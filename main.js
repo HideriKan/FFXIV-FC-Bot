@@ -8,6 +8,23 @@ const { token, prefix, userID } = require('./config.json');
 let g_RaidWeek = new RaidWeek(getStartingDay());
 
 /**
+ * Returns the day of the reset in FFXIV (Tuesday)
+ * @param {Boolean} isNext determinds the direction of the search. True this week, False next week
+ * @returns Date (a Tuesday)
+ */
+function getStartingDay(isNext = false) { // ++ or --
+	const direction = isNext ? 1 : -1;
+	const now = new Date(Date.now());
+
+	while (now.getUTCDay() != 2) { // 2 is Thuesday
+		now.setUTCDate(now.getUTCDate() + direction);
+	}
+
+	return now;
+} // End of getStartingDay
+
+/**
+ * Function of the Raid Command
  * Sends an Embed with the raid times into the corresponding channel
  * @param {Message} msg used to send the message to the channle
  * @param {Array} args optional
@@ -70,25 +87,10 @@ function postRaidTimes(msg, args = []) {
 		})
 		.catch(err => console.error(err));
 
-}
+} // End of postRaidTimes
 
 /**
- * Returns the day of the reset in FFXIV (Tuesday)
- * @param {Boolean} isNext determinds the direction of the search. True this week, False next week
- * @returns Date (a Tuesday)
- */
-function getStartingDay(isNext = false) { // ++ or --
-	const direction = isNext ? 1 : -1;
-	const now = new Date(Date.now());
-
-	while (now.getUTCDay() != 2) { // 2 is Thuesday
-		now.setUTCDate(now.getUTCDate() + direction);
-	}
-
-	return now;
-}
-
-/**
+ * Function of the Create Times (ct) Command
  * Create or Adjust the Raid times
  * @param {Message} msg 
  */
@@ -124,12 +126,12 @@ async function createTimes(msg) { // might change name to times init and call ne
 	msg.reply('New Times have been saved');
 	postRaidTimes(msg); // TODO: use as a prevew and save after
 
-}
+} // End of createTimes
 
 client
 	.once('ready', () => {
 		console.log(`Logged in as ${client.user.tag}!`);
-	})
+	}) // End of once ready
 	.on('message', msg => {
 		try {
 			if (!msg.content.startsWith(prefix) || msg.author.bot) return; // checks if it starts with the prefix
@@ -143,6 +145,6 @@ client
 			msg.reply('Something went wrong, please check the Logs..');
 			console.error(error);
 		}
-	});
+	}); // End of on message
 
 client.login(token);

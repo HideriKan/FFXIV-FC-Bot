@@ -50,8 +50,8 @@ class RaidDay {
 		}
 
 		return field;
-	}
+	} // End of toField
 
-}
+} // End of RaidDay
 
 module.exports = RaidDay;

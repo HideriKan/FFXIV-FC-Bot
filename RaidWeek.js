@@ -127,22 +127,25 @@ class RaidWeek {
 
 		} catch (err) {
 			console.error(err);
-		}
-	}
+		} // End of try-catch
+	} // End of readJson
 
 	/**
 	 * Simple function that writes the whole contents of the RaidWeek into a JSON file
 	 */
 	writeJson() {
-		fs.writeFile(jsonFile, JSON.stringify(this, null, 2), err => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-		});
-	}
+		// fs.writeFile(jsonFile, JSON.stringify(this, null, 2), err => {
+		// 	if (err) return console.error(err);
+		// 	console.log('saved RaidWeek');
+		// });
+		try {
+			fs.writeFileSync(jsonFile, JSON.stringify(this, null, 2));
+		} catch (err) {
+			if (err) return console.error(err);
+		} // End of try-catch
+		
+	} // End of writeJson
 
-
-}
+} // End RaidWeek
 
 module.exports = RaidWeek;
