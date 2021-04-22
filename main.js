@@ -53,7 +53,7 @@ function postRaidTimes(msg, args = []) {
 	} // End of if else
 
 	const test = new Date(g_RaidWeek.startingWeekDay);
-	dateRange = dFormat.format(test) + ' ' + dFormat.format(test.setDate(test.getDate()+7));
+	dateRange = dFormat.format(test) + ' ~ ' + dFormat.format(test.setDate(test.getDate()+7));
 
 	const embed = new MessageEmbed()
 		.setTitle('Raid Schedule (' + dateRange + ')')
@@ -62,7 +62,7 @@ function postRaidTimes(msg, args = []) {
 		.setFooter('The Time is now in Server Time (ST) / UTC so dont get confused')
 		.addFields(fields);
 
-	if (ping) embed.setTitle('<@&768117194373595136> Schedule (' + dateRange + ')');
+	if (ping) embed.setDescription('<@&474529221864062989> Please do tell me when there is a day that you dont have time so I can adjust the schedule');
 
 	msg.channel.send(embed)
 		.then(msg => {
