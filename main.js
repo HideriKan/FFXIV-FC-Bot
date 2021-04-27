@@ -79,7 +79,7 @@ function postRaidTimes(msg, args = []) {
 		.setFooter('The Time is now in Server Time (ST) / UTC so dont get confused')
 		.addFields(fields);
 
-	if (ping) embed.setDescription('<@&474529221864062989> Please do tell me when there is a day that you dont have time so I can adjust the schedule');
+	if (ping) embed.setDescription('<@&768117194373595136> Please do tell me when there is a day that you dont have time so I can adjust the schedule');
 
 	msg.channel.send(embed)
 		.then(msg => {
