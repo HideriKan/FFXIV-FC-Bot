@@ -47,7 +47,7 @@ function postRaidTimes(msg, args = []) {
 	let dateRange = '';
 
 	args.forEach(arg => {
-		if (arg.toLowerCase() === 'pin' && msg.member.permissions.has('MANAGE_MESSAGES') || msg.channel.type === 'dm') 
+		if (arg.toLowerCase() === 'pin' && msg.member.permissions.has('MANAGE_MESSAGES')) 
 			toPin = true;
 		if (arg.toLowerCase() === 'ro') 
 			onlyRaidDays = true;
@@ -139,8 +139,8 @@ client
 			const args = msg.content.slice(prefix.length).trim().split(/ +/); // collects the arguments
 			const command = args.shift().toLowerCase(); // gets just the command name
 
-			if (command === 'raid') postRaidTimes(msg, args);
-			if (command === 'ct' && msg.channel.type === 'dm' && msg.author.id === userID) createTimes(msg);
+			if (command === 'raid' || command === 'r' ) postRaidTimes(msg, args);
+			if (command === 'ct' && msg.channel.type === 'dm' && (msg.author.id === userID || msg.author.id === '146402125801324545')) createTimes(msg);
 		} catch (error) {
 			msg.reply('Something went wrong, please check the Logs..');
 			console.error(error);
