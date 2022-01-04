@@ -1,11 +1,18 @@
 // Imports
-const { Client, MessageEmbed, Message } = require('discord.js'); // eslint-disable-line no-unused-vars
-const client = new Client();
+const { Client, Intents , MessageEmbed, Message } = require('discord.js'); // eslint-disable-line no-unused-vars
 const RaidWeek = require('./RaidWeek.js');
+
+// const { REST } = require('@discordjs/rest');
+// const { Routes } = require('discord-api-types/v9');
+
 // File settings
 const { token, prefix, userID } = require('./config.json');
+
 // Globals
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 let g_RaidWeek = new RaidWeek(getStartingDay());
+
+// const rest = new REST({version: '9'}).setToken(token);
 
 /**
  * Returns the day of the reset in FFXIV (Tuesday)

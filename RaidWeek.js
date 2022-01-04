@@ -2,6 +2,7 @@
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
+// const { timeStamp } = require('console');
 // File settings
 const jsonFile = './RaidTimes.json';
 
@@ -32,6 +33,10 @@ class RaidWeek {
 			if (regex.test(msg.content) || msg.content.toLowerCase() === 'y' ) return true;
 			return false;
 		};
+		const filterIsBatch = msg => {
+			// MO/TH/WE/TU/FR/SA/SO (6 x /)
+			if (msg.content.toLowerCase().includes('/') && !msg.author.bot) return true;
+		};
 		const lastDate = new Date(this.startingWeekDay);
 		const shortDay = new Intl.DateTimeFormat('en', {
 			weekday: 'long', 
@@ -45,57 +50,115 @@ class RaidWeek {
 		let userMsg;
 		let userTime;
 		
-
-		for (let i = 0; i < 7; i++) {
-			const lDate = new Date(lastDate);
-			const rDay = new RaidDay(lDate);
-
-			// Asking the user if there is raid on xyz date
-			msg.channel.send('Is Raid on ' + shortDay.format(lDate) + 
-				// lDate.getDate() + '.' + (lDate.getUTCMonth() + 1) + 
-				' (y = Yes | n = No)');
-			await msg.channel.awaitMessages(filterYN, {max: 1, time: 30000, errors: ['time']})
-				.then(col => userMsg = col.first())
-				.catch(() => {
+		msg.channel.send('Is batch input? Y / N');
+		await msg.channel.awaitMessages(filterYN, {max: 1, time: 30000, errors: ['time']})
+			.then(col=> userMsg = col.first())
+			.catch(()=> {
+				msg.reply('Ya Took too long');
+				fail = true;
+			});
+			
+		if (fail) return;
+		if (userMsg.content.toLowerCase() == 'y') {
+			msg.channel.send('Gimmi Batch e.g.: `MO/TU/WE/TH/FR/SA/SU` => `/17:30//19///1835`');
+			await msg.channel.awaitMessages(filterIsBatch, {max: 1, time: 30000, errors: ['time']})
+				.then(col=> userMsg = col.first())
+				.catch(()=> {
 					msg.reply('Ya Took too long');
-					fail = true; // cannot return in a promise
+					fail = true;
 				});
 
-			if (fail) return;
+			let arr = userMsg.content.split('/');
 
-			switch (userMsg.content.toLowerCase()) {
-			case 'y':
-				rDay.isRaid = true;
-				break;
-			case 'n':
+			arr.forEach(times => {
+				let isDateSet = false;
+				const lDate = new Date(lastDate);
+				const rDay = new RaidDay(lDate);
+				times.trim();
+
+				if (!isNaN(times) || times.includes(':')) {
+
+					if(times.length === 2 && times != '00') {
+						lastDate.setUTCHours(times, 0);
+						isDateSet = true;
+						
+					} else if (times.length === 4) {
+						lastDate.setUTCHours(times.substring(0,2), times.substring(2));
+						isDateSet = true;
+					
+					} else if (times.length === 5) {
+						let arrTimes = times.split(':');
+						
+						if (!isNaN(arrTimes[0]) && !isNaN(arrTimes[1])) {
+							lastDate.setUTCHours(arrTimes[0], arrTimes[1]);
+							isDateSet = true;
+						
+						}
+					}
+
+					if (isDateSet) {
+						rDay.isRaid = true;
+						rDay.startTime = lastDate.toJSON();
+					}
+						
+				}
+
 				this.week.push(rDay);
 				lastDate.setDate(lastDate.getDate() + 1);
-				continue;
-			}
-
-			// Asking the use what the stating time is with the valid format
-			msg.channel.send('What Time does it start (hh:mm or \'Y\' for 18:00)'); 
-			await msg.channel.awaitMessages(filterTimeOrY, {max: 1, time: 30000, errors: ['time']})
-				.then(col => userMsg = col.first())
-				.catch(() => {
-					msg.reply('Ya Took too long');
-					fail = true; // cannot return in a promise
-				});
-
-			if (fail) return;
-
-			if (userMsg.content == 'y') {
-				userTime = ['18', '00'];
-			} else {
-				userTime = userMsg.content.split(':'); // Its gonna be an Array with [hh, mm]
-			}
+			});
+		} else if(userMsg.content.toLowerCase() == 'n') {
+			for (let i = 0; i < 7; i++) {
+				const lDate = new Date(lastDate);
+				const rDay = new RaidDay(lDate);
 				
-			lastDate.setHours(userTime[0], userTime[1]);
-			rDay.startTime = lastDate.toJSON();
+				// Asking the user if there is raid on xyz date
+				msg.channel.send('Is Raid on ' + shortDay.format(lDate) + 
+				// lDate.getDate() + '.' + (lDate.getUTCMonth() + 1) + 
+				' (y = Yes | n = No)');
+				await msg.channel.awaitMessages(filterYN, {max: 1, time: 30000, errors: ['time']})
+					.then(col => userMsg = col.first())
+					.catch(() => {
+						msg.reply('Ya Took too long');
+						fail = true; // cannot return in a promise
+					});
 
-			this.week.push(rDay);
-			lastDate.setDate(lastDate.getDate() + 1);
-		} // end of for loop 
+				if (fail) return;
+
+				switch (userMsg.content.toLowerCase()) {
+				case 'y':
+					rDay.isRaid = true;
+					break;
+				case 'n':
+					this.week.push(rDay);
+					lastDate.setUTCDate(lastDate.getUTCDate() + 1);
+					continue;
+				}
+
+				// Asking the use what the stating time is with the valid format
+				msg.channel.send('What Time does it start (hh:mm or \'Y\' for 18:00)'); 
+				await msg.channel.awaitMessages(filterTimeOrY, {max: 1, time: 30000, errors: ['time']})
+					.then(col => userMsg = col.first())
+					.catch(() => {
+						msg.reply('Ya Took too long');
+						fail = true; // cannot return in a promise
+					});
+
+				if (fail) return;
+
+				if (userMsg.content == 'y') {
+					userTime = ['18', '00'];
+				} else {
+					userTime = userMsg.content.split(':'); // Its gonna be an Array with [hh, mm]
+				}
+					
+				lastDate.setUTCHours(userTime[0], userTime[1]);
+				rDay.startTime = lastDate.toJSON();
+
+				this.week.push(rDay);
+				lastDate.setUTCDate(lastDate.getUTCDate() + 1);
+			} // end of for loop 
+		}
+
 	} // end of newDays
 
 	/**
