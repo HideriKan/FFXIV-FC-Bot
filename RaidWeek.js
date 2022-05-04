@@ -2,6 +2,7 @@
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
+const getStartingDay = require('./utility');
 // const { timeStamp } = require('console');
 // File settings
 const jsonFile = './RaidTimes.json';
@@ -12,17 +13,61 @@ const jsonFile = './RaidTimes.json';
 class RaidWeek {
 	/**
 	 * The Weekly reset for FFXIV is every tuesday so it the date parsed should be that.
-	 * @param {Date} startingWeekDay To know its own date
 	 */
-	constructor(startingWeekDay) {
-		this.startingWeekDay = startingWeekDay;
-		this.week = [RaidDay];
+	constructor() {
+		this.startingWeekDay = getStartingDay();
+		this.week = [];
+	}
+
+	async newDaysFromBatch(batch) {
+		const lastDate = new Date(this.startingWeekDay);
+
+		let arr = batch.split('/');
+
+
+		arr.forEach(times => {
+			let isDateSet = false;
+			const lDate = new Date(lastDate);
+			const rDay = new RaidDay(lDate);
+			times.trim();
+
+			if (!isNaN(times) || times.includes(':')) {
+
+				if(times.length === 2 && times != '00') {
+					lastDate.setUTCHours(times, 0);
+					isDateSet = true;
+					
+				} else if (times.length === 4) {
+					lastDate.setUTCHours(times.substring(0,2), times.substring(2));
+					isDateSet = true;
+				
+				} else if (times.length === 5) {
+					let arrTimes = times.split(':');
+					
+					if (!isNaN(arrTimes[0]) && !isNaN(arrTimes[1])) {
+						lastDate.setUTCHours(arrTimes[0], arrTimes[1]);
+						isDateSet = true;
+					
+					}
+				}
+
+				if (isDateSet) {
+					rDay.isRaid = true;
+					rDay.startTime = lastDate.toJSON();
+				}
+					
+			}
+
+			this.week.push(rDay);
+			lastDate.setDate(lastDate.getDate() + 1);
+		});
 	}
 
 	/**
 	 * Creates the data for the week by asking the user for each day.
 	 * An Asyncronos func because it is needed to await the respnse from the user.
 	 * @param {Message} msg To read the contents of the User
+	 * @deprecated this doesnt get used anymore
 	 */
 	async newDays(msg) {
 		const filterYN = msg => {
@@ -51,7 +96,7 @@ class RaidWeek {
 		let userTime;
 		
 		msg.channel.send('Is batch input? Y / N');
-		await msg.channel.awaitMessages(filterYN, {max: 1, time: 30000, errors: ['time']})
+		await msg.channel.awaitMessages({filterYN, max: 1, time: 30000, errors: ['time']})
 			.then(col=> userMsg = col.first())
 			.catch(()=> {
 				msg.reply('Ya Took too long');
@@ -61,7 +106,7 @@ class RaidWeek {
 		if (fail) return;
 		if (userMsg.content.toLowerCase() == 'y') {
 			msg.channel.send('Gimmi Batch e.g.: `MO/TU/WE/TH/FR/SA/SU` => `/17:30//19///1835`');
-			await msg.channel.awaitMessages(filterIsBatch, {max: 1, time: 30000, errors: ['time']})
+			await msg.channel.awaitMessages({filterIsBatch, max: 1, time: 30000, errors: ['time']})
 				.then(col=> userMsg = col.first())
 				.catch(()=> {
 					msg.reply('Ya Took too long');
@@ -115,7 +160,7 @@ class RaidWeek {
 				msg.channel.send('Is Raid on ' + shortDay.format(lDate) + 
 				// lDate.getDate() + '.' + (lDate.getUTCMonth() + 1) + 
 				' (y = Yes | n = No)');
-				await msg.channel.awaitMessages(filterYN, {max: 1, time: 30000, errors: ['time']})
+				await msg.channel.awaitMessages({filterYN, max: 1, time: 30000, errors: ['time']})
 					.then(col => userMsg = col.first())
 					.catch(() => {
 						msg.reply('Ya Took too long');
@@ -136,7 +181,7 @@ class RaidWeek {
 
 				// Asking the use what the stating time is with the valid format
 				msg.channel.send('What Time does it start (hh:mm or \'Y\' for 18:00)'); 
-				await msg.channel.awaitMessages(filterTimeOrY, {max: 1, time: 30000, errors: ['time']})
+				await msg.channel.awaitMessages({filterTimeOrY, max: 1, time: 30000, errors: ['time']})
 					.then(col => userMsg = col.first())
 					.catch(() => {
 						msg.reply('Ya Took too long');
@@ -163,30 +208,23 @@ class RaidWeek {
 
 	/**
 	 * Reads the date from the json file and turns is into a RaidWeek with an array of RaidDays
-	 * @param {Boolean} dontPassData default: true
-	 * @returns if passed with false, just the read date from the file will pe passed
 	 */
-	readJson(dontPassData = true) {
+	readJson() {
 		try {
 			const data = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
 
-			if (dontPassData) {
+			this.startingWeekDay = data.startingWeekDay;
+			this.week = [];
 
-				this.startingWeekDay = data.startingWeekDay;
-				this.week = [];
+			data.week.forEach(dataDay => {
+				let newDay = new RaidDay(dataDay.day);
+				newDay.isRaid = dataDay.isRaid;
+				newDay.startTime = dataDay.startTime;
+				newDay.endTime = dataDay.endTime;
 
-				data.week.forEach(dataDay => {
-					let newDay = new RaidDay(dataDay.day);
-					newDay.isRaid = dataDay.isRaid;
-					newDay.startTime = dataDay.startTime;
-					newDay.endTime = dataDay.endTime;
-
-					this.week.push(newDay);
-				});
-				return;
-			} else {
-				return data;
-			} // end of if else
+				this.week.push(newDay);
+			});
+			return;
 
 		} catch (err) {
 			console.error(err);
