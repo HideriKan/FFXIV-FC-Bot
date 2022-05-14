@@ -5,7 +5,7 @@ const getStartingDay = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('createschedule')
+		.setName('betacreateschedule')
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.addBooleanOption( option => option.setName('next').setDescription('Edit current week?').setRequired(true))
 		.addStringOption( option => 
@@ -28,7 +28,7 @@ module.exports = {
 	async execute(interaction) {
 		const raidWeek = new RaidWeek();
 		const editNext = interaction.options.getBoolean('next');
-		const batch = interaction.options.getString('times');
+		const batch = interaction.options.getString('batch');
 		const batchArr = batch.split('/');		
 		// batchArr.push(interaction.options.getString('tu'));
 		// batchArr.push(interaction.options.getString('we'));
