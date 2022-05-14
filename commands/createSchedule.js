@@ -5,7 +5,7 @@ const getStartingDay = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('betacreateschedule')
+		.setName('createschedule')
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.addBooleanOption( option => option.setName('next').setDescription('Edit current week?').setRequired(true))
 		.addStringOption( option => 
