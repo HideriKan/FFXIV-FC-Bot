@@ -13,7 +13,7 @@ module.exports = {
 		.setName('raid')
 		.setDescription('Shows the Raid Schedule')
 		.addStringOption(option =>
-			option.setName('mods')
+			option.setName('modifiers')
 				.setDescription('Add Optional Modifiers')
 				.addChoice('Shows only the raid days', RAIDONLY)
 				.addChoice('Pins the message (Does not work currently)', PIN)

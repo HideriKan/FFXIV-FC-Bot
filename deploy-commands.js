@@ -15,15 +15,24 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(token);
 
-
+const isGlobal = false;
 (async () => {
 	try {
 		console.log('Started refreshing application (/) commands.');
 
-		await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
-			{ body: commands },
-		);
+		if (isGlobal) {
+			await rest.put(
+				Routes.applicationCommands(clientId), {
+					body: commands
+				},
+			);
+		} else {
+			await rest.put(
+				Routes.applicationGuildCommands(clientId, guildId), {
+					body: commands
+				},
+			);
+		}
 
 		console.log('Successfully reloaded application (/) commands.');
 	} catch (error) {

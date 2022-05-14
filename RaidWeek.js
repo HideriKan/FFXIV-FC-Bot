@@ -19,13 +19,10 @@ class RaidWeek {
 		this.week = [];
 	}
 
-	async newDaysFromBatch(batch) {
+	async newDaysFromBatch(batchArr) {
 		const lastDate = new Date(this.startingWeekDay);
 
-		let arr = batch.split('/');
-
-
-		arr.forEach(times => {
+		batchArr.forEach(times => {
 			let isDateSet = false;
 			const lDate = new Date(lastDate);
 			const rDay = new RaidDay(lDate);
