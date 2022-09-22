@@ -9,7 +9,7 @@ class RaidDay {
 	constructor(day) {
 		this.day = day;
 		this.isRaid = false;
-		this.startTime = ''; 
+		this.startTime = '';
 		this.endTime = '';
 	}
 
@@ -20,12 +20,6 @@ class RaidDay {
 	toField() {
 		let tDate = new Date(this.day);
 		let sDate = new Date(this.startTime);
-		let tFormat = new Intl.DateTimeFormat('de', {
-			hour: '2-digit',
-			minute: '2-digit',
-			timeZone: 'UTC'
-			// timeZoneName: 'short'
-		});
 		let dFormat = new Intl.DateTimeFormat('en', {
 			day: '2-digit',
 			month: 'short',
@@ -37,8 +31,7 @@ class RaidDay {
 		if (this.isRaid) {
 			field = {
 				name: dFormat.format(tDate),
-				value: 'Start: ' + tFormat.format(sDate) + ' ST',
-				// +'\nEnd: ' + tFormat.format(eDate),
+				value: `At: <t:${Math.floor(sDate.getTime() / 1000)}:t> <t:${Math.floor(sDate.getTime() / 1000)}:R>`,
 				inline: true
 			};
 		} else {
