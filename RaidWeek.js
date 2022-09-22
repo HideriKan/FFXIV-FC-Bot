@@ -2,7 +2,7 @@
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
-const getStartingDay = require('./utility');
+const { getStartingDay } = require('./utility');
 // const { timeStamp } = require('console');
 // File settings
 const jsonFile = './RaidTimes.json';

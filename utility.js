@@ -13,4 +13,6 @@ function getStartingDay(isNextWeek = false) { // ++ or --
 	return now;
 } // End of getStartingDay
 
-module.exports = getStartingDay ;
+module.exports = {
+	getStartingDay,
+};
