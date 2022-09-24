@@ -5,18 +5,16 @@ const { MessageEmbed } = require('discord.js');
 const RaidWeek = require('../RaidWeek');
 
 // Arguments
-const RAIDONLY = 'raidOnly'; 
-const PIN = 'pin';
+const argLite = 'lite'; 
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raid')
-		.setDescription('Shows the Raid Schedule')
+		.setDescription('[Beta] Shows the Raid Schedule')
 		.addStringOption(option =>
 			option.setName('modifiers')
-				.setDescription('Add Optional Modifiers')
-				.addChoice('Shows only the raid days', RAIDONLY)
-				.addChoice('Pins the message (Does not work currently)', PIN)
+				.setDescription('Optional Modifiers')
+				.addChoice('Lite', argLite)
 		),
 	/**
 	 * Displays the current raid schedule
@@ -34,20 +32,19 @@ module.exports = {
 		});
 
 		let fields = new Array();
-		let fWeek = new Array();
 
-		let modifiers = interaction.options.getString('mods');
-		if (modifiers === null) modifiers = new Array();
+		let modifiers = interaction.options.getString('modifiers');
+		if (modifiers === null) 
+			modifiers = new Array();
 
-		const onlyRaidDays = modifiers.includes(RAIDONLY);
-		const toPin = modifiers.includes(PIN);
+		const onlyRaidDays = modifiers.includes(argLite);
 
 		raidWeek.readJson();
 
 		if (onlyRaidDays) {
-			fWeek = raidWeek.week.filter(day => day.isRaid);
-			fWeek.forEach(day => {
-				fields.push(day.toField());
+			raidWeek.week.forEach(day => {
+				if (day.isRaid)
+					fields.push(day.toField());
 			});
 		} else {
 			raidWeek.week.forEach(day => {
@@ -60,15 +57,14 @@ module.exports = {
 
 		const embed = new MessageEmbed()
 			.setTitle('Raid Schedule (' + dateRange + ')')
-			.setDescription('Please do tell when there is a day that you dont have time so we can adjust the schedule')
 			.setColor('#dc4fad')
-			.setFooter({ text: 'The Time is in Server Time (ST) / UTC'})
 			.addFields(fields);
-
+			
+		if (!onlyRaidDays)	
+			embed.setDescription('Please do tell when there is a day that you dont have time so we can adjust the schedule')
+				.setFooter({ text: 'The Time is in Server Time (ST) / UTC'});
+			
 		await interaction.reply({ embeds: [embed] })
-			.then(msg => { 
-				if (toPin) msg.pin(); //TODO: doesnt work
-			})
 			.catch(err => console.error(err));
 	},
 };
