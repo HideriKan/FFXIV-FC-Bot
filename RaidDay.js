@@ -31,7 +31,7 @@ class RaidDay {
 		if (this.isRaid) {
 			field = {
 				name: dFormat.format(tDate),
-				value: `At: <t:${Math.floor(sDate.getTime() / 1000)}:t> <t:${Math.floor(sDate.getTime() / 1000)}:R>`,
+				value: `At: <t:${Math.floor(sDate.getTime() / 1000)}:t>, <t:${Math.floor(sDate.getTime() / 1000)}:R>`,
 				inline: true
 			};
 		} else {
