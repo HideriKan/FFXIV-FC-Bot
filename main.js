@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js'
 const fs = require('node:fs');
 
 // configs
-const { token } = require('./config.json');
+const { token, isBeta, tokenBeta } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
 
@@ -25,4 +25,4 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 }
 
-client.login(token);
+client.login(isBeta ? tokenBeta : token);
