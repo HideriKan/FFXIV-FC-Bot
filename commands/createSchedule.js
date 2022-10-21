@@ -6,14 +6,14 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('createschedule')
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
-		.addBooleanOption(option => 
-			option.setName('next')
-				.setDescription('Edit current week?')
-				.setRequired(true))
-		.addStringOption(option =>
-			option.setName('batch')
-				.setDescription('Add week times in Tu/We/Th/Fr/Sa/Su/Mo')
-				.setRequired(true))
+		.addBooleanOption(option => option.setName('next')
+			.setDescription('Edit current week?')
+			.setRequired(true)
+		)
+		.addStringOption(option => option.setName('batch')
+			.setDescription('Add week times in Tu/We/Th/Fr/Sa/Su/Mo')
+			.setRequired(true)
+		)
 	,
 	/**
 	 * Function of the Create Times (ct) Command

@@ -8,10 +8,10 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raid')
 		.setDescription('[Beta] Shows the Raid Schedule')
-		.addStringOption(opt =>
-			opt.setName('options')
-				.setDescription('Optional Modifiers')
-				.addChoices({ name: 'Lite', value: argLite })
+		.addStringOption(opt => opt.setName('options')
+			.setDescription('Optional Modifiers')
+			.addChoices({ name: 'Lite', value: argLite }
+			)
 		),
 	/**
 	 * Displays the current raid schedule
