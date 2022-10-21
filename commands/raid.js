@@ -11,8 +11,8 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raid')
 		.setDescription('[Beta] Shows the Raid Schedule')
-		.addStringOption(option =>
-			option.setName('modifiers')
+		.addStringOption(opt =>
+			opt.setName('options')
 				.setDescription('Optional Modifiers')
 				.addChoice('Lite', argLite)
 		),
@@ -33,11 +33,11 @@ module.exports = {
 
 		let fields = new Array();
 
-		let modifiers = interaction.options.getString('modifiers');
-		if (modifiers === null) 
-			modifiers = new Array();
+		let opt = interaction.options.getString('options');
+		if (opt === null)
+			opt = new Array();
 
-		const onlyRaidDays = modifiers.includes(argLite);
+		const onlyRaidDays = opt.includes(argLite);
 
 		raidWeek.readJson();
 
