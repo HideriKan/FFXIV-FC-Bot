@@ -1,11 +1,11 @@
 // Imports
-const { Client, Collection, Intents } = require('discord.js'); // eslint-disable-line no-unused-vars
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const fs = require('node:fs');
 
 // configs
 const { token } = require('./config.json');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS], partials: ['MESSAGE', 'CHANNEL'] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
 
 // add commands dynamicly 
 client.commands = new Collection();

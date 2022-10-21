@@ -1,6 +1,5 @@
 // Discord Js require
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 // Config
 const { clientId, guildId, token } = require('./config.json'); // eslint-disable-line no-unused-vars
@@ -13,28 +12,27 @@ for (const file of commandFiles) {
 	commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(token);
 
 const isGlobal = false;
 (async () => {
 	try {
-		console.log('Started refreshing application (/) commands.');
-
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+		let data;
 		if (isGlobal) {
-			await rest.put(
-				Routes.applicationCommands(clientId), {
-					body: commands
-				},
+			data = await rest.put(
+				Routes.applicationCommands(clientId),
+				{ body: commands },
 			);
 		} else {
-			await rest.put(
-				Routes.applicationGuildCommands(clientId, guildId), {
-					body: commands
-				},
+			data = await rest.put(
+				Routes.applicationGuildCommands(clientId, guildId),
+				{ body: commands },
 			);
+	
 		}
 
-		console.log('Successfully reloaded application (/) commands.');
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
 		console.error(error);
 	}

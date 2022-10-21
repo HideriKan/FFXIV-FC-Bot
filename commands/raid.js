@@ -1,20 +1,17 @@
-const {
-	SlashCommandBuilder
-} = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const RaidWeek = require('../RaidWeek');
 
 // Arguments
-const argLite = 'lite'; 
+const argLite = 'lite';
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raid')
 		.setDescription('[Beta] Shows the Raid Schedule')
-		.addStringOption(option =>
-			option.setName('modifiers')
+		.addStringOption(opt =>
+			opt.setName('modifiers')
 				.setDescription('Optional Modifiers')
-				.addChoice('Lite', argLite)
+				.addChoices({ name: 'Lite', value: argLite })
 		),
 	/**
 	 * Displays the current raid schedule
@@ -34,7 +31,7 @@ module.exports = {
 		let fields = new Array();
 
 		let modifiers = interaction.options.getString('modifiers');
-		if (modifiers === null) 
+		if (modifiers === null)
 			modifiers = new Array();
 
 		const onlyRaidDays = modifiers.includes(argLite);
@@ -55,15 +52,15 @@ module.exports = {
 		const startingDay = new Date(raidWeek.startingWeekDay);
 		const dateRange = dFormat.format(startingDay) + ' ~ ' + dFormat.format(startingDay.setDate(startingDay.getDate() + 7));
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Raid Schedule (' + dateRange + ')')
 			.setColor('#dc4fad')
 			.addFields(fields);
-			
-		if (!onlyRaidDays)	
+
+		if (!onlyRaidDays)
 			embed.setDescription('Please do tell when there is a day that you dont have time so we can adjust the schedule')
-				.setFooter({ text: 'The Time is in Server Time (ST) / UTC'});
-			
+				.setFooter({ text: 'The Time is in Server Time (ST) / UTC' });
+
 		await interaction.reply({ embeds: [embed] })
 			.catch(err => console.error(err));
 	},
