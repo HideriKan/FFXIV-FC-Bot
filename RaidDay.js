@@ -15,7 +15,7 @@ class RaidDay {
 
 	/**
 	 * A Simple parse.
-	 * @returns An object for the MessageEmbeds.addField()
+	 * @returns An object for the EmbedBuilder.addFields()
 	 */
 	toField() {
 		let tDate = new Date(this.day);
