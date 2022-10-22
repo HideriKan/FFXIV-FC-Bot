@@ -36,7 +36,3 @@ const rest = new REST({ version: '10' }).setToken(isBeta ? tokenBeta : token);
 		console.error(error);
 	}
 })();
-// rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: commands })
-// rest.put(Routes.applicationCommands(clientId), {body: commands })
-// 	.then(() => console.log('Successfully registered applicaion commands.'))
-// 	.catch(console.error());
