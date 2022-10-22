@@ -1,3 +1,4 @@
+const { time } = require('discord.js');
 /**
  * Manages the day of a Raid
  */
@@ -15,7 +16,7 @@ class RaidDay {
 
 	/**
 	 * A Simple parse.
-	 * @returns An object for the MessageEmbeds.addField()
+	 * @returns An object for the EmbedBuilder.addFields()
 	 */
 	toField() {
 		let tDate = new Date(this.day);
@@ -31,7 +32,7 @@ class RaidDay {
 		if (this.isRaid) {
 			field = {
 				name: dFormat.format(tDate),
-				value: `At: <t:${Math.floor(sDate.getTime() / 1000)}:t>, <t:${Math.floor(sDate.getTime() / 1000)}:R>`,
+				value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`,
 				inline: true
 			};
 		} else {

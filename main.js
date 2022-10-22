@@ -1,11 +1,11 @@
 // Imports
-const { Client, Collection, Intents } = require('discord.js'); // eslint-disable-line no-unused-vars
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const fs = require('node:fs');
 
 // configs
-const { token } = require('./config.json');
+const { token, isBeta, tokenBeta } = require('./config.json');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS], partials: ['MESSAGE', 'CHANNEL'] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
 
 // add commands dynamicly 
 client.commands = new Collection();
@@ -19,10 +19,10 @@ for (const file of commandFiles) {
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
-	if(event.once)
+	if (event.once)
 		client.once(event.name, (...args) => event.execute(...args));
-	else 
+	else
 		client.on(event.name, (...args) => event.execute(...args));
 }
 
-client.login(token);
+client.login(isBeta ? tokenBeta : token);
