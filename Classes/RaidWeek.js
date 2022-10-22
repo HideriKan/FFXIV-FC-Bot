@@ -2,7 +2,7 @@
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
-const { getStartingDay } = require('./utility');
+const { getStartingDay } = require('../utility');
 
 // File settings
 const jsonFile = './RaidTimes.json';
@@ -30,21 +30,21 @@ class RaidWeek {
 
 			if (!isNaN(times) || times.includes(':')) {
 
-				if(times.length === 2 && times != '00') {
+				if (times.length === 2 && times != '00') {
 					lastDate.setUTCHours(times, 0);
 					isDateSet = true;
-					
+
 				} else if (times.length === 4) {
-					lastDate.setUTCHours(times.substring(0,2), times.substring(2));
+					lastDate.setUTCHours(times.substring(0, 2), times.substring(2));
 					isDateSet = true;
-				
+
 				} else if (times.length === 5) {
 					let arrTimes = times.split(':');
-					
+
 					if (!isNaN(arrTimes[0]) && !isNaN(arrTimes[1])) {
 						lastDate.setUTCHours(arrTimes[0], arrTimes[1]);
 						isDateSet = true;
-					
+
 					}
 				}
 
@@ -52,7 +52,7 @@ class RaidWeek {
 					rDay.isRaid = true;
 					rDay.startTime = lastDate.toJSON();
 				}
-					
+
 			}
 
 			this.week.push(rDay);
@@ -72,7 +72,7 @@ class RaidWeek {
 			return false;
 		};
 		const filterTimeOrY = msg => {
-			if (regex.test(msg.content) || msg.content.toLowerCase() === 'y' ) return true;
+			if (regex.test(msg.content) || msg.content.toLowerCase() === 'y') return true;
 			return false;
 		};
 		const filterIsBatch = msg => {
@@ -81,7 +81,7 @@ class RaidWeek {
 		};
 		const lastDate = new Date(this.startingWeekDay);
 		const shortDay = new Intl.DateTimeFormat('en', {
-			weekday: 'long', 
+			weekday: 'long',
 			month: 'short',
 			day: '2-digit',
 			timeZone: 'UTC'
@@ -91,21 +91,21 @@ class RaidWeek {
 		let fail = false;
 		let userMsg;
 		let userTime;
-		
+
 		msg.channel.send('Is batch input? Y / N');
-		await msg.channel.awaitMessages({filterYN, max: 1, time: 30000, errors: ['time']})
-			.then(col=> userMsg = col.first())
-			.catch(()=> {
+		await msg.channel.awaitMessages({ filterYN, max: 1, time: 30000, errors: ['time'] })
+			.then(col => userMsg = col.first())
+			.catch(() => {
 				msg.reply('Ya Took too long');
 				fail = true;
 			});
-			
+
 		if (fail) return;
 		if (userMsg.content.toLowerCase() == 'y') {
 			msg.channel.send('Gimmi Batch e.g.: `MO/TU/WE/TH/FR/SA/SU` => `/17:30//19///1835`');
-			await msg.channel.awaitMessages({filterIsBatch, max: 1, time: 30000, errors: ['time']})
-				.then(col=> userMsg = col.first())
-				.catch(()=> {
+			await msg.channel.awaitMessages({ filterIsBatch, max: 1, time: 30000, errors: ['time'] })
+				.then(col => userMsg = col.first())
+				.catch(() => {
 					msg.reply('Ya Took too long');
 					fail = true;
 				});
@@ -120,21 +120,21 @@ class RaidWeek {
 
 				if (!isNaN(times) || times.includes(':')) {
 
-					if(times.length === 2 && times != '00') {
+					if (times.length === 2 && times != '00') {
 						lastDate.setUTCHours(times, 0);
 						isDateSet = true;
-						
+
 					} else if (times.length === 4) {
-						lastDate.setUTCHours(times.substring(0,2), times.substring(2));
+						lastDate.setUTCHours(times.substring(0, 2), times.substring(2));
 						isDateSet = true;
-					
+
 					} else if (times.length === 5) {
 						let arrTimes = times.split(':');
-						
+
 						if (!isNaN(arrTimes[0]) && !isNaN(arrTimes[1])) {
 							lastDate.setUTCHours(arrTimes[0], arrTimes[1]);
 							isDateSet = true;
-						
+
 						}
 					}
 
@@ -142,22 +142,22 @@ class RaidWeek {
 						rDay.isRaid = true;
 						rDay.startTime = lastDate.toJSON();
 					}
-						
+
 				}
 
 				this.week.push(rDay);
 				lastDate.setDate(lastDate.getDate() + 1);
 			});
-		} else if(userMsg.content.toLowerCase() == 'n') {
+		} else if (userMsg.content.toLowerCase() == 'n') {
 			for (let i = 0; i < 7; i++) {
 				const lDate = new Date(lastDate);
 				const rDay = new RaidDay(lDate);
-				
+
 				// Asking the user if there is raid on xyz date
-				msg.channel.send('Is Raid on ' + shortDay.format(lDate) + 
-				// lDate.getDate() + '.' + (lDate.getUTCMonth() + 1) + 
-				' (y = Yes | n = No)');
-				await msg.channel.awaitMessages({filterYN, max: 1, time: 30000, errors: ['time']})
+				msg.channel.send('Is Raid on ' + shortDay.format(lDate) +
+					// lDate.getDate() + '.' + (lDate.getUTCMonth() + 1) + 
+					' (y = Yes | n = No)');
+				await msg.channel.awaitMessages({ filterYN, max: 1, time: 30000, errors: ['time'] })
 					.then(col => userMsg = col.first())
 					.catch(() => {
 						msg.reply('Ya Took too long');
@@ -167,18 +167,18 @@ class RaidWeek {
 				if (fail) return;
 
 				switch (userMsg.content.toLowerCase()) {
-				case 'y':
-					rDay.isRaid = true;
-					break;
-				case 'n':
-					this.week.push(rDay);
-					lastDate.setUTCDate(lastDate.getUTCDate() + 1);
-					continue;
+					case 'y':
+						rDay.isRaid = true;
+						break;
+					case 'n':
+						this.week.push(rDay);
+						lastDate.setUTCDate(lastDate.getUTCDate() + 1);
+						continue;
 				}
 
 				// Asking the use what the stating time is with the valid format
-				msg.channel.send('What Time does it start (hh:mm or \'Y\' for 18:00)'); 
-				await msg.channel.awaitMessages({filterTimeOrY, max: 1, time: 30000, errors: ['time']})
+				msg.channel.send('What Time does it start (hh:mm or \'Y\' for 18:00)');
+				await msg.channel.awaitMessages({ filterTimeOrY, max: 1, time: 30000, errors: ['time'] })
 					.then(col => userMsg = col.first())
 					.catch(() => {
 						msg.reply('Ya Took too long');
@@ -192,7 +192,7 @@ class RaidWeek {
 				} else {
 					userTime = userMsg.content.split(':'); // Its gonna be an Array with [hh, mm]
 				}
-					
+
 				lastDate.setUTCHours(userTime[0], userTime[1]);
 				rDay.startTime = lastDate.toJSON();
 
@@ -203,8 +203,12 @@ class RaidWeek {
 
 	} // end of newDays
 
+	keepOnlyRaidDays() {
+		this.week = this.week.filter(day => day.isRaid);
+	}
+
 	/**
-	 * Reads the date from the json file and turns is into a RaidWeek with an array of RaidDays
+	 * Reads the defual json file and fills this raidweek
 	 */
 	readJson() {
 		try {
@@ -241,7 +245,7 @@ class RaidWeek {
 		} catch (err) {
 			if (err) return console.error(err);
 		} // End of try-catch
-		
+
 	} // End of writeJson
 
 } // End RaidWeek

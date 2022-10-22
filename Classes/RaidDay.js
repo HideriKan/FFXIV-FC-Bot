@@ -1,3 +1,4 @@
+const { time } = require('discord.js');
 /**
  * Manages the day of a Raid
  */
@@ -31,7 +32,7 @@ class RaidDay {
 		if (this.isRaid) {
 			field = {
 				name: dFormat.format(tDate),
-				value: `At: <t:${Math.floor(sDate.getTime() / 1000)}:t>, <t:${Math.floor(sDate.getTime() / 1000)}:R>`,
+				value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`,
 				inline: true
 			};
 		} else {
