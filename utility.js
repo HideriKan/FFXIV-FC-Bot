@@ -26,6 +26,7 @@ const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '101261
 async function createScheduledEvents(interaction, raidWeek) {
 	if (!interaction.guild.available)
 		return;
+	await interaction.deferReply();
 
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
 
@@ -45,7 +46,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 		});
 	});
 
-	// interaction.update({ content: 'Guild Events have been added', components: [] });
+	interaction.deferUpdate({ content: 'Guild Events have been added', components: [] });
 }
 
 /**
