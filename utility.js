@@ -45,7 +45,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 		});
 	});
 
-	// interaction.update({ content: 'Guild Events have been added', components: [] });
+	interaction.update({ content: 'Guild Events have been added', components: [] });
 }
 
 /**
