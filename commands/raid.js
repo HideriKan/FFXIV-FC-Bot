@@ -7,7 +7,7 @@ const argLite = 'lite';
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raid')
-		.setDescription('[Beta] Shows the Raid Schedule')
+		.setDescription('Shows the Raid Schedule')
 		.addStringOption(opt => opt.setName('options')
 			.setDescription('Optional Modifiers')
 			.addChoices({ name: 'Lite', value: argLite }
