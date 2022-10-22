@@ -28,7 +28,7 @@ const rest = new REST({ version: '10' }).setToken(isBeta ? tokenBeta : token);
 				Routes.applicationGuildCommands(isBeta ? clientIdBeta : clientId, guildId),
 				{ body: commands },
 			);
-	
+
 		}
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
