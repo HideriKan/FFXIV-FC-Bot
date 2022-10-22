@@ -2,7 +2,7 @@
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 // Config
-const { clientId, guildId, token } = require('./config.json'); // eslint-disable-line no-unused-vars
+const { clientId, guildId, token, isBeta, tokenBeta, clientIdBeta } = require('./config.json'); // eslint-disable-line no-unused-vars
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -12,7 +12,7 @@ for (const file of commandFiles) {
 	commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '10' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(isBeta ? tokenBeta : token);
 
 const isGlobal = false;
 (async () => {
@@ -21,15 +21,15 @@ const isGlobal = false;
 		let data;
 		if (isGlobal) {
 			data = await rest.put(
-				Routes.applicationCommands(clientId),
+				Routes.applicationCommands(isBeta ? clientIdBeta : clientId),
 				{ body: commands },
 			);
 		} else {
 			data = await rest.put(
-				Routes.applicationGuildCommands(clientId, guildId),
+				Routes.applicationGuildCommands(isBeta ? clientIdBeta : clientId, guildId),
 				{ body: commands },
 			);
-	
+
 		}
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
