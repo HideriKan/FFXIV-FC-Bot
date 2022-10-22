@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const RaidWeek = require('../RaidWeek');
+const RaidWeek = require('../Classes/RaidWeek');
 
 // Arguments
 const argLite = 'lite';
