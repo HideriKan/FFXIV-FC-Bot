@@ -2,7 +2,7 @@
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
-const { getStartingDay } = require('../utility');
+const { getStartingDay, getRaidDayFromString } = require('../utility');
 
 // File settings
 const jsonFile = './RaidTimes.json';
@@ -22,40 +22,8 @@ class RaidWeek {
 	async newDaysFromBatch(batchArr) {
 		const lastDate = new Date(this.startingWeekDay);
 
-		batchArr.forEach(times => {
-			let isDateSet = false;
-			const lDate = new Date(lastDate);
-			const rDay = new RaidDay(lDate);
-			times.trim();
-
-			if (!isNaN(times) || times.includes(':')) {
-
-				if (times.length === 2 && times != '00') {
-					lastDate.setUTCHours(times, 0);
-					isDateSet = true;
-
-				} else if (times.length === 4) {
-					lastDate.setUTCHours(times.substring(0, 2), times.substring(2));
-					isDateSet = true;
-
-				} else if (times.length === 5) {
-					let arrTimes = times.split(':');
-
-					if (!isNaN(arrTimes[0]) && !isNaN(arrTimes[1])) {
-						lastDate.setUTCHours(arrTimes[0], arrTimes[1]);
-						isDateSet = true;
-
-					}
-				}
-
-				if (isDateSet) {
-					rDay.isRaid = true;
-					rDay.startTime = lastDate.toJSON();
-				}
-
-			}
-
-			this.week.push(rDay);
+		batchArr.forEach(time => {
+			this.week.push(getRaidDayFromString(time, lastDate));
 			lastDate.setDate(lastDate.getDate() + 1);
 		});
 	}
