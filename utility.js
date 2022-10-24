@@ -28,21 +28,22 @@ async function createScheduledEvents(interaction, raidWeek) {
 		return;
 
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
+	const now = new Date();
 
 	raidWeek.readJson();
 	raidWeek.keepOnlyRaidDays();
 
 	raidWeek.week.forEach(day => {
-		const start = new Date(day.startTime).getTime();
-
-		interaction.guild.scheduledEvents.create({
-			name: new Date(day.day).toDateString(),
-			description: 'Raid Time',
-			scheduledStartTime: start,
-			privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
-			entityType: GuildScheduledEventEntityType.Voice,
-			channel: channel.id
-		});
+		const start = new Date(day.startTime)
+		if (start > now)
+			interaction.guild.scheduledEvents.create({
+				name: new Date(day.day).toDateString(),
+				description: 'Raid Time',
+				scheduledStartTime: start.getTime(),
+				privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
+				entityType: GuildScheduledEventEntityType.Voice,
+				channel: channel.id
+			});
 	});
 
 	interaction.update({ content: 'Guild Events have been added', components: [] });
