@@ -1,4 +1,5 @@
 class Member {
+	static fileName = './MemberLoot.json';
 	constructor(name, id) {
 		this.name = name; // display name
 		this.id = id; // unique discord snowflake id
