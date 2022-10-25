@@ -19,9 +19,9 @@ class RaidDay {
 	 * @returns An object for the EmbedBuilder.addFields()
 	 */
 	toField() {
-		let tDate = new Date(this.day);
-		let sDate = new Date(this.startTime);
-		let dFormat = new Intl.DateTimeFormat('en', {
+		const tDate = new Date(this.day);
+		const sDate = new Date(this.startTime);
+		const dFormat = new Intl.DateTimeFormat('en', {
 			day: '2-digit',
 			month: 'short',
 			weekday: 'short',
