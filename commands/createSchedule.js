@@ -24,7 +24,13 @@ module.exports = {
 		const raidWeek = new RaidWeek();
 		const editNext = interaction.options.getBoolean('next');
 		const batch = interaction.options.getString('batch');
-		const batchArr = batch.split('/');
+		let batchArr = batch.split('/');
+		if (batchArr.lenght > 7)
+		batchArr = batchArr.slice(0, 7);
+		while (batchArr.lenght < 7)
+		batchArr.push('');
+		
+		const raidWeek = new RaidWeek();
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -37,7 +43,6 @@ module.exports = {
 					.setLabel('Ult')
 					.setStyle(ButtonStyle.Secondary)
 			);
-
 
 		if (editNext) // when the user is chosing a next week
 			raidWeek.startingWeekDay = getStartingDay(true);
