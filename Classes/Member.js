@@ -18,6 +18,41 @@ class Member {
 	}
 
 	/**
+	 * finds and fills the corresponding user in the file
+	 * @param {String} id unique discord snowflake id
+	 */
+	findInFile(id) {
+		const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+		// TODO: test
+		const member = data.find(member => { member.id === id });
+
+		if (member !== undefined) {
+			this = member;
+		}
+	}
+
+	/**
+	 * saves the member
+	 */
+	saveMember() {
+		const members = getAllMembers();
+		
+		if (isMemberAlreadyPresent(this.id)) {
+			for (let i = 0; i < members.length; i++)
+				if (members[i].id == this.id)
+					members[i] = this;
+
+		}
+		else
+			members.push(this)
+		saveMembers(members);
+	}
+
+	static isMemberAlreadyPresent(id) {
+		// TODO:
+	}
+
+	/**
 	 * will write the passed data into the json
 	 * @param {Array} data an Array of Member
 	 */
