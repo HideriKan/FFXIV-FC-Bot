@@ -27,21 +27,16 @@ class RaidDay {
 			weekday: 'short',
 			timeZone: 'UTC'
 		});
-		let field = {};
 
-		if (this.isRaid) {
-			field = {
-				name: dFormat.format(tDate),
-				value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`,
-				inline: true
-			};
-		} else {
-			field = {
-				name: dFormat.format(tDate),
-				value: 'No Raid',
-				inline: true
-			};
-		}
+		let field = {
+			name: dFormat.format(tDate),
+			inline: true
+		};
+
+		if (this.isRaid)
+			field = { value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`, }
+		else
+			field = { value: 'No Raid' };
 
 		return field;
 	} // End of toField
