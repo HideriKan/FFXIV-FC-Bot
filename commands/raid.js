@@ -17,8 +17,6 @@ module.exports = {
 	 * Displays the current raid schedule
 	 * Sends an Embed with the raid times into the corresponding channel
 	 * @param {import('discord.js').Interaction} interaction 
-	 * @argument pin Will pin the post afterwards
-	 * @argument ro (Raidonly) Will only show the days when there is raid
 	 */
 	async execute(interaction) {
 		const raidWeek = new RaidWeek();

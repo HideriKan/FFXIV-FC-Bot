@@ -3,8 +3,11 @@ const RaidWeek = require('../Classes/RaidWeek');
 const { getStartingDay } = require('../utility');
 
 module.exports = {
+	// TODO: change name to time
+	// TODO: add subcommand create
+	// TODO: merge edit time into this as a subcommand
 	data: new SlashCommandBuilder()
-		.setName('createschedule')
+		.setName('createschedule') 
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
@@ -16,14 +19,15 @@ module.exports = {
 			.setRequired(true))
 	,
 	/**
-	 * Function of the Create Times (ct) Command
-	 * Create or Adjust the Raid times
-	 * @param {import('discord.js').Interaction} interaction
+	 * createschedule will take a true or false if the new schedule is for the current week or the next one.
+	 * the other argument will be the batch which contain the string array of the raid times
+	 * @param {import('discord.js').Interaction} interaction message interaction
 	 */
 	async execute(interaction) {
-		const raidWeek = new RaidWeek();
+		// get user option
 		const editNext = interaction.options.getBoolean('next');
 		const batch = interaction.options.getString('batch');
+		// process user batch
 		let batchArr = batch.split('/');
 		if (batchArr.lenght > 7)
 		batchArr = batchArr.slice(0, 7);

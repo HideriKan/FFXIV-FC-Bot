@@ -1,4 +1,5 @@
 const { time } = require('discord.js');
+
 /**
  * Manages the day of a Raid
  */

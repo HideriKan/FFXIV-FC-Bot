@@ -18,6 +18,10 @@ class RaidWeek {
 		this.week = [];
 	}
 
+	/**
+	 * generates a raid week from a batch of raid times
+	 * @param {String[]} batchArr array of times
+	 */
 	async newDaysFromBatch(batchArr) {
 		const lastDate = new Date(this.startingWeekDay);
 
@@ -28,10 +32,7 @@ class RaidWeek {
 	}
 
 	/**
-	 * Creates the data for the week by asking the user for each day.
-	 * An Asyncronos func because it is needed to await the respnse from the user.
-	 * @param {Message} msg To read the contents of the User
-	 * @deprecated this doesnt get used anymore
+	 * filters out the non raid days from the week
 	 */
 	keepOnlyRaidDays() {
 		this.week = this.week.filter(day => day.isRaid);
@@ -63,7 +64,7 @@ class RaidWeek {
 	} // End of readJson
 
 	/**
-	 * Simple function that writes the whole contents of the RaidWeek into a JSON file
+	 * writes the raid week into a formatted json file
 	 */
 	writeJson() {
 		// fs.writeFile(jsonFile, JSON.stringify(this, null, 2), err => {

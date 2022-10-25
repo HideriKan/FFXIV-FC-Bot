@@ -24,7 +24,7 @@ module.exports = {
         )
     ,
     /**
-     * 
+     * Edits the time from the selected day to the given one
      * @param {import("discord.js").Interaction} interaction 
      */
     async execute(interaction) {
