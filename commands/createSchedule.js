@@ -29,8 +29,12 @@ module.exports = {
 		const batch = interaction.options.getString('batch');
 		// process user batch
 		let batchArr = batch.split('/');
+		
+		// reduce the array when its too big
 		if (batchArr.lenght > 7)
 		batchArr = batchArr.slice(0, 7);
+		
+		// fill the array when its to small
 		while (batchArr.lenght < 7)
 		batchArr.push('');
 		
