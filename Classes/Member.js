@@ -27,12 +27,12 @@ class Member {
 		const member = data.find(member => { member.id === id });
 
 		if (member !== undefined) {
-			this = member;
+			this.fromMember(member);
 		}
 	}
 
 	/**
-	 * saves the member
+	 * saves the member to the json file
 	 */
 	saveMember() {
 		const members = getAllMembers();
@@ -45,7 +45,26 @@ class Member {
 		}
 		else
 			members.push(this)
+			
 		saveMembers(members);
+	}
+
+	/**
+	 * 
+	 * @param {Member} member 
+	 */
+	fromMember(member) {
+		this.name = member.name; // display name
+		this.id = member.id; // unique discord snowflake id
+		this.hasBiS = member.hasBiS; // might not use
+		this.priority = member.priority;
+		this.totalGear = member.totalGear;
+		this.hasWeapon = member.hasWeapon;
+		this.hasBody = member.hasBody;
+		this.hasTomeWeap = member.hasTomeWeap;
+		this.hasTomeWeapUp = member.hasTomeWeapUp;
+		this.TotalGearUp = member.TotalGearUp;
+		this.TotalAccUp = member.TotalAccUp;
 	}
 
 	/**
