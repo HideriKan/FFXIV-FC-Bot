@@ -12,7 +12,7 @@ class Member {
 		this.hasWeapon = false;
 		this.hasBody = false;
 		this.hasTomeWeap = false;
-		this.hasTimeWeapUp = false;
+		this.hasTomeWeapUp = false;
 		this.TotalGearUp = 0;
 		this.TotalAccUp = 0;
 	}
