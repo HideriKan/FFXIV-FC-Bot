@@ -35,9 +35,9 @@ class RaidDay {
 		};
 
 		if (this.isRaid)
-			field = { value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`, }
+			field.value = `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`;
 		else
-			field = { value: 'No Raid' };
+			field.value = 'No Raid';
 
 		return field;
 	} // End of toField
