@@ -1,6 +1,35 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, } = require('discord.js');
 const Member = require('../Classes/Member');
 
+function got(user, type) {
+	const reply = { content: null, components: null, ephemeral: true };
+	const row = new ActionRowBuilder()
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('yes')
+				.setLabel('Yes')
+				.setStyle(ButtonStyle.Primary)
+		)
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('no')
+				.setLabel('No')
+				.setStyle(ButtonStyle.Danger)
+		);
+
+	reply.content = `Give ${user} an item type of "${type}"?`;
+	reply.components = [row];
+
+	return reply;
+}
+
+function show(type) {
+	const reply = { content: null, components: null, ephemeral: true };
+
+	reply.content = `The show with options: "${type}" is a WIP command`;
+	return reply;
+}
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loot')
@@ -59,34 +88,15 @@ module.exports = {
 		await interaction.deferReply();
 		const cmd = interaction.options.getSubcommand();
 		const type = interaction.options.getString('type');
-		let reply = {
-			content: null,
-			components: null,
-			ephemeral: true,
-		};
-
 		const user = interaction.options.getUser('user');
-		const row = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setCustomId('yes')
-					.setLabel('Yes')
-					.setStyle(ButtonStyle.Primary)
-			)
-			.addComponents(
-				new ButtonBuilder()
-					.setCustomId('no')
-					.setLabel('No')
-					.setStyle(ButtonStyle.Danger)
-			);
 
+		let reply;
 		switch (cmd) {
 			case 'got':
-				reply.content = `Give ${user} an item type of "${type}"?`;
-				reply.components = [row];
+				reply = got(user, type);
 				break;
 			case 'show':
-				reply.content = `The ${cmd} with options: "${type}" is a WIP command`;
+				reply = show(type);
 				break;
 		}
 
