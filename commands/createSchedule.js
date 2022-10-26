@@ -1,5 +1,5 @@
 const { Interaction, SlashCommandBuilder } = require('discord.js');
-const RaidWeek = require('../RaidWeek');
+const RaidWeek = require('../Classes/RaidWeek');
 const { getStartingDay } = require('../utility');
 
 module.exports = {
