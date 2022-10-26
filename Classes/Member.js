@@ -78,7 +78,9 @@ class Member {
 	 */
 	static getAllMembers() {
 		try {
-			return JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+			// TODO: test on empty file
+			return data
 		} catch (error) {
 			console.error(err);
 			return new Array;
