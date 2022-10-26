@@ -48,8 +48,16 @@ class Member {
 		saveMembers(members);
 	}
 
+	/**
+	 * Checks if the given id is already present is in the member json
+	 * @param {String} id unqie discord snowflake id
+	 * @returns true if found, otherwise false
+	 */
 	static isMemberAlreadyPresent(id) {
-		// TODO:
+		const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+		const member = data.find(member => { member.id === id });
+		
+		return member !== undefined;
 	}
 
 	/**
