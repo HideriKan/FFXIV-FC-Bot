@@ -1,6 +1,12 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, User, } = require('discord.js');
 const Member = require('../Classes/Member');
 
+/**
+ * processes the loot got command
+ * @param {User} user mentioned user
+ * @param {string} type item type
+ * @returns reply as an object
+ */
 function got(user, type) {
 	const reply = { content: null, components: null, ephemeral: true };
 	const row = new ActionRowBuilder()
@@ -17,12 +23,19 @@ function got(user, type) {
 				.setStyle(ButtonStyle.Danger)
 		);
 
+	const member = new Member(user.nickname, user.id);
+	member.saveMember();
+
 	reply.content = `Give ${user} an item type of "${type}"?`;
 	reply.components = [row];
 
 	return reply;
 }
 
+/**
+ * processes the loot show command
+ * @param {string} type item type
+ */
 function show(type) {
 	const reply = { content: null, components: null, ephemeral: true };
 
@@ -72,21 +85,19 @@ module.exports = {
 			)
 		),
 	/**
-	 * @param {Interaction} interaction
+	 * @param {import('discord.js').Interaction} interaction
 	 */
 	async execute(interaction) {
 		await interaction.deferReply();
 		const cmd = interaction.options.getSubcommand();
-		const type = interaction.options.getString('type');
-		const user = interaction.options.getUser('user');
 
 		let reply;
 		switch (cmd) {
 			case 'got':
-				reply = got(user, type);
+				reply = got(interaction.options.getUser('user'), interaction.options.getString('type'));
 				break;
 			case 'show':
-				reply = show(type);
+				reply = show(interaction.options.getString('type'));
 				break;
 		}
 
