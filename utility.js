@@ -78,7 +78,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 		const start = new Date(day.startTime)
 		if (start > now)
 			interaction.guild.scheduledEvents.create({
-				name: new Date(day.day).toDateString(),
+				name: 'Raid',
 				description: 'Raid Time',
 				scheduledStartTime: start.getTime(),
 				privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
