@@ -37,13 +37,28 @@ module.exports = {
         // read the current time
         const raidWeek = new RaidWeek();
         raidWeek.readJson();
+        const rDay = raidWeek.week[index];
+
+        // get the event for that raid day
+        const testTimeStamp = new Date(rDay.startTime);
+        testTimeStamp.setMilliseconds(000);
+        const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: testTimeStamp.getTime() });
+        const event = events.size >= 1 ? events.first() : null;
 
         // adjust the raid day with the new time
-        raidWeek.week[index] = getRaidDayFromString(time, raidWeek.week[index].day);
+        const newDay = getRaidDayFromString(time, rDay.day);
+        raidWeek.week[index] = newDay;
+
+        if (event !== null) {
+            if (newDay.isRaid)
+                event.setScheduledStartTime(newDay.startTime)
+            else
+                event.delete();
+        }
 
         // save the new raid day to the file
         raidWeek.writeJson();
 
-        interaction.reply({ content: `The raid day has been updated.\nPlease use the ${inlineCode('/raid')} command again` });
+        interaction.reply({ content: `The raid day has been updated.\nPlease use the ${inlineCode('/raid')} command again.` });
     }
 }
