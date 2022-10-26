@@ -1,4 +1,5 @@
 const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
+const fs = require('fs');
 
 /**
  * Returns the day of the reset in FFXIV (Tuesday)
@@ -55,6 +56,15 @@ async function createScheduledEvents(interaction, raidWeek) {
 async function assingToMember(interaction) {
 	console.log(interaction);
 	interaction.update({ content: 'Updated', components: [] });
+}
+
+// TODO:
+function fileExists(fileName) {
+	try {
+		fs.existsSync(fileName)
+	} catch (error) {
+		
+	}
 }
 
 module.exports = {
