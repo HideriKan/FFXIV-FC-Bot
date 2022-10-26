@@ -34,52 +34,42 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loot')
 		.setDescription('Loot tracker')
-		.addSubcommand((subcmd) =>
-			subcmd
-				.setName('got') // opt: [user, type]
-				.setDescription('Distrubte loot for a raid member')
-				.addUserOption((opt) =>
-					opt
-						.setName('user')
-						.setDescription('who got the loot')
-						.setRequired(true)
+		.addSubcommand((subcmd) => subcmd.setName('got') // opt: [user, type]
+			.setDescription('Distrubte loot for a raid member')
+			.addUserOption((opt) => opt.setName('user')
+				.setDescription('who got the loot')
+				.setRequired(true)
+			)
+			.addStringOption((opt) => opt.setName('type')
+				.setDescription('Item Type')
+				.setRequired(true)
+				.addChoices(
+					{ name: 'Gear', value: 'gear' },
+					{ name: 'Weapon', value: 'weap' },
+					{ name: 'Body', value: 'body' },
+					{ name: 'Tome Weapon', value: 'tomeWeap' },
+					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
+					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
+					{ name: 'Priority', value: 'prio' }
 				)
-				.addStringOption((opt) =>
-					opt
-						.setName('type')
-						.setDescription('Item Type')
-						.setRequired(true)
-						.addChoices(
-							{ name: 'Gear', value: 'gear' },
-							{ name: 'Weapon', value: 'weap' },
-							{ name: 'Body', value: 'body' },
-							{ name: 'Tome Weapon', value: 'tomeWeap' },
-							{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
-							{ name: 'Tome Gear Upgrade', value: 'gearUp' },
-							{ name: 'Tome Accessory Upgrade', value: 'accUp' },
-							{ name: 'Priority', value: 'prio' }
-						)
-				)
+			)
 		)
-		.addSubcommand((subcmd) =>
-			subcmd
-				.setName('show') // opt: type
-				.setDescription('Show who can roll / priority')
-				.addStringOption((opt) =>
-					opt
-						.setName('type')
-						.setDescription('Item Type')
-						.setRequired(true)
-						.addChoices(
-							{ name: 'Gear', value: 'gear' },
-							{ name: 'Weapon', value: 'weap' },
-							{ name: 'Body', value: 'body' },
-							{ name: 'Tome Weapon', value: 'tomeWeap' },
-							{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
-							{ name: 'Tome Gear Upgrade', value: 'gearUp' },
-							{ name: 'Tome Accessory Upgrade', value: 'accUp' }
-						)
+		.addSubcommand((subcmd) => subcmd.setName('show') // opt: type
+			.setDescription('Show who can roll / priority')
+			.addStringOption((opt) => opt.setName('type')
+				.setDescription('Item Type')
+				.setRequired(true)
+				.addChoices(
+					{ name: 'Gear', value: 'gear' },
+					{ name: 'Weapon', value: 'weap' },
+					{ name: 'Body', value: 'body' },
+					{ name: 'Tome Weapon', value: 'tomeWeap' },
+					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
+					{ name: 'Tome Accessory Upgrade', value: 'accUp' }
 				)
+			)
 		),
 	/**
 	 * @param {Interaction} interaction
