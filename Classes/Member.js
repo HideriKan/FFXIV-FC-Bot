@@ -5,38 +5,19 @@ class Member {
 	static fileName = './MemberLoot.json';
 
 	constructor(name, id) {
-		if (Member.isInFile(id))
-			this.fromMember(this.findInFile(id));
-		else {
-			this.name = name; // display name
-			this.id = id; // unique discord snowflake id
-			this.hasBiS = false; // might not use
-			this.priority = 0;
-			this.totalGear = 0;
-			this.hasWeapon = false;
-			this.hasBody = false;
-			this.hasTomeWeap = false;
-			this.hasTomeWeapUp = false;
-			this.TotalGearUp = 0;
-			this.TotalAccUp = 0;
-		}
-	}
+		this.name = name; // display name
+		this.id = id; // unique discord snowflake id
+		this.hasBiS = false; // might not use
+		this.priority = 0;
+		this.totalGear = 0;
+		this.hasWeapon = false;
+		this.hasBody = false;
+		this.hasTomeWeap = false;
+		this.hasTomeWeapUp = false;
+		this.totalGearUp = 0;
+		this.totalAccUp = 0;
 
-	/**
-	 * finds and fills the corresponding user in the file
-	 * @param {String} id unique discord snowflake id
-	 */
-	static findInFile(id) {
-		if (fileExists(this.fileName)) {
-			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
-			// TODO: test
-			const member = data.find(member => { member.id === id });
-
-			if (member !== undefined)
-				return member;
-		}
-
-		return new Member();
+		this.fillFromFile()
 	}
 
 	/**
@@ -71,8 +52,8 @@ class Member {
 		this.hasBody = member.hasBody;
 		this.hasTomeWeap = member.hasTomeWeap;
 		this.hasTomeWeapUp = member.hasTomeWeapUp;
-		this.TotalGearUp = member.TotalGearUp;
-		this.TotalAccUp = member.TotalAccUp;
+		this.totalGearUp = member.totalGearUp;
+		this.totalAccUp = member.totalAccUp;
 	}
 
 	/**
