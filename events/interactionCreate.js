@@ -28,7 +28,11 @@ module.exports = {
 
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			
+			if (interaction.deferred && !interaction.replied)
+				await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true });
+			else if (!interaction.replied)
+				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 	},
 };
