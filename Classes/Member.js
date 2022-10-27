@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { fileExists } = require('../utility');
+const { fileExists, onFileError } = require('../utility');
 
 class Member {
 	static fileName = './MemberLoot.json';
@@ -36,8 +36,8 @@ class Member {
 	}
 
 	/**
-	 * 
-	 * @param {Member} member 
+	 * copys the values from the passed member
+	 * @param {Member} member values to copy from
 	 */
 	fromMember(member) {
 		this.name = member.name; // display name
@@ -54,16 +54,40 @@ class Member {
 	}
 
 	/**
+	 * tries to find the user in the file and fill the member with fond one
+	 */
+	fillFromFile() {
+		if (!fileExists(Member.fileName))
+			return
+
+		try {
+			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
+			const member = data.find(member => member.id === this.id );
+
+			if (member !== undefined)
+				this.fromMember(member);
+
+		} catch (err) {
+			onFileError(error)
+		}
+	}
+
+	/**
 	 * Checks if the given id is already present is in the member json
 	 * @param {String} id unqie discord snowflake id
 	 * @returns true if found, otherwise false
 	 */
 	static isInFile(id) {
-		if (fileExists(this.fileName)) {
-			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+		if (!fileExists(Member.fileName))
+			return false;
+
+		try {
+			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
 			const member = data.find(member => { member.id === id });
 
 			return member !== undefined;
+		} catch (error) {
+			onFileError(error)
 		}
 
 		return false;
@@ -75,9 +99,10 @@ class Member {
 	 */
 	static saveMembers(data) {
 		try {
-			fs.writeFileSync(this.fileName, JSON.stringify(data, null, 2));
+			fs.writeFileSync(Member.fileName, JSON.stringify(data, null, 2));
 		} catch (err) {
-			if (err) return console.error(err);
+			if (err)
+				return console.error(err);
 		}
 	}
 
@@ -86,14 +111,13 @@ class Member {
 	 * @returns {Array} array of members
 	 */
 	static getAllMembers() {
-		if (fileExists(this.fileName)) {
-			try {
-				const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
-				// TODO: test on empty file
-				return data
-			} catch (error) {
-				console.error(err);
-			}
+		if (!fileExists(Member.fileName))
+			return new Array;
+
+		try {
+			return JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
+		} catch (error) {
+			onFileError(error)
 		}
 		return new Array;
 	}
