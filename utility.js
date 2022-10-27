@@ -51,15 +51,6 @@ async function createScheduledEvents(interaction, raidWeek) {
 
 /**
  * 
- * @param {import('discord.js').Interaction} interaction 
- */
-async function assingToMember(interaction) {
-	console.log(interaction);
-	interaction.update({ content: 'Updated', components: [] });
-}
-
-/**
- * 
  * @param {String} fileName path to the file
  * @returns true if already exisits, otherwise false and creates the file
  */

@@ -1,3 +1,4 @@
+const ItemManager = require('../Classes/ItemManager');
 const RaidWeek = require('../Classes/RaidWeek');
 const { createScheduledEvents, assingToMember } = require('../utility');
 
@@ -13,8 +14,8 @@ module.exports = {
 			if (interaction.isButton()) {
 				if (interaction.customId === 'savage' || interaction.customId === 'ult')
 					await createScheduledEvents(interaction, new RaidWeek());
-				if (interaction.customId === 'yes')
-					await assingToMember(interaction);
+				if (interaction.customId === 'yesitem')
+					await ItemManager.assingToMember(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
 			}
