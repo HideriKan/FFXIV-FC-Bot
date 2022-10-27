@@ -63,13 +63,21 @@ function fileExists(fileName) {
 
 		return true;
 	} catch (error) {
-		console.error(error);
+		onFileError(error);
 	}
+}
+
+
+function onFileError(err) {
+	if (err.message === 'Unexpected end of JSON input')
+		console.error('Error: File Emtpy');
+	else
+		console.error(err);
 }
 
 module.exports = {
 	getStartingDay,
 	createScheduledEvents,
-	assingToMember,
-	fileExists
+	fileExists,
+	onFileError
 }; 
