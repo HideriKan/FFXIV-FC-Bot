@@ -58,17 +58,27 @@ async function assingToMember(interaction) {
 	interaction.update({ content: 'Updated', components: [] });
 }
 
-// TODO:
+/**
+ * 
+ * @param {String} fileName path to the file
+ * @returns true if already exisits, otherwise false and creates the file
+ */
 function fileExists(fileName) {
 	try {
-		fs.existsSync(fileName)
+		if (!fs.existsSync(fileName)) {
+			fs.writeFile(fileName, '', err => { if (err) console.error(err); });
+			return false;
+		}
+
+		return true;
 	} catch (error) {
-		
+		console.error(error);
 	}
 }
 
 module.exports = {
 	getStartingDay,
 	createScheduledEvents,
-	assingToMember
+	assingToMember,
+	fileExists
 }; 

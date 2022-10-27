@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { fileExists } = require('../utility');
 
 class Member {
 	static fileName = './MemberLoot.json';
@@ -27,14 +28,16 @@ class Member {
 	 * finds and fills the corresponding user in the file
 	 * @param {String} id unique discord snowflake id
 	 */
-	findInFile(id) {
-		const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
-		// TODO: test
-		const member = data.find(member => { member.id === id });
+	static findInFile(id) {
+		if (fileExists(this.fileName)) {
+			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+			// TODO: test
+			const member = data.find(member => { member.id === id });
 
-		if (member !== undefined)
-			return member;
-		
+			if (member !== undefined)
+				return member;
+		}
+
 		return new Member();
 	}
 
@@ -80,10 +83,14 @@ class Member {
 	 * @returns true if found, otherwise false
 	 */
 	static isInFile(id) {
-		const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
-		const member = data.find(member => { member.id === id });
+		if (fileExists(this.fileName)) {
+			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+			const member = data.find(member => { member.id === id });
 
-		return member !== undefined;
+			return member !== undefined;
+		}
+
+		return false;
 	}
 
 	/**
@@ -103,14 +110,16 @@ class Member {
 	 * @returns {Array} array of members
 	 */
 	static getAllMembers() {
-		try {
-			const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
-			// TODO: test on empty file
-			return data
-		} catch (error) {
-			console.error(err);
-			return new Array;
+		if (fileExists(this.fileName)) {
+			try {
+				const data = JSON.parse(fs.readFileSync(this.fileName, 'utf8'));
+				// TODO: test on empty file
+				return data
+			} catch (error) {
+				console.error(err);
+			}
 		}
+		return new Array;
 	}
 }
 
