@@ -5,8 +5,6 @@ class Member {
 	static fileName = './MemberLoot.json';
 
 	constructor(name, id) {
-		
-
 		if (Member.isInFile(id))
 			this.fromMember(this.findInFile(id));
 		else {
@@ -45,7 +43,7 @@ class Member {
 	 * saves the member to the json file
 	 */
 	saveMember() {
-		const members = getAllMembers();
+		const members = this.getAllMembers();
 
 		if (isMemberAlreadyPresent(this.id)) {
 			for (let i = 0; i < members.length; i++)
