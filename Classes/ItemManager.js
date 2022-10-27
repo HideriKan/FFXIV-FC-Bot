@@ -55,6 +55,7 @@ class ItemManager {
 		const output = new Array();
 		let func;
 
+		// TODO: use user instead of name
 		switch (type) {
 			case 'gear':
 				reply.content = escapeUnderline(bold('Total Gear:\n'));
