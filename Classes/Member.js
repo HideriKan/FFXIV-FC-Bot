@@ -24,18 +24,15 @@ class Member {
 	 * saves the member to the json file
 	 */
 	saveMember() {
-		const members = this.getAllMembers();
+		const members = Member.getAllMembers();
+		const index = members.findIndex(element => element.id === this.id)
 
-		if (isMemberAlreadyPresent(this.id)) {
-			for (let i = 0; i < members.length; i++)
-				if (members[i].id == this.id)
-					members[i] = this;
-
-		}
+		if (index >= 0)
+			members[index] = this;
 		else
 			members.push(this)
 
-		saveMembers(members);
+		Member.saveMembers(members);
 	}
 
 	/**
