@@ -119,6 +119,19 @@ class Member {
 		}
 		return new Array;
 	}
+
+	static isWeapBodyBalanced() {
+		const members = Member.getAllMembers();
+		let isBalanced = true;
+
+		members.forEach(member => {
+			if (!member.hasBody && !member.hasWeapon) 
+				isBalanced = false;
+		});
+
+		return isBalanced;
+	}
+
 }
 
 module.exports = Member;
