@@ -73,52 +73,73 @@ class ItemManager {
 		interaction.update({ content: interaction.message.content.replace('Give', 'Gave'), components: [] });
 	}
 
-	static generateData(type) {
-		const reply = { content: null, components: null, ephemeral: true };
-		const members = Member.getAllMembers();
-		const output = new Array();
+	getArrayFunc(reply, output) {
 		let func;
 
+		// Need  = false
+		// Greed = true
+		// Pass  = null
 		switch (this.type.value) {
+			case 'gear': // Isolated
+				reply.content = bold('Total Gear:\n');
+				func = member => { output.push({ name: member.id, value: member.totalGear }); };
 				break;
-			case 'weap':
-				reply.content = escapeUnderline(bold('Has Weapon:\n'));
-				func = member => { output.push({ name: member.name, value: member.hasWeapon }); };
+			case 'weap': // Dependant on body
+				reply.content = bold('Weapon Rolls:\n');
+				if (Member.isWeapBodyBalanced())
+					func = member => { output.push({ name: member.id, value: member.hasWeapon }); };
+				else
+					func = member => { output.push({ name: member.id, value: member.hasWeapon || member.hasBody }); };
 				break;
-			case 'body':
-				reply.content = escapeUnderline(bold('Has Body:\n'));
-				func = member => { output.push({ name: member.name, value: member.hasBody }); };
+			case 'body': // Dependant on weap
+				reply.content = bold('Body Rolls:\n');
+				if (Member.isWeapBodyBalanced())
+					func = member => { output.push({ name: member.id, value: member.hasBody }); };
+				else
+					func = member => { output.push({ name: member.id, value: member.hasBody || member.hasWeapon }); };
+
 				break;
-			case 'tomeWeap':
-				reply.content = escapeUnderline(bold('Has Tome Weapon:\n'));
-				func = member => { output.push({ name: member.name, value: member.hasTomeWeap }); };
+			case 'tomeWeap': // Isolated
+				reply.content = bold('Tome Weapon Rolls: ') + italic('requires 500 Tomes\n');
+				func = member => { output.push({ name: member.id, value: member.hasTomeWeap ? null : false }); };
 				break;
-			case 'tomeUp':
-				reply.content = escapeUnderline(bold('Has Tome Weapon Upgrade:\n'));
-				func = member => { output.push({ name: member.name, value: member.hasTomeWeapUp }); };
+			case 'tomeUp': // Dependant on tomeWeap
+				reply.content = bold(`Tome Weapon Upgrade Rolls: `) + italic('requires Tome Weapon\n');
+				func = member => { output.push({ name: member.id, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
 				break;
-			case 'gearUp':
-				reply.content = escapeUnderline(bold('Total Gear Upgrade:\n'));
-				func = member => { output.push({ name: member.name, value: member.TotalGearUp }); };
+			case 'gearUp': // Isolated
+				reply.content = bold('Total Gear Upgrade:\n');
+				func = member => { output.push({ name: member.id, value: member.totalGearUp }); };
 				break;
-			case 'accUp':
-				reply.content = escapeUnderline(bold('Total Accessory Upgrade:\n'));
-				func = member => { output.push({ name: member.name, value: member.TotalAccUp }); };
+			case 'accUp': // Isolated
+				reply.content = bold('Total Accessory Upgrade:\n');
+				func = member => { output.push({ name: member.id, value: member.totalAccUp }); };
 				break;
 			case 'prio':
-				reply.content = escapeUnderline(bold('Current Priority:\n'));
-				func = member => { output.push({ name: member.name, value: member.priority }); };
+				reply.content = bold('Current Priority:\n');
+				func = member => { output.push({ name: member.id, value: member.priority }); };
 				// TODO:
 				break;
 		}
 
-		members.forEach(func);
-		output.sort((a, b) => a.value > b.value );
-		output.forEach(item => { reply.content += `${item.value}: ${item.name}\n` });
+		return func;
+	}
+
+	generateData() {
+		const reply = { content: null, components: null, ephemeral: true };
+		const members = Member.getAllMembers();
+		const output = new Array();
+
+		members.forEach(this.getArrayFunc(reply, output));
+		output.sort((a, b) => a.value - b.value);
+		output.forEach(this.type.isBool ? this.dataFromBool(reply) : this.dataFromNumber(reply));
 
 		return reply;
-
 	}
+
+	rollFromBool = bool => bool ? 'Greed' : bool === null ? ' Pass' : ' Need';
+	dataFromBool = reply => item => { reply.content += `${inlineCode(this.rollFromBool(item.value))}: ${userMention(item.name)}\n` };
+	dataFromNumber = reply => item => { reply.content += `${inlineCode(item.value)}: ${userMention(item.name)}\n` };
 }
 
 module.exports = ItemManager;
