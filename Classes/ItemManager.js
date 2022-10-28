@@ -70,8 +70,7 @@ class ItemManager {
 		}
 		member.saveMember();
 
-
-		interaction.update({ content: 'Updated', components: [] });
+		interaction.update({ content: interaction.message.content.replace('Give', 'Gave'), components: [] });
 	}
 
 	static generateData(type) {
