@@ -59,10 +59,10 @@ class ItemManager {
 				member.hasTomeWeapUp = true;
 				break;
 			case 'gearUp':
-				member.TotalGearUp++;
+				member.totalGearUp++;
 				break;
 			case 'accUp':
-				member.TotalAccUp++;
+				member.totalAccUp++;
 				break;
 			case 'prio':
 				// TODO:
