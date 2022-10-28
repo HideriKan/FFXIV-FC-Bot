@@ -38,12 +38,9 @@ class ItemManager {
 	 * 
 	 * @param {import('discord.js').ButtonInteraction} interaction 
 	 */
-	static async assingToMember(interaction) {
-		const splitArr = interaction.message.content.split(' ');
-		const type = splitArr[1];
+	async assingToMember(interaction) {
 		const user = interaction.message.mentions.parsedUsers.first();
-		const memberName = user.nickname === undefined ? user.username : user.nickname
-		const member = new Member(memberName, user.id);
+		const member = new Member(user.id);
 
 		switch (this.type.value) {
 			case 'gear':
