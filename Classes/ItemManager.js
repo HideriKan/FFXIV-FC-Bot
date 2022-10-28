@@ -45,7 +45,7 @@ class ItemManager {
 		const memberName = user.nickname === undefined ? user.username : user.nickname
 		const member = new Member(memberName, user.id);
 
-		switch (type) {
+		switch (this.type.value) {
 			case 'gear':
 				member.totalGear++;
 				break;
@@ -83,11 +83,7 @@ class ItemManager {
 		const output = new Array();
 		let func;
 
-		// TODO: use user instead of name
-		switch (type) {
-			case 'gear':
-				reply.content = escapeUnderline(bold('Total Gear:\n'));
-				func = member => { output.push({ name: member.name, value: member.totalGear }); };
+		switch (this.type.value) {
 				break;
 			case 'weap':
 				reply.content = escapeUnderline(bold('Has Weapon:\n'));
