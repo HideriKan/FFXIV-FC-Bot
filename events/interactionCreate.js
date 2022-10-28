@@ -15,7 +15,9 @@ module.exports = {
 				if (interaction.customId === 'savage' || interaction.customId === 'ult')
 					await createScheduledEvents(interaction, new RaidWeek());
 				if (interaction.customId === 'yesitem')
-					await ItemManager.assingToMember(interaction);
+					// this is a mess that I am not proud of
+					await new ItemManager(ItemManager.itemNameFromMessage(interaction.message.content))
+						.assingToMember(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
 			}

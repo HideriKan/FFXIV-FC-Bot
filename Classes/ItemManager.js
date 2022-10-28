@@ -19,6 +19,14 @@ class ItemManager {
 		{ name: 'Priority', value: 'prio', isBool: false }
 	]
 
+	static itemNameFromMessage(content) {
+		const search = '**'
+		const first = content.indexOf(search) + search.length; // plus search length to ignore it on the next search and in the substring
+		const second = content.indexOf(search, first);
+		const type = content.substring(first, second);
+
+		return type;
+	}
 
 	static fromItemName(name) {
 		return ItemManager.items.find(item => {
