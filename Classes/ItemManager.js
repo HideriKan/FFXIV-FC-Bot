@@ -2,8 +2,36 @@ const { bold, escapeUnderline } = require('discord.js');
 const Member = require('./Member');
 
 class ItemManager {
-	constructor() {
+	constructor(type) {
+		this.type = ItemManager.fromItemName(type);
+		if (this.type === undefined)
+			this.type = ItemManager.fromItemValue(type);
+	}
 
+	static items = [
+		{ name: 'Gear', value: 'gear', isBool: false },
+		{ name: 'Weapon', value: 'weap', isBool: true },
+		{ name: 'Body', value: 'body', isBool: true },
+		{ name: 'Tome Weapon', value: 'tomeWeap', isBool: true },
+		{ name: 'Tome Weapon Upgrade', value: 'tomeUp', isBool: true },
+		{ name: 'Tome Gear Upgrade', value: 'gearUp', isBool: false },
+		{ name: 'Tome Accessory Upgrade', value: 'accUp', isBool: false },
+		{ name: 'Priority', value: 'prio', isBool: false }
+	]
+
+
+	static fromItemName(name) {
+		return ItemManager.items.find(item => {
+			if (item.name === name)
+				return item.value;
+		});
+	}
+
+	static fromItemValue(value) {
+		return ItemManager.items.find(item => {
+			if (item.value === value)
+				return item.name;
+		})
 	}
 
 	/**
