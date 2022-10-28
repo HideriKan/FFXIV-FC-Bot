@@ -87,7 +87,7 @@ module.exports = {
 				reply = giveBtn(interaction.options.getMember('user'), interaction.options.getString('type'));
 				break;
 			case 'show':
-				reply = ItemManager.generateData(interaction.options.getString('type'));
+				reply = itemMgr.generateData();
 				break;
 		}
 
