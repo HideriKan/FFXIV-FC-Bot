@@ -4,8 +4,7 @@ const { fileExists, onFileError } = require('../utility');
 class Member {
 	static fileName = './MemberLoot.json';
 
-	constructor(name, id) {
-		this.name = name; // display name
+	constructor(id) {
 		this.id = id; // unique discord snowflake id
 		this.hasBiS = false; // might not use
 		this.priority = 0;
