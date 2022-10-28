@@ -39,7 +39,6 @@ class Member {
 	 * @param {Member} member values to copy from
 	 */
 	fromMember(member) {
-		this.name = member.name; // display name
 		this.id = member.id; // unique discord snowflake id
 		this.hasBiS = member.hasBiS; // might not use
 		this.priority = member.priority;
