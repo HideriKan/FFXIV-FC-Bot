@@ -24,7 +24,7 @@ function giveBtn(user, type) {
 		);
 	
 
-	reply.content = `Give ${type} to ${user}`;
+	reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
 	reply.components = [row];
 
 	return reply;
@@ -79,6 +79,7 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		const cmd = interaction.options.getSubcommand();
+		const itemMgr = new ItemManager(interaction.options.getString('type'));
 
 		let reply;
 		switch (cmd) {
