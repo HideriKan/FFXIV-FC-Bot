@@ -26,6 +26,45 @@ function giveBtn(user, type) {
 
 
 	reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
+	const member = new Member(user.id);
+	let baseline = 0;
+
+	// Warning for certain types
+	switch (type) {
+		case 'weap':
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user already has a raid weapon, proceed?`)
+			break;
+		case 'body':
+			if (member.hasBody)
+				reply.content += bold(`\nWarning! This user already has a raid body, proceed?`)
+			break;
+		case 'tomeWeap':
+			if (member.hasTomeWeap)
+				reply.content += bold(`\nWarning! This user already has a tome weapon, proceed?`)
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+			break;
+		case 'tomeUp':
+			if (!member.hasTomeWeap)
+				reply.content += bold(`\nWarning! This user does not own the tome weapon, proceed?`)
+			if (member.hasTomeWeapUp)
+				reply.content += bold(`\nWarning! This user alreay has the tome weapon upgrade, proceed?`)
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+			break;
+		case 'gearUp':
+			baseline = Member.getCurrentBaseline(type);
+			if (member.totalGearUp > baseline)
+				reply.content += bold('\nWarning! This will set them over current baseline, proceed?')
+			break;
+		case 'accUp':
+			baseline = Member.getCurrentBaseline(type);
+			if (member.totalAccUp > baseline)
+				reply.content += bold('\nWarning! This will set them over current baseline, proceed?')
+			break;
+	}
+
 	reply.components = [row];
 
 	return reply;
