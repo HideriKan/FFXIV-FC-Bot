@@ -23,7 +23,7 @@ function giveBtn(user, type) {
 				.setLabel('No')
 				.setStyle(ButtonStyle.Danger)
 		);
-	
+
 
 	reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
 	reply.components = [row];
@@ -37,7 +37,7 @@ module.exports = {
 		.setDescription('Loot tracker')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-		.addSubcommand((subcmd) => subcmd.setName('give') // opt: [user, type]
+		.addSubcommand(subcmd => subcmd.setName('give') // opt: [user, type]
 			.setDescription('Distrubte loot for a raid member')
 			.addUserOption((opt) => opt.setName('user')
 				.setDescription('who got the loot')
@@ -58,7 +58,7 @@ module.exports = {
 				)
 			)
 		)
-		.addSubcommand((subcmd) => subcmd.setName('show') // opt: type
+		.addSubcommand(subcmd => subcmd.setName('show') // opt: type
 			.setDescription('Show who can roll / priority')
 			.addStringOption((opt) => opt.setName('type')
 				.setDescription('Item Type')
