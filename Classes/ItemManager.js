@@ -137,7 +137,14 @@ class ItemManager {
 		const output = new Array();
 
 		members.forEach(this.getArrayFunc(reply, output));
-		output.sort((a, b) => a.value - b.value);
+		output.sort((a, b) => {
+			if (a.value === null)
+				return 1
+			if (b.value === null)
+				return -1
+
+			return a.value - b.value
+		});
 		output.forEach(this.type.isBool ? this.dataFromBool(reply) : this.dataFromNumber(reply));
 
 		return reply;
