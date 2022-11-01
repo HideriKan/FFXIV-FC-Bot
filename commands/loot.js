@@ -58,7 +58,7 @@ module.exports = {
 				)
 			)
 		)
-		.addSubcommand(subcmd => subcmd.setName('show') // opt: type
+		.addSubcommand(subcmd => subcmd.setName('show') // opt: type [user]
 			.setDescription('Show who can roll / priority')
 			.addStringOption((opt) => opt.setName('type')
 				.setDescription('Item Type')
@@ -75,6 +75,9 @@ module.exports = {
 					{ name: 'User', value: 'user' }
 				)
 			)
+			.addUserOption(opt => opt.setName('user')
+				.setDescription('user you want to see')
+			)
 		)
 		.addSubcommand(subcmd => subcmd.setName('create') // opt: user
 			.setDescription('Create a new item user profile')
@@ -89,18 +92,24 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		const cmd = interaction.options.getSubcommand();
-		const itemMgr = new ItemManager(interaction.options.getString('type'));
+		const user = interaction.options.getMember('user');
+		const type = interaction.options.getString('type');
+		const itemMgr = new ItemManager(type);
 
 		let reply;
 		switch (cmd) {
 			case 'give':
-				reply = giveBtn(interaction.options.getMember('user'), interaction.options.getString('type'));
+				reply = giveBtn(user, type);
 				break;
 			case 'show':
-				reply = itemMgr.generateData();
+				if (type === 'user' && user !== null)
+					reply = { embeds: [new Member(user.id).toEmbed(user)] };
+				else if (type === 'user' && user === null)
+					reply = { content: 'Please pass a user as the second argument' }
+				else
+					reply = itemMgr.generateData();
 				break;
 			case 'create':
-				const user = interaction.options.getMember('user');
 				new Member(user.id).saveMember();
 				reply = { content: user + ' Has been created' };
 				break;

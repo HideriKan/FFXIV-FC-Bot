@@ -1,3 +1,4 @@
+const { EmbedBuilder, GuildMember } = require('discord.js');
 const fs = require('fs');
 const { fileExists, onFileError } = require('../utility');
 
@@ -68,6 +69,23 @@ class Member {
 		} catch (err) {
 			onFileError(error)
 		}
+	}
+
+	toEmbed(user) {
+		return new EmbedBuilder()
+			.setTitle(user.displayName)
+			.setThumbnail(user.displayAvatarURL())
+			.setColor(user.displayColor)
+			.setDescription(`Current priority: ${this.priority}
+				Number of savage gear: ${this.totalGear}
+				Has weapon: ${this.hasWeapon ? 'Yes' : 'No'}
+				Has body: ${this.hasBiS ? 'Yes' : 'No'}
+				Has tome weapon: ${this.hasTomeWeap ? 'Yes' : 'No'}
+				Has tome weapon upgrade: ${this.hasTomeWeapUp ? 'Yes' : 'No'}
+				Number of gear upgrades: ${this.totalGearUp}
+				Number of accessories upgreades: ${this.totalAccUp}`)
+			.setFooter({text: 'work in progress'})
+
 	}
 
 	/**
