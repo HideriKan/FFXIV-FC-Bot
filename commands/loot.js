@@ -70,7 +70,9 @@ module.exports = {
 					{ name: 'Tome Weapon', value: 'tomeWeap' },
 					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
-					{ name: 'Tome Accessory Upgrade', value: 'accUp' }
+					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
+					{ name: 'Priority', value: 'prio' },
+					{ name: 'User', value: 'user' }
 				)
 			)
 		)
