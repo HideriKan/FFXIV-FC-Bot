@@ -150,6 +150,21 @@ class Member {
 		return isBalanced;
 	}
 
+	static getCurrentBaseline(type) {
+		const members = Member.getAllMembers();
+		let baseline = 0;
+
+		switch (type) { // TODO: prio
+			case 'gearUp':
+				members.forEach(member => { baseline = member.totalGearUp < baseline ? member.totalGearUp : baseline; });
+				break;
+			case 'accUp':
+				members.forEach(member => { baseline = member.totalAccUp < baseline ? member.totalAccUp : baseline; });
+				break;
+		}
+
+		return baseline;
+	}
 }
 
 module.exports = Member;

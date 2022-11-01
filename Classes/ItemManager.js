@@ -116,11 +116,11 @@ class ItemManager {
 				func = member => { output.push({ name: member.id, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
 				break;
 			case 'gearUp': // Isolated
-				reply.content = bold('Total Gear Upgrade:\n');
+				reply.content = bold('Total Gear Upgrade:\n') + italic(`Current baseline:${Member.getCurrentBaseline(type)}`);
 				func = member => { output.push({ name: member.id, value: member.totalGearUp }); };
 				break;
 			case 'accUp': // Isolated
-				reply.content = bold('Total Accessory Upgrade:\n');
+				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline:${Member.getCurrentBaseline(type)}`);
 				func = member => { output.push({ name: member.id, value: member.totalAccUp }); };
 				break;
 			case 'prio':
