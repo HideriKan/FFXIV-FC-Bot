@@ -103,9 +103,11 @@ module.exports = {
 				break;
 			case 'show':
 				if (type === 'user' && user !== null)
-					reply = { embeds: [new Member(user.id).toEmbed(user)] };
+					reply = { embeds: [new Member(user.id).toEmbed(user, type)] };
 				else if (type === 'user' && user === null)
 					reply = { content: 'Please pass a user as the second argument' }
+				else if (type !== 'user' && user !== null)
+					reply = {embeds: [new Member(user.id).toEmbed(user, type)]}
 				else
 					reply = itemMgr.generateData();
 				break;

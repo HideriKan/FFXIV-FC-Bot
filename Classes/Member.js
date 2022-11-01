@@ -71,12 +71,41 @@ class Member {
 		}
 	}
 
-	toEmbed(user) {
-		return new EmbedBuilder()
+	toEmbed(user, type) {
+		const embed = new EmbedBuilder()
 			.setTitle(user.displayName)
 			.setThumbnail(user.displayAvatarURL())
 			.setColor(user.displayColor)
-			.setDescription(`Current priority: ${this.priority}
+			.setFooter({ text: 'work in progress' });
+
+		switch (type) {
+			case 'gear':
+				embed.setDescription(`Number of savage gear: ${this.totalGear}`);
+				break;
+			case 'weap':
+				embed.setDescription(`Has weapon: ${this.hasWeapon ? 'Yes' : 'No'}`);
+				break;
+			case 'body':
+				embed.setDescription(`Has body: ${this.hasBiS ? 'Yes' : 'No'}`);
+				break;
+			case 'tomeWeap':
+				embed.setDescription(`Has tome weapon: ${this.hasTomeWeap ? 'Yes' : 'No'}`);
+				break;
+			case 'tomeUp':
+				embed.setDescription(`Has tome weapon upgrade: ${this.hasTomeWeapUp ? 'Yes' : 'No'}`);
+				break;
+			case 'gearUp':
+				embed.setDescription(`Number of gear upgrades: ${this.totalGearUp}`);
+				break;
+			case 'accUp':
+				embed.setDescription(`Number of accessories upgreades: ${this.totalAccUp}`);
+				break;
+			case 'prio':
+				embed.setDescription(`Current priority: ${this.priority}`);
+				break;
+			case 'user':
+			default:
+				embed.setDescription(`Current priority: ${this.priority}
 				Number of savage gear: ${this.totalGear}
 				Has weapon: ${this.hasWeapon ? 'Yes' : 'No'}
 				Has body: ${this.hasBiS ? 'Yes' : 'No'}
@@ -84,8 +113,10 @@ class Member {
 				Has tome weapon upgrade: ${this.hasTomeWeapUp ? 'Yes' : 'No'}
 				Number of gear upgrades: ${this.totalGearUp}
 				Number of accessories upgreades: ${this.totalAccUp}`)
-			.setFooter({text: 'work in progress'})
+				break;
+		}
 
+		return embed;
 	}
 
 	/**
