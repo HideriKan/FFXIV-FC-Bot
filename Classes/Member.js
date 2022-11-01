@@ -8,7 +8,7 @@ class Member {
 	constructor(id) {
 		this.id = id; // unique discord snowflake id
 		this.hasBiS = false; // might not use
-		this.priority = 0;
+		this.priority = 10;
 		this.totalGear = 0;
 		this.hasWeapon = false;
 		this.hasBody = false;
@@ -124,13 +124,13 @@ class Member {
 	 * @param {String} id unqie discord snowflake id
 	 * @returns true if found, otherwise false
 	 */
-	static isInFile(id) {
+	isInFile() {
 		if (!fileExists(Member.fileName))
 			return false;
 
 		try {
 			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
-			const member = data.find(member => { member.id === id });
+			const member = data.find(member => member.id === this.id);
 
 			return member !== undefined;
 		} catch (error) {
