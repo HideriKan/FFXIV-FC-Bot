@@ -81,7 +81,7 @@ module.exports = {
 		)
 		.addSubcommand(subcmd => subcmd.setName('create') // opt: user
 			.setDescription('Create a new item user profile')
-			.addUserOption(opt.setName('user')
+			.addUserOption(opt => opt.setName('user')
 				.setDescription('Who you want to create a profile for')
 				.setRequired(true)
 			)
