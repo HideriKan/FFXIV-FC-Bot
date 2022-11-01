@@ -37,7 +37,7 @@ module.exports = {
 		.setDescription('Loot tracker')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-		.addSubcommand(subcmd => subcmd.setName('give') // opt: [user, type]
+		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type
 			.setDescription('Distrubte loot for a raid member')
 			.addUserOption((opt) => opt.setName('user')
 				.setDescription('who got the loot')

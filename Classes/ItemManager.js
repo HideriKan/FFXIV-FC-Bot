@@ -105,7 +105,6 @@ class ItemManager {
 					func = member => { output.push({ name: member.id, value: member.hasBody }); };
 				else
 					func = member => { output.push({ name: member.id, value: member.hasBody || member.hasWeapon }); };
-
 				break;
 			case 'tomeWeap': // Isolated
 				reply.content = bold('Tome Weapon Rolls: ') + italic('requires 500 Tomes\n');
@@ -123,10 +122,9 @@ class ItemManager {
 				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline:${Member.getCurrentBaseline(type)}`);
 				func = member => { output.push({ name: member.id, value: member.totalAccUp }); };
 				break;
-			case 'prio':
+			case 'prio': // TODO: prio
 				reply.content = bold('Current Priority:\n');
 				func = member => { output.push({ name: member.id, value: member.priority }); };
-				// TODO:
 				break;
 		}
 

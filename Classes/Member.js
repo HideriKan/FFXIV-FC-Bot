@@ -61,7 +61,7 @@ class Member {
 
 		try {
 			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
-			const member = data.find(member => member.id === this.id );
+			const member = data.find(member => member.id === this.id);
 
 			if (member !== undefined)
 				this.fromMember(member);
@@ -143,7 +143,7 @@ class Member {
 		let isBalanced = true;
 
 		members.forEach(member => {
-			if (!member.hasBody && !member.hasWeapon) 
+			if (!member.hasBody && !member.hasWeapon) // if a member doesnt have a weap and a body
 				isBalanced = false;
 		});
 
