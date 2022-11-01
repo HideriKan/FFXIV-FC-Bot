@@ -107,19 +107,19 @@ class ItemManager {
 					func = member => { output.push({ name: member.id, value: member.hasBody || member.hasWeapon }); };
 				break;
 			case 'tomeWeap': // Isolated
-				reply.content = bold('Tome Weapon Rolls: ') + italic('requires 500 Tomes\n');
+				reply.content = bold('Tome Weapon Rolls:\n') + italic('requires 500 Tomes\n');
 				func = member => { output.push({ name: member.id, value: member.hasTomeWeap ? null : false }); };
 				break;
 			case 'tomeUp': // Dependant on tomeWeap
-				reply.content = bold(`Tome Weapon Upgrade Rolls: `) + italic('requires Tome Weapon\n');
+				reply.content = bold(`Tome Weapon Upgrade Rolls:\n`) + italic('requires Tome Weapon\n');
 				func = member => { output.push({ name: member.id, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
 				break;
 			case 'gearUp': // Isolated
-				reply.content = bold('Total Gear Upgrade:\n') + italic(`Current baseline:${Member.getCurrentBaseline(type)}`);
+				reply.content = bold('Total Gear Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
 				func = member => { output.push({ name: member.id, value: member.totalGearUp }); };
 				break;
 			case 'accUp': // Isolated
-				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline:${Member.getCurrentBaseline(type)}`);
+				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
 				func = member => { output.push({ name: member.id, value: member.totalAccUp }); };
 				break;
 			case 'prio': // TODO: prio

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildMember, PermissionFlagsBits, bold, } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildMember, PermissionFlagsBits, bold, userMention, BaseGuildEmoji, TeamMemberMembershipState, } = require('discord.js');
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 
@@ -146,13 +146,13 @@ module.exports = {
 				else if (type === 'user' && user === null)
 					reply = { content: 'Please pass a user as the second argument' }
 				else if (type !== 'user' && user !== null)
-					reply = {embeds: [new Member(user.id).toEmbed(user, type)]}
+					reply = { embeds: [new Member(user.id).toEmbed(user, type)] }
 				else
 					reply = itemMgr.generateData();
 				break;
 			case 'create':
 				new Member(user.id).saveMember();
-				reply = { content: user + ' Has been created' };
+				reply = { content: user.displayName + ' Has been created' };
 				break;
 		}
 
