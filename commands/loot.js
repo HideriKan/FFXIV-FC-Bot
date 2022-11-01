@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildMember, PermissionFlagsBits, bold, } = require('discord.js');
 const ItemManager = require('../Classes/ItemManager');
+const Member = require('../Classes/Member');
 
 /**
  * processes the loot got command
@@ -72,6 +73,13 @@ module.exports = {
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' }
 				)
 			)
+		)
+		.addSubcommand(subcmd => subcmd.setName('create') // opt: user
+			.setDescription('Create a new item user profile')
+			.addUserOption(opt.setName('user')
+				.setDescription('Who you want to create a profile for')
+				.setRequired(true)
+			)
 		),
 	/**
 	 * @param {import('discord.js').Interaction} interaction
@@ -88,6 +96,11 @@ module.exports = {
 				break;
 			case 'show':
 				reply = itemMgr.generateData();
+				break;
+			case 'create':
+				const user = interaction.options.getMember('user');
+				new Member(user.id).saveMember();
+				reply = { content: user + ' Has been created' };
 				break;
 		}
 
