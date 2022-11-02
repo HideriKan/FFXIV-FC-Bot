@@ -1,4 +1,3 @@
-// Imports
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { getStartingDay, getRaidDayFromString } = require('../utility');
@@ -40,7 +39,7 @@ class RaidWeek {
 	}
 
 	/**
-	 * Reads the defual json file and fills this raidweek
+	 * Reads the defual json file and fills this raidweek with its content
 	 */
 	readJson() {
 		try {

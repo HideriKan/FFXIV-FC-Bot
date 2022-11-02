@@ -4,8 +4,8 @@ const { getStartingDay } = require('../utility');
 
 module.exports = {
 	// TODO: change name to time
-	// TODO: add subcommand create
-	// TODO: merge edit time into this as a subcommand
+	// TODO: change to subcommand create
+	// TODO: merge edit time into this as a subcommand edit
 	data: new SlashCommandBuilder()
 		.setName('createschedule') 
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
