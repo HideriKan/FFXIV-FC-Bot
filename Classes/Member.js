@@ -4,6 +4,7 @@ const { ensureFileExists, onFileError } = require('../utility');
 
 class Member {
 	static fileName = './MemberLoot.json';
+	static csvName = './MemberLoot.csv';
 
 	constructor(id) {
 		this.id = id; // unique discord snowflake id
@@ -209,6 +210,35 @@ class Member {
 		}
 
 		return baseline;
+	}
+
+	static toEmbedStats() {
+		let totalGear = 0, totalGearUp = 0, totalAccUp = 0;
+		let fields = [{name: '', value: ''}];
+
+		const members = Member.getAllMembers();
+		members.forEach(m => {
+			totalGear += m.totalGear;
+			totalGearUp += m.totalGearUp;
+			totalAccUp += m.totalAccUp;
+		});
+
+		let highGear = 0, highGearUp = 0, highAccUp = 0;
+
+		const embed = new EmbedBuilder()
+			.setTitle('Statistics')
+			.addFields(fields)
+			.setFooter({text: 'work in progress'});
+
+		return embed;
+	}
+
+	static toCSVFile() {
+		let content = 'Id, Total gear, Weapon, Body, Tome weapon, Tome weapon upgrade, Gear upgrade, Accessory upgrade\n';
+		const members = Member.getAllMembers();
+		members.forEach(member => {
+			content += `${member.id}, ${member.totalGear}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasBody ? '1' : '0'}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasTomeWeapUp ? '1' : '0'}, ${member.totalGearUp}, ${member.totalAccUp}\n`;
+		});
 	}
 }
 
