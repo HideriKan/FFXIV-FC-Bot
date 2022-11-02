@@ -3,28 +3,42 @@ const RaidWeek = require('../Classes/RaidWeek');
 const { getStartingDay } = require('../utility');
 
 module.exports = {
+	// TODO: change name to time
+	// TODO: change to subcommand create
+	// TODO: merge edit time into this as a subcommand edit
 	data: new SlashCommandBuilder()
-		.setName('createschedule')
+		.setName('createschedule') 
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
-		.addBooleanOption(option => option.setName('next')
+		.addBooleanOption(opt => opt.setName('next')
 			.setDescription('Edit current week?')
 			.setRequired(true))
-		.addStringOption(option => option.setName('batch')
+		.addStringOption(opt => opt.setName('batch')
 			.setDescription('Add week times in Tu/We/Th/Fr/Sa/Su/Mo')
 			.setRequired(true))
 	,
 	/**
-	 * Function of the Create Times (ct) Command
-	 * Create or Adjust the Raid times
-	 * @param {import('discord.js').Interaction} interaction
+	 * createschedule will take a true or false if the new schedule is for the current week or the next one.
+	 * the other argument will be the batch which contain the string array of the raid times
+	 * @param {import('discord.js').Interaction} interaction message interaction
 	 */
 	async execute(interaction) {
-		const raidWeek = new RaidWeek();
+		// get user option
 		const editNext = interaction.options.getBoolean('next');
 		const batch = interaction.options.getString('batch');
-		const batchArr = batch.split('/');
+		// process user batch
+		let batchArr = batch.split('/');
+		
+		// reduce the array when its too big
+		if (batchArr.lenght > 7)
+		batchArr = batchArr.slice(0, 7);
+		
+		// fill the array when its to small
+		while (batchArr.lenght < 7)
+		batchArr.push('');
+		
+		const raidWeek = new RaidWeek();
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -37,7 +51,6 @@ module.exports = {
 					.setLabel('Ult')
 					.setStyle(ButtonStyle.Secondary)
 			);
-
 
 		if (editNext) // when the user is chosing a next week
 			raidWeek.startingWeekDay = getStartingDay(true);

@@ -1,8 +1,9 @@
-const { SlashCommandBuilder, inlineCode } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const RaidWeek = require("../Classes/RaidWeek");
 const { getRaidDayFromString } = require("../utility");
 
 module.exports = {
+    // TODO: add optional option for day to move to
     data: new SlashCommandBuilder()
         .setName('edittime')
         .setDescription('Edits a singular day from the schedule')
@@ -24,26 +25,47 @@ module.exports = {
         )
     ,
     /**
-     * 
+     * Edits the time from the selected day
      * @param {import("discord.js").Interaction} interaction 
      */
     async execute(interaction) {
         // get user options
         const index = Number(interaction.options.getString('raidday'));
+        let content;
         let time = interaction.options.getString('time');
         if (time === null)
             time = '';
 
-        // read the current time
+        // read the raid day to be changed
         const raidWeek = new RaidWeek();
         raidWeek.readJson();
+        const rDay = raidWeek.week[index];
+        const rDayTime = new Date(rDay.startTime)
+        content = `${rDayTime.getDate()} has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to `;
+
+        // get the event for that raid day
+        const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
+        const event = events.size >= 1 ? events.first() : null;
 
         // adjust the raid day with the new time
-        raidWeek.week[index] = getRaidDayFromString(time, raidWeek.week[index].day);
+        const newDay = getRaidDayFromString(time, rDay.day);
+        const newDayTime = new Date(newDay.startTime);
+        raidWeek.week[index] = newDay;
+
+        if (newDay.isRaid) {
+            content += `${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`
+            if (event !== null)
+                event.setScheduledStartTime(newDay.startTime)
+        }
+        else {
+            content += 'No Raid';
+            if (event !== null)
+                event.delete();
+        }
 
         // save the new raid day to the file
         raidWeek.writeJson();
 
-        interaction.reply({ content: `The raid day has been updated.\nPlease use the ${inlineCode('/raid')} command again` });
+        interaction.reply({ content: content });
     }
 }

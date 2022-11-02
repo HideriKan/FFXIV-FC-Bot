@@ -3,7 +3,8 @@ const RaidDay = require('./Classes/RaidDay');
 
 /**
  * Returns the day of the reset in FFXIV (Tuesday)
- * @returns True current week Date (of Tuesday)
+ * @param {Boolean} isNextWeek determins if the start of the week is the current one or the next week
+ * @returns starting week date of FFXIV (Tuesday)
  */
 function getStartingDay(isNextWeek = false) { // ++ or --
 	const direction = isNextWeek ? 1 : -1;
@@ -57,17 +58,17 @@ function getRaidDayFromString(timeStr, raidDate) {
 	return rDay;
 }
 
-const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
 /**
- * 
+ * Creates scheduled guild events for a specific channel from a raidweek 
  * @param {import('discord.js').MessageComponentInteraction} interaction 
  * @param {RaidWeek} raidWeek 
- * @returns void
  */
 async function createScheduledEvents(interaction, raidWeek) {
 	if (!interaction.guild.available)
 		return;
 
+	// TODO: Make custom with some command
+	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
 	const now = new Date();
 
@@ -78,7 +79,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 		const start = new Date(day.startTime)
 		if (start > now)
 			interaction.guild.scheduledEvents.create({
-				name: new Date(day.day).toDateString(),
+				name: 'Raid',
 				description: 'Raid Time',
 				scheduledStartTime: start.getTime(),
 				privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
@@ -90,18 +91,8 @@ async function createScheduledEvents(interaction, raidWeek) {
 	interaction.update({ content: 'Guild Events have been added', components: [] });
 }
 
-/**
- * 
- * @param {import('discord.js').Interaction} interaction 
- */
-async function assingToMember(interaction) {
-	console.log(interaction);
-	interaction.update({ content: 'Updated', components: [] });
-}
-
 module.exports = {
 	getStartingDay,
 	getRaidDayFromString,
-	createScheduledEvents,
-	assingToMember
+	createScheduledEvents
 }; 

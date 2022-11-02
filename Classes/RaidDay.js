@@ -1,10 +1,11 @@
 const { time } = require('discord.js');
+
 /**
  * Manages the day of a Raid
  */
 class RaidDay {
 	/**
-	 * Takes the Days and sets it as that day with some initial values
+	 * Takes the Days and sets it as that day with default initial values
 	 * @param {Date} day acts as the Initial value and set it to the given date
 	 */
 	constructor(day) {
@@ -15,33 +16,28 @@ class RaidDay {
 	}
 
 	/**
-	 * A Simple parse.
+	 * Converts the day into an object to be used for the embed fields
 	 * @returns An object for the EmbedBuilder.addFields()
 	 */
 	toField() {
-		let tDate = new Date(this.day);
-		let sDate = new Date(this.startTime);
-		let dFormat = new Intl.DateTimeFormat('en', {
+		const tDate = new Date(this.day);
+		const sDate = new Date(this.startTime);
+		const dFormat = new Intl.DateTimeFormat('en', {
 			day: '2-digit',
 			month: 'short',
 			weekday: 'short',
 			timeZone: 'UTC'
 		});
-		let field = {};
 
-		if (this.isRaid) {
-			field = {
-				name: dFormat.format(tDate),
-				value: `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`,
-				inline: true
-			};
-		} else {
-			field = {
-				name: dFormat.format(tDate),
-				value: 'No Raid',
-				inline: true
-			};
-		}
+		let field = {
+			name: dFormat.format(tDate),
+			inline: true
+		};
+
+		if (this.isRaid)
+			field.value = `At: ${time(sDate, 't')}, ${time(sDate, 'R')}`;
+		else
+			field.value = 'No Raid';
 
 		return field;
 	} // End of toField
