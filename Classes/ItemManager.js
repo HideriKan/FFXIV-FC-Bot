@@ -82,7 +82,7 @@ class ItemManager {
 				else
 					member.totalAccUp++;
 				break;
-			case 'prio': // TODO: change / rething / something I dont like this
+			case 'prio': // TODO: change / rethink / something I dont like this
 				const members = Member.getAllMembers();
 				members.sort((a, b) => a.priority - b.priority);
 
@@ -97,6 +97,7 @@ class ItemManager {
 
 				break;
 		}
+
 		member.saveMember();
 
 		interaction.update({ content: interaction.message.content.replace('Give', 'Gave'), components: [] });

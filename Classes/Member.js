@@ -72,6 +72,12 @@ class Member {
 		}
 	}
 
+	/**
+	 * Generates an discord embed
+	 * @param {GuildMember} user the user profile to display
+	 * @param {String} type item value
+	 * @returns generated embed
+	 */
 	toEmbed(user, type) {
 		const embed = new EmbedBuilder()
 			.setTitle(user.displayName)
@@ -168,6 +174,10 @@ class Member {
 		return new Array;
 	}
 
+	/**
+	 * Checks all members if everybody has atleast one weapon and body
+	 * @returns {Boolean} true if everybody has alteast one, otherwise false
+	 */
 	static isWeapBodyBalanced() {
 		const members = Member.getAllMembers();
 		let isBalanced = true;
@@ -180,6 +190,11 @@ class Member {
 		return isBalanced;
 	}
 
+	/**
+	 * Checks all members for the given type and collects the lowest value as the baseline
+	 * @param {String} type item value
+	 * @returns returns the min. from all members item type
+	 */
 	static getCurrentBaseline(type) {
 		const members = Member.getAllMembers();
 		let baseline = 0;
