@@ -90,18 +90,8 @@ async function createScheduledEvents(interaction, raidWeek) {
 	interaction.update({ content: 'Guild Events have been added', components: [] });
 }
 
-/**
- * 
- * @param {import('discord.js').Interaction} interaction 
- */
-async function assingToMember(interaction) {
-	console.log(interaction);
-	interaction.update({ content: 'Updated', components: [] });
-}
-
 module.exports = {
 	getStartingDay,
 	getRaidDayFromString,
-	createScheduledEvents,
-	assingToMember
+	createScheduledEvents
 }; 
