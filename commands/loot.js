@@ -90,11 +90,11 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
 		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type, [isdone]
 			.setDescription('Distrubte loot for a raid member')
-			.addUserOption((opt) => opt.setName('user')
+			.addUserOption(opt => opt.setName('user')
 				.setDescription('who got the loot')
 				.setRequired(true)
 			)
-			.addStringOption((opt) => opt.setName('type')
+			.addStringOption(opt => opt.setName('type')
 				.setDescription('Item Type')
 				.setRequired(true)
 				.addChoices(
@@ -114,7 +114,7 @@ module.exports = {
 		)
 		.addSubcommand(subcmd => subcmd.setName('show') // opt: type, [user]
 			.setDescription('Show who can roll / priority')
-			.addStringOption((opt) => opt.setName('type')
+			.addStringOption(opt => opt.setName('type')
 				.setDescription('Item Type')
 				.setRequired(true)
 				.addChoices(
@@ -157,11 +157,9 @@ module.exports = {
 				reply = giveBtn(user, type, setDone);
 				break;
 			case 'show':
-				if (type === 'user' && user !== null)
-					reply = { embeds: [new Member(user.id).toEmbed(user, type)] };
-				else if (type === 'user' && user === null)
+				if (type === 'user' && user === null)
 					reply = { content: 'Please pass a user as the second argument' }
-				else if (type !== 'user' && user !== null)
+				else if (user !== null)
 					reply = { embeds: [new Member(user.id).toEmbed(user, type)] }
 				else
 					reply = itemMgr.generateData();
@@ -172,6 +170,6 @@ module.exports = {
 				break;
 		}
 
-		interaction.editReply(reply);
+		await interaction.editReply(reply);
 	},
 };
