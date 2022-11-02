@@ -8,7 +8,6 @@ class Member {
 
 	constructor(id) {
 		this.id = id; // unique discord snowflake id
-		this.hasBiS = false; // might not use
 		this.priority = 10;
 		this.totalGear = 0;
 		this.hasWeapon = false;
@@ -44,7 +43,6 @@ class Member {
 	 */
 	fromMember(member) {
 		this.id = member.id; // unique discord snowflake id
-		this.hasBiS = member.hasBiS; // might not use
 		this.priority = member.priority;
 		this.totalGear = member.totalGear;
 		this.hasWeapon = member.hasWeapon;

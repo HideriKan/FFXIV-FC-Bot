@@ -34,9 +34,6 @@ function giveBtn(user, type, setDone) {
 	let baseline = 0;
 
 	// Warning for certain types
-	if (member.hasBiS)
-		reply.content += bold(`\nWarning! This user has BiS, proceed?`)
-
 	switch (type) {
 		case 'weap':
 			if (member.hasWeapon)
