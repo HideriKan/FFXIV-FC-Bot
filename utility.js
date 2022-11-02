@@ -56,19 +56,9 @@ async function createScheduledEvents(interaction, raidWeek) {
  */
 function ensureFileExists(fileName) {
 	try {
-		if (!fs.accessSync(fileName, fs.constants.R_OK | fs.constants.W_OK)) {
-			fs.writeFileSync(fileName, '[]');
-			return false;
-		}
-
-		return true;
+		fs.accessSync(fileName, fs.constants.R_OK | fs.constants.W_OK)
 	} catch (error) {
-		const err = onFileError(error);
-		if (err.type === 1) {
-			fs.writeFileSync(fileName, '[]');
-			return true;	
-		}
-		console.log(err.text); 
+		fs.writeFileSync(fileName, '[]');
 	}
 }
 
