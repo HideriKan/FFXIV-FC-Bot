@@ -4,17 +4,17 @@ const { getStartingDay } = require('../utility');
 
 module.exports = {
 	// TODO: change name to time
-	// TODO: add subcommand create
-	// TODO: merge edit time into this as a subcommand
+	// TODO: change to subcommand create
+	// TODO: merge edit time into this as a subcommand edit
 	data: new SlashCommandBuilder()
 		.setName('createschedule') 
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
-		.addBooleanOption(option => option.setName('next')
+		.addBooleanOption(opt => opt.setName('next')
 			.setDescription('Edit current week?')
 			.setRequired(true))
-		.addStringOption(option => option.setName('batch')
+		.addStringOption(opt => opt.setName('batch')
 			.setDescription('Add week times in Tu/We/Th/Fr/Sa/Su/Mo')
 			.setRequired(true))
 	,

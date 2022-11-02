@@ -1,8 +1,9 @@
-const { SlashCommandBuilder, inlineCode } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const RaidWeek = require("../Classes/RaidWeek");
 const { getRaidDayFromString } = require("../utility");
 
 module.exports = {
+    // TODO: add optional option for day to move to
     data: new SlashCommandBuilder()
         .setName('edittime')
         .setDescription('Edits a singular day from the schedule')
@@ -24,7 +25,7 @@ module.exports = {
         )
     ,
     /**
-     * Edits the time from the selected day to the given one
+     * Edits the time from the selected day
      * @param {import("discord.js").Interaction} interaction 
      */
     async execute(interaction) {

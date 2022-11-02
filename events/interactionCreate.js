@@ -1,10 +1,10 @@
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents, assingToMember } = require('../utility');
+const { createScheduledEvents } = require('../utility');
 
 module.exports = {
 	name: 'interactionCreate',
 	/**
-	 * 
+	 * Module for the interactionCreate discord event
 	 * @param {import("discord.js").Interaction} interaction 
 	 */
 	async execute(interaction) {
@@ -14,7 +14,7 @@ module.exports = {
 				if (interaction.customId === 'savage' || interaction.customId === 'ult')
 					await createScheduledEvents(interaction, new RaidWeek());
 				if (interaction.customId === 'yes')
-					await assingToMember(interaction);
+					console.log(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
 			}

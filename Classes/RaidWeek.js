@@ -1,10 +1,7 @@
-// Imports
 const RaidDay = require('./RaidDay');
 const fs = require('fs');
 const { getStartingDay, getRaidDayFromString } = require('../utility');
 
-// File settings
-const jsonFile = './RaidTimes.json';
 
 /**
  * Manages the whole raid week with an array of RaidDays. 
@@ -17,6 +14,9 @@ class RaidWeek {
 		this.startingWeekDay = getStartingDay();
 		this.week = [];
 	}
+
+	/** relative path to the file */
+	static fileName = './RaidTimes.json';
 
 	/**
 	 * generates a raid week from a batch of raid times
@@ -39,11 +39,11 @@ class RaidWeek {
 	}
 
 	/**
-	 * Reads the defual json file and fills this raidweek
+	 * Reads the defual json file and fills this raidweek with its content
 	 */
 	readJson() {
 		try {
-			const data = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+			const data = JSON.parse(fs.readFileSync(RaidWeek.fileName, 'utf8'));
 
 			this.startingWeekDay = data.startingWeekDay;
 			this.week = [];
@@ -67,12 +67,8 @@ class RaidWeek {
 	 * writes the raid week into a formatted json file
 	 */
 	writeJson() {
-		// fs.writeFile(jsonFile, JSON.stringify(this, null, 2), err => {
-		// 	if (err) return console.error(err);
-		// 	console.log('saved RaidWeek');
-		// });
 		try {
-			fs.writeFileSync(jsonFile, JSON.stringify(this, null, 2));
+			fs.writeFileSync(RaidWeek.fileName, JSON.stringify(this, null, 2));
 		} catch (err) {
 			if (err) return console.error(err);
 		} // End of try-catch

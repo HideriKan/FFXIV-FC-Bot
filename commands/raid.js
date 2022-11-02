@@ -48,16 +48,16 @@ module.exports = {
 		} // End of if else
 
 		const startingDay = new Date(raidWeek.startingWeekDay);
-		const dateRange = dFormat.format(startingDay) + ' ~ ' + dFormat.format(startingDay.setDate(startingDay.getDate() + 7));
+		const dateRange = dFormat.format(startingDay) + ' - ' + dFormat.format(startingDay.setDate(startingDay.getDate() + 7));
 
 		const embed = new EmbedBuilder()
 			.setTitle('Raid Schedule (' + dateRange + ')')
 			.setColor('#dc4fad')
-			.addFields(fields);
+			.addFields(fields)
+			.setFooter({ text: 'The Time displayed is in Server Time (ST) / UTC' });
 
 		if (!onlyRaidDays)
-			embed.setDescription('Please do tell when there is a day that you dont have time so we can adjust the schedule')
-				.setFooter({ text: 'The Time is in Server Time (ST) / UTC' });
+			embed.setDescription('Please do tell us when there is a day that you dont have time so we can adjust the schedule');
 
 		await interaction.reply({ embeds: [embed] })
 			.catch(err => console.error(err));

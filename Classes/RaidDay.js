@@ -5,7 +5,7 @@ const { time } = require('discord.js');
  */
 class RaidDay {
 	/**
-	 * Takes the Days and sets it as that day with some initial values
+	 * Takes the Days and sets it as that day with default initial values
 	 * @param {Date} day acts as the Initial value and set it to the given date
 	 */
 	constructor(day) {
@@ -16,7 +16,7 @@ class RaidDay {
 	}
 
 	/**
-	 * A Simple parse.
+	 * Converts the day into an object to be used for the embed fields
 	 * @returns An object for the EmbedBuilder.addFields()
 	 */
 	toField() {
