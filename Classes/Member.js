@@ -1,6 +1,6 @@
 const { EmbedBuilder, GuildMember } = require('discord.js');
 const fs = require('fs');
-const { fileExists, onFileError } = require('../utility');
+const { ensureFileExists, onFileError } = require('../utility');
 
 class Member {
 	static fileName = './MemberLoot.json';
@@ -56,8 +56,7 @@ class Member {
 	 * tries to find the user in the file and fill the member with fond one
 	 */
 	fillFromFile() {
-		if (!fileExists(Member.fileName))
-			return
+		ensureFileExists(Member.fileName);
 
 		try {
 			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
@@ -125,8 +124,7 @@ class Member {
 	 * @returns true if found, otherwise false
 	 */
 	isInFile() {
-		if (!fileExists(Member.fileName))
-			return false;
+		ensureFileExists(Member.fileName);
 
 		try {
 			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
@@ -158,8 +156,7 @@ class Member {
 	 * @returns {Array} array of members
 	 */
 	static getAllMembers() {
-		if (!fileExists(Member.fileName))
-			return new Array;
+		ensureFileExists(Member.fileName);
 
 		try {
 			return JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));

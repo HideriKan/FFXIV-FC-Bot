@@ -54,16 +54,21 @@ async function createScheduledEvents(interaction, raidWeek) {
  * @param {String} fileName path to the file
  * @returns true if already exisits, otherwise false and creates the file
  */
-function fileExists(fileName) {
+function ensureFileExists(fileName) {
 	try {
-		if (!fs.existsSync(fileName)) {
-			fs.writeFile(fileName, '', err => { if (err) console.error(err); });
+		if (!fs.accessSync(fileName, fs.constants.R_OK | fs.constants.W_OK)) {
+			fs.writeFileSync(fileName, '[]');
 			return false;
 		}
 
 		return true;
 	} catch (error) {
-		onFileError(error);
+		const err = onFileError(error);
+		if (err.type === 1) {
+			fs.writeFileSync(fileName, '[]');
+			return true;	
+		}
+		console.log(err.text); 
 	}
 }
 
@@ -78,6 +83,6 @@ function onFileError(err) {
 module.exports = {
 	getStartingDay,
 	createScheduledEvents,
-	fileExists,
+	ensureFileExists,
 	onFileError
 }; 
