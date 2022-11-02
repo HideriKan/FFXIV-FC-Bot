@@ -149,7 +149,7 @@ class Member {
 
 			return member !== undefined;
 		} catch (error) {
-			console.error(onFileError(err).text);
+			console.error(onFileError(error).text);
 		}
 
 		return false;
@@ -163,8 +163,7 @@ class Member {
 		try {
 			fs.writeFileSync(Member.fileName, JSON.stringify(data, null, 2));
 		} catch (err) {
-			if (err)
-				return console.error(err);
+			console.error(err);
 		}
 	}
 
@@ -178,7 +177,7 @@ class Member {
 		try {
 			return JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
 		} catch (error) {
-			console.error(onFileError(err).text);
+			console.error(onFileError(error).text);
 		}
 		return new Array;
 	}
