@@ -15,7 +15,9 @@ class Member {
 		this.hasTomeWeap = false;
 		this.hasTomeWeapUp = false;
 		this.totalGearUp = 0;
+		this.GearUpDone = false;
 		this.totalAccUp = 0;
+		this.AccUpDone = false;
 
 		this.fillFromFile()
 	}

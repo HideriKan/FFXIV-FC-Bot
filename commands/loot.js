@@ -8,7 +8,7 @@ const Member = require('../Classes/Member');
  * @param {string} type item type
  * @returns reply as an object
  */
-function giveBtn(user, type) {
+function giveBtn(user, type, setDone) {
 	const reply = { content: null, components: null, ephemeral: true };
 	const row = new ActionRowBuilder()
 		.addComponents(
@@ -25,11 +25,18 @@ function giveBtn(user, type) {
 		);
 
 
-	reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
+	if (setDone)
+		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done?`;
+	else
+		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}?`;
+
 	const member = new Member(user.id);
 	let baseline = 0;
 
 	// Warning for certain types
+	if (member.hasBiS)
+		reply.content += bold(`\nWarning! This user has BiS, proceed?`)
+
 	switch (type) {
 		case 'weap':
 			if (member.hasWeapon)
@@ -76,7 +83,7 @@ module.exports = {
 		.setDescription('Loot tracker')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type
+		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type, [isdone]
 			.setDescription('Distrubte loot for a raid member')
 			.addUserOption((opt) => opt.setName('user')
 				.setDescription('who got the loot')
@@ -96,8 +103,11 @@ module.exports = {
 					{ name: 'Priority', value: 'prio' }
 				)
 			)
+			.addBooleanOption(opt => opt.setName('isdone')
+				.setDescription('Indicates a finished state for the type. Only works on Gear, GearUp or AccUp')
+			)
 		)
-		.addSubcommand(subcmd => subcmd.setName('show') // opt: type [user]
+		.addSubcommand(subcmd => subcmd.setName('show') // opt: type, [user]
 			.setDescription('Show who can roll / priority')
 			.addStringOption((opt) => opt.setName('type')
 				.setDescription('Item Type')
@@ -133,12 +143,13 @@ module.exports = {
 		const cmd = interaction.options.getSubcommand();
 		const user = interaction.options.getMember('user');
 		const type = interaction.options.getString('type');
+		const setDone = interaction.options.getBoolean('isdone');
 		const itemMgr = new ItemManager(type);
 
 		let reply;
 		switch (cmd) {
 			case 'give':
-				reply = giveBtn(user, type);
+				reply = giveBtn(user, type, setDone);
 				break;
 			case 'show':
 				if (type === 'user' && user !== null)
