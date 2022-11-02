@@ -67,7 +67,7 @@ class Member {
 				this.fromMember(member);
 
 		} catch (err) {
-			onFileError(error)
+			console.error(onFileError(err).text);			
 		}
 	}
 
@@ -134,7 +134,7 @@ class Member {
 
 			return member !== undefined;
 		} catch (error) {
-			onFileError(error)
+			console.error(onFileError(err).text);			
 		}
 
 		return false;
@@ -164,7 +164,7 @@ class Member {
 		try {
 			return JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
 		} catch (error) {
-			onFileError(error)
+			console.error(onFileError(err).text);			
 		}
 		return new Array;
 	}

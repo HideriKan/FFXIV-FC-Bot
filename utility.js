@@ -70,9 +70,9 @@ function fileExists(fileName) {
 
 function onFileError(err) {
 	if (err.message === 'Unexpected end of JSON input')
-		console.error('Error: File Emtpy');
+		return { text: 'Error: File Emtpy', type: 1 }
 	else
-		console.error(err);
+		return { text: err, type: 0 };
 }
 
 module.exports = {
