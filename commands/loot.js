@@ -62,13 +62,18 @@ function giveBtn(user, type, setDone) {
 			break;
 		case 'gearUp':
 			baseline = Member.getCurrentBaseline(type);
-			if (member.totalGearUp > baseline)
-				reply.content += bold('\nWarning! This will set them over current baseline, proceed?')
+			if (member.totalGearUp > baseline && !setDone)
+				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+			if (member.GearUpDone)
+				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
+
 			break;
 		case 'accUp':
 			baseline = Member.getCurrentBaseline(type);
-			if (member.totalAccUp > baseline)
-				reply.content += bold('\nWarning! This will set them over current baseline, proceed?')
+			if (member.totalAccUp > baseline && !setDone)
+				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+			if (member.AccUpDone)
+				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
 			break;
 	}
 

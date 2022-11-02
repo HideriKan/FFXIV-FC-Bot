@@ -48,11 +48,15 @@ class ItemManager {
 	 */
 	async assingToMember(interaction) {
 		const user = interaction.message.mentions.parsedUsers.first();
+		const setDone = interaction.message.content.includes('as done?');
 		const member = new Member(user.id);
 
 		switch (this.type.value) {
 			case 'gear':
-				member.totalGear++;
+				if (setDone)
+					member.hasBiS = true;
+				else
+					member.totalGear++;
 				break;
 			case 'weap':
 				member.hasWeapon = true;
@@ -67,10 +71,16 @@ class ItemManager {
 				member.hasTomeWeapUp = true;
 				break;
 			case 'gearUp':
-				member.totalGearUp++;
+				if (setDone)
+					member.GearUpDone = true;
+				else
+					member.totalGearUp++;
 				break;
 			case 'accUp':
-				member.totalAccUp++;
+				if (setDone)
+					member.AccUpDone = true;
+				else
+					member.totalAccUp++;
 				break;
 			case 'prio': // TODO: change / rething / something I dont like this
 				const members = Member.getAllMembers();
