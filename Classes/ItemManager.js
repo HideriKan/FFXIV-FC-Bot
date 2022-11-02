@@ -54,7 +54,7 @@ class ItemManager {
 		switch (this.type.value) {
 			case 'gear':
 				if (setDone)
-					member.hasBiS = true;
+					member.gearDone = true;
 				else
 					member.totalGear++;
 				break;
@@ -72,13 +72,13 @@ class ItemManager {
 				break;
 			case 'gearUp':
 				if (setDone)
-					member.GearUpDone = true;
+					member.gearUpDone = true;
 				else
 					member.totalGearUp++;
 				break;
 			case 'accUp':
 				if (setDone)
-					member.AccUpDone = true;
+					member.accUpDone = true;
 				else
 					member.totalAccUp++;
 				break;
@@ -112,7 +112,7 @@ class ItemManager {
 		switch (this.type.value) {
 			case 'gear': // Isolated
 				reply.content = bold('Total Gear:\n');
-				func = member => { output.push({ name: member.id, value: member.totalGear }); };
+				func = member => { if(!member.gearDone) output.push({ name: member.id, value: member.totalGear }); };
 				break;
 			case 'weap': // Dependant on body
 				reply.content = bold('Weapon Rolls:\n');
@@ -138,11 +138,11 @@ class ItemManager {
 				break;
 			case 'gearUp': // Isolated
 				reply.content = bold('Total Gear Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
-				func = member => { output.push({ name: member.id, value: member.totalGearUp }); };
+				func = member => { if (!member.gearUpDone) output.push({ name: member.id, value: member.totalGearUp }); };
 				break;
 			case 'accUp': // Isolated
 				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
-				func = member => { output.push({ name: member.id, value: member.totalAccUp }); };
+				func = member => { if (!member.accUpDone) output.push({ name: member.id, value: member.totalAccUp }); };
 				break;
 			case 'prio': // TODO: prio
 				reply.content = bold('Current Priority:\n');

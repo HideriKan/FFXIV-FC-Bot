@@ -26,15 +26,19 @@ function giveBtn(user, type, setDone) {
 
 
 	if (setDone)
-		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done?`;
+		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done`;
 	else
-		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}?`;
+		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
 
 	const member = new Member(user.id);
 	let baseline = 0;
 
 	// Warning for certain types
 	switch (type) {
+		case 'gear':
+			if (member.gearDone)
+				reply.content += bold(`\nWarning! This user is already done with raid gear, proceed?`)
+			break;
 		case 'weap':
 			if (member.hasWeapon)
 				reply.content += bold(`\nWarning! This user already has a raid weapon, proceed?`)
@@ -61,7 +65,7 @@ function giveBtn(user, type, setDone) {
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalGearUp > baseline && !setDone)
 				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
-			if (member.GearUpDone)
+			if (member.gearUpDone)
 				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
 
 			break;
@@ -69,7 +73,7 @@ function giveBtn(user, type, setDone) {
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalAccUp > baseline && !setDone)
 				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
-			if (member.AccUpDone)
+			if (member.accUpDone)
 				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
 			break;
 	}
