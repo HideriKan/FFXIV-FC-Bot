@@ -124,51 +124,51 @@ function addGiveBtn(user, type, setDone) {
 	else
 		reply.content = `Give ${bold(ItemManager.nameFromItemValue(type).name)} to ${user}`;
 
-	const member = new Member(user.id, user.displayName);
+	const member = new Member(user.id);
 	let baseline = 0;
 
 	// Warning for certain types
 	switch (type) {
 		case 'gear':
 			if (member.gearDone)
-				reply.content += bold(`\nWarning! This user is already done with raid gear, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} is already done with thier raid gear, proceed?`)
 			break;
 		case 'weap':
 			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user already has a raid weapon, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} already has a raid weapon, proceed?`)
 			break;
 		case 'body':
 			if (member.hasBody)
-				reply.content += bold(`\nWarning! This user already has a raid body, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} already has a raid body, proceed?`)
 			break;
 		case 'tomeWeap':
 			if (member.hasTomeWeap)
-				reply.content += bold(`\nWarning! This user already has a tome weapon, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} already has a tome weapon, proceed?`)
 			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} alreay has a tome weapon upgrade, proceed?`)
 			break;
 		case 'tomeUp':
 			if (!member.hasTomeWeap)
-				reply.content += bold(`\nWarning! This user does not own the tome weapon, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} does not own the tome weapon, proceed?`)
 			if (member.hasTomeWeapUp)
-				reply.content += bold(`\nWarning! This user alreay has the tome weapon upgrade, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} alreay has the tome weapon upgrade, proceed?`)
 			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} alreay has a raid weapon, proceed?`)
 			break;
 		case 'gearUp':
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalGearUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.nameFromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+				reply.content += bold(`\nWarning! Max allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`)
 			if (member.gearUpDone)
-				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} is already done with gear upgrades, proceed?`)
 
 			break;
 		case 'accUp':
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalAccUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.nameFromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+				reply.content += bold(`\nWarning! Max allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`)
 			if (member.accUpDone)
-				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
+				reply.content += bold(`\nWarning! ${user.displayName} is already done with accessory upgrades, proceed?`)
 			break;
 	}
 
