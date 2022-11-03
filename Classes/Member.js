@@ -165,6 +165,7 @@ class Member {
 	static saveMembers(data) {
 		try {
 			fs.writeFileSync(Member.fileName, JSON.stringify(data, null, 2));
+			Member.backupLast10();
 		} catch (err) {
 			console.error(err);
 		}
