@@ -53,6 +53,13 @@ module.exports = {
 				.setDescription('user you want to see')
 			)
 		)
+		.addSubcommand(subcmd => subcmd.setName('remove') // opt: user
+			.setDescription('Remove the a user from the database')
+			.addUserOption(opt => opt.setName('user')
+				.setDescription('Who you want to remove')
+				.setRequired(true)
+			)
+		)
 	,
 	/**
 	 * @param {import('discord.js').Interaction} interaction
@@ -77,6 +84,9 @@ module.exports = {
 					reply = { embeds: [new Member(user.id).toEmbed(user, type)] }
 				else
 					reply = itemMgr.generateData();
+				break;
+			case 'remove':
+				reply = addRemoveBtn(user);
 				break;
 		}
 
@@ -160,6 +170,30 @@ function addGiveBtn(user, type, setDone) {
 				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
 			break;
 	}
+
+	return reply;
+}
+
+/**
+ * gives the user a question with a choice to remove the user from the file
+ * @param {GuildMember} user mentioned user
+ */
+function addRemoveBtn(user) {
+	const reply = { content: null, components: null, ephemeral: true };
+	reply.content = `Remove ${user} from the database`
+	reply.components = new ActionRowBuilder()
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('yesrem')
+				.setLabel('Yes')
+				.setStyle(ButtonStyle.Danger)
+		)
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('no')
+				.setLabel('No')
+				.setStyle(ButtonStyle.Secondary)
+		);
 
 	return reply;
 }
