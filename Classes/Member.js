@@ -238,17 +238,55 @@ class Member {
 	}
 
 	static toEmbedStats() {
-		let totalGear = 0, totalGearUp = 0, totalAccUp = 0;
-		let fields = [{ name: '', value: '' }];
+		let totalGear = 0, totalGearUp = 0, totalAccUp = 0,
+			highGear = { num: 0, name: [] }, highGearUp = { num: 0, name: [] }, highAccUp = { num: 0, name: [] },
+			lowestGear = { num: 0, name: [] }, lowestGearUp = { num: 0, name: [] }, lowestAccUp = { num: 0, name: [] };
+
 
 		const members = Member.getAllMembers();
 		members.forEach(m => {
 			totalGear += m.totalGear;
 			totalGearUp += m.totalGearUp;
 			totalAccUp += m.totalAccUp;
+
+			if (highGear <= m.totalGear) {
+				highGear.num = m.totalGear;
+				highGear.name.push(m.displayName);
+			}
+			if (highGearUp <= m.totalGearUp) {
+				highGearUp.num = m.totalGearUp;
+				highGearUp.name.push(m.displayName);
+			}
+			if (highAccUp <= m.totalAccUp) {
+				highAccUp.name.push(m.displayName);
+				highAccUp.num = m.totalAccUp;
+			}
+
+			if (lowestGear >= m.totalGear) {
+				lowestGear.name.push(m.displayName);
+				lowestGear.num = m.totalGear;
+			}
+			if (lowestGearUp >= m.totalGearUp) {
+				lowestGearUp.name.push(m.displayName);
+				lowestGearUp.num = m.totalGearUp;
+			}
+			if (lowestAccUp >= m.totalAccUp) {
+				lowestAccUp.name.push(m.displayName);
+				lowestAccUp.num = m.totalAccUp;
+			}
 		});
 
-		let highGear = 0, highGearUp = 0, highAccUp = 0;
+
+		let fields = [{
+			name: 'Gear', value: `/\\: ${highGear.num} (${highGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, highGear.name)}
+		\\/: ${lowestGear.num} (${lowestGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestGear.name)}`
+		}, {
+			name: 'Gear Upgrades', value: `/\\: ${highGearUp.num} (${highGearUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, highGearUp.name)}
+		\\/: ${lowestGearUp.num} (${lowestGearUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestGearUp.name)}`
+		}, {
+			name: 'Acc Upgrades', value: `/\\: ${highAccUp.num} (${highAccUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, highAccUp.name)}
+		\\/: ${lowestAccUp.num} (${lowestAccUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestAccUp.name)}`
+		}];
 
 		const embed = new EmbedBuilder()
 			.setTitle('Statistics')
@@ -257,6 +295,8 @@ class Member {
 
 		return embed;
 	}
+
+	static getNamesFromList = (members, foundList) => members.filter(m => foundList.includes(m.id)).toString();
 
 	static backupLast10() {
 
