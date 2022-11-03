@@ -57,9 +57,9 @@ class ItemManager {
 	 * @param {import('discord.js').ButtonInteraction} interaction 
 	 */
 	async assingItemToMember(interaction) {
-		const user = interaction.message.mentions.parsedUsers.first();
+		const user = interaction.message.mentions.members.first();
 		const setDone = interaction.message.content.includes('as done?');
-		const member = new Member(user.id);
+		const member = new Member(user.id, user.displayName);
 
 		switch (this.type.value) {
 			case 'gear':
