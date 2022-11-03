@@ -42,6 +42,16 @@ class ItemManager {
 		})
 	}
 
+	static sortPriorityOfAll() { // Do I really need this?
+		const members = Member.getAllMembers();
+		members.sort((a, b) => a.priority - b.priority);
+
+		for (let i = 0; i < members.length; i++)
+			members[i].priority = i + 1;
+
+		Member.saveMembers(members);
+	}
+
 	/**
 	 * 
 	 * @param {import('discord.js').ButtonInteraction} interaction 
@@ -55,8 +65,11 @@ class ItemManager {
 			case 'gear':
 				if (setDone)
 					member.gearDone = true;
-				else
+				else {
 					member.totalGear++;
+					member.priority = 9
+					ItemManager.sortPriorityOfAll();
+				}
 				break;
 			case 'weap':
 				member.hasWeapon = true;
