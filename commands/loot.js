@@ -46,7 +46,8 @@ module.exports = {
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
 					{ name: 'Priority', value: 'prio' },
-					{ name: 'User', value: 'user' }
+					{ name: 'User', value: 'user' },
+					{ name: 'Statistics', value: 'stats' }
 				)
 			)
 			.addUserOption(opt => opt.setName('user')
@@ -80,8 +81,10 @@ module.exports = {
 			case 'show':
 				if (type === 'user' && user === null)
 					reply = { content: 'Please pass a user as the second argument' }
-				else if (user !== null)
+				else if (type !== 'stats' && user !== null)
 					reply = { embeds: [new Member(user.id).toEmbed(user, type)] }
+				else if (type === 'stats')
+					reply = ItemManager.toEmbedStats();
 				else
 					reply = itemMgr.generateData();
 				break;
