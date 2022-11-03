@@ -21,7 +21,7 @@ class Member {
 		this.totalAccUp = 0;
 		this.accUpDone = false;
 
-		this.fillFromFile()
+		this.fillMemberFromFile()
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Member {
 		this.id = member.id; // unique discord snowflake id
 		this.priority = member.priority;
 		this.totalGear = member.totalGear;
-		this.gearDone = member.gearDone; // might not use
+		this.gearDone = member.gearDone;
 		this.hasWeapon = member.hasWeapon;
 		this.hasBody = member.hasBody;
 		this.hasTomeWeap = member.hasTomeWeap;
@@ -62,7 +62,7 @@ class Member {
 	/**
 	 * tries to find the user in the file and fill the member with fond one
 	 */
-	fillFromFile() {
+	fillMemberFromFile() {
 		ensureFileExists(Member.fileName);
 
 		try {
@@ -142,7 +142,7 @@ class Member {
 	 * @param {String} id unqie discord snowflake id
 	 * @returns true if found, otherwise false
 	 */
-	isInFile() {
+	isMemberInFile() {
 		ensureFileExists(Member.fileName);
 
 		try {
@@ -223,7 +223,7 @@ class Member {
 		const members = Member.getAllMembers();
 		let baseline = 0;
 
-		switch (type) { // TODO: prio
+		switch (type) {
 			case 'gearUp':
 				members.forEach(member => { if (!member.gearUpDone) baseline = member.totalGearUp < baseline ? member.totalGearUp : baseline; });
 				break;

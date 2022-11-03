@@ -3,12 +3,12 @@ const Member = require('./Member');
 
 class ItemManager {
 	constructor(type) {
-		this.type = ItemManager.fromItemName(type);
+		this.type = ItemManager.valueFromItemName(type);
 		if (this.type === undefined)
-			this.type = ItemManager.fromItemValue(type);
+			this.type = ItemManager.nameFromItemValue(type);
 	}
 
-	static items = [
+	static items = [ // TODO: add done?
 		{ name: 'Gear', value: 'gear', isBool: false },
 		{ name: 'Weapon', value: 'weap', isBool: true },
 		{ name: 'Body', value: 'body', isBool: true },
@@ -19,7 +19,7 @@ class ItemManager {
 		{ name: 'Priority', value: 'prio', isBool: false }
 	]
 
-	static itemNameFromMessage(content) {
+	static itemTypeFromMessage(content) {
 		const search = '**'
 		const first = content.indexOf(search) + search.length; // plus search length to ignore it on the next search and in the substring
 		const second = content.indexOf(search, first);
@@ -28,14 +28,14 @@ class ItemManager {
 		return type;
 	}
 
-	static fromItemName(name) {
+	static valueFromItemName(name) {
 		return ItemManager.items.find(item => {
 			if (item.name === name)
 				return item.value;
 		});
 	}
 
-	static fromItemValue(value) {
+	static nameFromItemValue(value) {
 		return ItemManager.items.find(item => {
 			if (item.value === value)
 				return item.name;
@@ -56,7 +56,7 @@ class ItemManager {
 	 * 
 	 * @param {import('discord.js').ButtonInteraction} interaction 
 	 */
-	async assingToMember(interaction) {
+	async assingItemToMember(interaction) {
 		const user = interaction.message.mentions.parsedUsers.first();
 		const setDone = interaction.message.content.includes('as done?');
 		const member = new Member(user.id);
@@ -107,7 +107,7 @@ class ItemManager {
 		interaction.update({ content: interaction.message.content.replace('Give', 'Gave'), components: [] });
 	}
 
-	getArrayFunc(reply, output) {
+	getMemberValueFunc(reply, output) {
 		let func;
 
 		// Need  = false
@@ -162,7 +162,7 @@ class ItemManager {
 		const members = Member.getAllMembers();
 		const output = new Array();
 
-		members.forEach(this.getArrayFunc(reply, output));
+		members.forEach(this.getMemberValueFunc(reply, output));
 		output.sort((a, b) => {
 			if (a.value === null)
 				return 1
