@@ -6,7 +6,8 @@ class Member {
 	static fileName = './MemberLoot.json';
 	static csvName = './MemberLoot.csv';
 
-	constructor(id) {
+	constructor(id, displayName = '') {
+		this.displayName = displayName ? displayName : '';
 		this.id = id; // unique discord snowflake id
 		this.priority = 10;
 		this.totalGear = 0;
@@ -43,6 +44,7 @@ class Member {
 	 * @param {Member} member values to copy from
 	 */
 	fromMember(member) {
+		this.displayName = this.displayName ? this.displayName : member.displayName; // only add the display name if there is none given
 		this.id = member.id; // unique discord snowflake id
 		this.priority = member.priority;
 		this.totalGear = member.totalGear;
