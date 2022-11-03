@@ -104,7 +104,7 @@ module.exports = {
  */
 function addGiveBtn(user, type, setDone) {
 	const reply = { content: null, components: null, ephemeral: true };
-	reply.components = new ActionRowBuilder()
+	reply.components = [new ActionRowBuilder()
 		.addComponents(
 			new ButtonBuilder()
 				.setCustomId('yesitem')
@@ -116,7 +116,8 @@ function addGiveBtn(user, type, setDone) {
 				.setCustomId('no')
 				.setLabel('No')
 				.setStyle(ButtonStyle.Danger)
-		);
+		)
+	];
 
 	if (setDone)
 		reply.content = `Set ${bold(ItemManager.nameFromItemValue(type).name)} for ${user} as done`;
@@ -181,7 +182,7 @@ function addGiveBtn(user, type, setDone) {
 function addRemoveBtn(user) {
 	const reply = { content: null, components: null, ephemeral: true };
 	reply.content = `Remove ${user} from the database`
-	reply.components = new ActionRowBuilder()
+	reply.components = [new ActionRowBuilder()
 		.addComponents(
 			new ButtonBuilder()
 				.setCustomId('yesrem')
@@ -193,7 +194,8 @@ function addRemoveBtn(user) {
 				.setCustomId('no')
 				.setLabel('No')
 				.setStyle(ButtonStyle.Secondary)
-		);
+		)
+	];
 
 	return reply;
 }
