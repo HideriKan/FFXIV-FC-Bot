@@ -16,7 +16,7 @@ module.exports = {
 				if (interaction.customId === 'savage' || interaction.customId === 'ult')
 					await createScheduledEvents(interaction, new RaidWeek());
 				else if (interaction.customId === 'yesitem')
-					await new ItemManager(ItemManager.itemNameFromMessage(interaction.message.content)).assingToMember(interaction);
+					await new ItemManager(ItemManager.itemTypeFromMessage(interaction.message.content)).assingItemToMember(interaction);
 				else if (interaction.customId === 'yesrem')
 					await Member.removeUserFromFile(interaction);
 				else if (interaction.customId === 'no')

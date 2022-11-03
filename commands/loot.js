@@ -119,9 +119,9 @@ function addGiveBtn(user, type, setDone) {
 		);
 
 	if (setDone)
-		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done`;
+		reply.content = `Set ${bold(ItemManager.nameFromItemValue(type).name)} for ${user} as done`;
 	else
-		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
+		reply.content = `Give ${bold(ItemManager.nameFromItemValue(type).name)} to ${user}`;
 
 	const member = new Member(user.id, user.displayName);
 	let baseline = 0;
@@ -157,7 +157,7 @@ function addGiveBtn(user, type, setDone) {
 		case 'gearUp':
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalGearUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+				reply.content += bold(`\nWarning! Max ${ItemManager.nameFromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
 			if (member.gearUpDone)
 				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
 
@@ -165,7 +165,7 @@ function addGiveBtn(user, type, setDone) {
 		case 'accUp':
 			baseline = Member.getCurrentBaseline(type);
 			if (member.totalAccUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+				reply.content += bold(`\nWarning! Max ${ItemManager.nameFromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
 			if (member.accUpDone)
 				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
 			break;
