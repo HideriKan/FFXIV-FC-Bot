@@ -1,14 +1,22 @@
 const { bold, inlineCode, italic } = require('discord.js');
 const Member = require('./Member');
 
+/**
+ * A collection of method to display and manage item / item types
+ */
 class ItemManager {
+	/**
+	 * Manages the passed item with the members
+	 * @param {String} type item type, can either be the item value or the item display name
+	 */
 	constructor(type) {
 		this.type = ItemManager.valueFromItemName(type);
 		if (this.type === undefined)
 			this.type = ItemManager.nameFromItemValue(type);
 	}
 
-	static items = [ // TODO: add done?
+	// List of all the items to be parsed
+	static items = [
 		{ name: 'Gear', value: 'gear', isBool: false },
 		{ name: 'Weapon', value: 'weap', isBool: true },
 		{ name: 'Body', value: 'body', isBool: true },
@@ -19,6 +27,11 @@ class ItemManager {
 		{ name: 'Priority', value: 'prio', isBool: false }
 	]
 
+	/**
+	 * extracts the item type from the give message send from the bot before confirming the command
+	 * @param {String} content message content
+	 * @returns type obejct with name value and isBool boolean
+	 */
 	static itemTypeFromMessage(content) {
 		const search = '**'
 		const first = content.indexOf(search) + search.length; // plus search length to ignore it on the next search and in the substring
@@ -28,6 +41,11 @@ class ItemManager {
 		return type;
 	}
 
+	/**
+	 * searches the list of items for the given item type value and returns the value
+	 * @param {String} name display name of the item
+	 * @returns value of the item type
+	 */
 	static valueFromItemName(name) {
 		return ItemManager.items.find(item => {
 			if (item.name === name)
@@ -35,6 +53,11 @@ class ItemManager {
 		});
 	}
 
+	/**
+	 * searches the list off items for the given item type value and returns the display name
+	 * @param {String} value value of the item type
+	 * @returns display name of the item type
+	 */
 	static nameFromItemValue(value) {
 		return ItemManager.items.find(item => {
 			if (item.value === value)
@@ -42,7 +65,10 @@ class ItemManager {
 		})
 	}
 
-	static sortPriorityOfAll() { // Do I really need this?
+	/**
+	 * Reads all of the members in the file sorts it by thier priortiy and then fill the priority so no gaps are present
+	 */
+	static sortPriorityOfAll() {
 		const members = Member.getAllMembers();
 		members.sort((a, b) => a.priority - b.priority);
 
@@ -52,6 +78,11 @@ class ItemManager {
 		Member.saveMembers(members);
 	}
 
+	/**
+	 * WIP
+	 * collects data from the members and tries to calculate the max and min values with procentages certain gear
+	 * @returns discord embed
+	 */
 	static toEmbedStats() {
 		let totalGear = 0, totalGearUp = 0, totalAccUp = 0,
 			highGear = { num: 0, name: [] }, highGearUp = { num: 0, name: [] }, highAccUp = { num: 0, name: [] },
@@ -111,11 +142,9 @@ class ItemManager {
 		return embed;
 	}
 
-	static getNamesFromList = (members, foundList) => members.filter(m => foundList.includes(m.id)).toString();
-
 	/**
-	 * 
-	 * @param {import('discord.js').ButtonInteraction} interaction 
+	 * assings the item type to the mentioned member in the message
+	 * @param {import('discord.js').ButtonInteraction} interaction from the interactionCreate event
 	 */
 	async assingItemToMember(interaction) {
 		const user = interaction.message.mentions.members.first();
@@ -168,6 +197,12 @@ class ItemManager {
 		interaction.update({ content: interaction.message.content.replace('Give', 'Gave'), components: [] });
 	}
 
+	/**
+	 * creates a custom foreach function to customize the output 
+	 * @param {Object} reply message reply object
+	 * @param {Array} output container to keep all the custom objects
+	 * @returns for each function
+	 */
 	getMemberValueFunc(reply, output) {
 		let func;
 
@@ -218,6 +253,10 @@ class ItemManager {
 		return func;
 	}
 
+	/**
+	 * creates a reply with all the members found in the file and depending on thier contents decides thier roll
+	 * @returns {Object} message reply object
+	 */
 	toRollOverview() {
 		const reply = { content: null, components: null, ephemeral: true };
 		const members = Member.getAllMembers();
@@ -237,8 +276,34 @@ class ItemManager {
 		return reply;
 	}
 
+	// Simple functions to keep the code not as messy
+	/**
+	 * filters the members list to only include members from the found list
+	 * @param {Array} members given from Member.getAllMembers()
+	 * @param {Array} foundList list to filter from
+	 * @returns {String} string of all members found in the foundList
+	 */
+	static getNamesFromList = (members, foundList) => members.filter(m => foundList.includes(m.id)).toString();
+
+	/**
+	 * parses the boolean to the assinged roll type as a string
+	 * @param {Boolean} bool nullable boolean to cover all of the roll types
+	 * @returns {String} roll based on the boolean
+	 */
 	rollFromBool = bool => bool ? 'Greed' : bool === null ? ' Pass' : ' Need';
+
+	/**
+	 * generates strings to display the roll table but uses the rollFromBool method to display roll types instead of numbers
+	 * @param {Object} reply discord reply object
+	 * @returns foreach function to display certain data
+	 */
 	dataFromBool = reply => item => { reply.content += `${inlineCode(this.rollFromBool(item.value))}: ${item.name}\n` };
+
+	/**
+	 * generates strings to display the roll table
+	 * @param {Object} reply discord reply object
+	 * @returns foreach function to display certain data
+	 */
 	dataFromNumber = reply => item => { reply.content += `${inlineCode(item.value)}: ${item.name}\n` };
 }
 

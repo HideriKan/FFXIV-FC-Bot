@@ -3,13 +3,20 @@ const fs = require('fs');
 const { ensureFileExists, onFileError } = require('../utility');
 
 class Member {
+	// directory and file constants
 	static fileName = './MemberLoot.json';
 	static bkpLocation = './data/backup/'
 	static csvName = 'MemberLoot.csv';
 
+	/**
+	 * generates an emtpy member with default values
+	 * after wards tried to find the member in the file of saved members and gets the data if found
+	 * @param {String} id unique discord snowflake id
+	 * @param {String} displayName (Optional) name of the user to be used for display information
+	 */
 	constructor(id, displayName = '') {
 		this.displayName = displayName ? displayName : '';
-		this.id = id; // unique discord snowflake id
+		this.id = id;
 		this.priority = 10;
 		this.totalGear = 0;
 		this.gearDone = false;
@@ -140,7 +147,6 @@ class Member {
 
 	/**
 	 * Checks if the given id is already present is in the member json
-	 * @param {String} id unqie discord snowflake id
 	 * @returns true if found, otherwise false
 	 */
 	isMemberInFile() {
@@ -165,15 +171,16 @@ class Member {
 	static saveMembers(data) {
 		try {
 			fs.writeFileSync(Member.fileName, JSON.stringify(data, null, 2));
-			Member.backupLast10();
+			Member.backupLastTen();
 		} catch (err) {
 			console.error(err);
 		}
 	}
 
 	/**
-	 * 
-	 * @param {import('discord.js').ButtonInteraction} interaction 
+	 * acts as an interaction method
+	 * wil remove the mentioned member from the file of members
+	 * @param {import('discord.js').ButtonInteraction} interaction interactoin from the intercationCreate discord event
 	 */
 	static async removeMemberFromFile(interaction) {
 		const user = interaction.message.mentions.parsedUsers.first();
@@ -237,7 +244,11 @@ class Member {
 		return baseline;
 	}
 
-	static backupLast10() {
+	/**
+	 * checks the amount of files in the given backup location and if its over 10 it will remove one
+	 * then save another csv file as backup
+	 */
+	static backupLastTen() {
 
 		const csvFiles = fs.readdirSync(Member.bkpLocation).filter(file => file.endsWith('.csv'));
 		if (csvFiles.length >= 10)
@@ -248,6 +259,10 @@ class Member {
 		fs.writeFileSync(fileLocation, content);
 	}
 
+	/**
+	 * generates the content for a csv file
+	 * @returns {String} csv content
+	 */
 	static toCSVFile() {
 		const members = Member.getAllMembers();
 
