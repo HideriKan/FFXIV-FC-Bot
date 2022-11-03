@@ -68,7 +68,7 @@ module.exports = {
 		let reply;
 		switch (cmd) {
 			case 'give':
-				reply = giveBtn(user, type, setDone);
+				reply = addGiveBtn(user, type, setDone);
 				break;
 			case 'show':
 				if (type === 'user' && user === null)
