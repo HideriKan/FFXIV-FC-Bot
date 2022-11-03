@@ -86,7 +86,7 @@ module.exports = {
 				else if (type === 'stats')
 					reply = ItemManager.toEmbedStats();
 				else
-					reply = itemMgr.generateData();
+					reply = itemMgr.toRollOverview();
 				break;
 			case 'remove':
 				reply = addRemoveBtn(user);

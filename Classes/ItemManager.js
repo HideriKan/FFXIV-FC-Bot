@@ -218,7 +218,7 @@ class ItemManager {
 		return func;
 	}
 
-	generateData() {
+	toRollOverview() {
 		const reply = { content: null, components: null, ephemeral: true };
 		const members = Member.getAllMembers();
 		const output = new Array();
