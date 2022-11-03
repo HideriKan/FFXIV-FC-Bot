@@ -2,87 +2,6 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Guild
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 
-/**
- * processes the loot got command
- * @param {GuildMember} user mentioned user
- * @param {string} type item type
- * @returns reply as an object
- */
-function giveBtn(user, type, setDone) {
-	const reply = { content: null, components: null, ephemeral: true };
-	const row = new ActionRowBuilder()
-		.addComponents(
-			new ButtonBuilder()
-				.setCustomId('yesitem')
-				.setLabel('Yes')
-				.setStyle(ButtonStyle.Primary)
-		)
-		.addComponents(
-			new ButtonBuilder()
-				.setCustomId('no')
-				.setLabel('No')
-				.setStyle(ButtonStyle.Danger)
-		);
-
-
-	if (setDone)
-		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done`;
-	else
-		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
-
-	const member = new Member(user.id);
-	let baseline = 0;
-
-	// Warning for certain types
-	switch (type) {
-		case 'gear':
-			if (member.gearDone)
-				reply.content += bold(`\nWarning! This user is already done with raid gear, proceed?`)
-			break;
-		case 'weap':
-			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user already has a raid weapon, proceed?`)
-			break;
-		case 'body':
-			if (member.hasBody)
-				reply.content += bold(`\nWarning! This user already has a raid body, proceed?`)
-			break;
-		case 'tomeWeap':
-			if (member.hasTomeWeap)
-				reply.content += bold(`\nWarning! This user already has a tome weapon, proceed?`)
-			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
-			break;
-		case 'tomeUp':
-			if (!member.hasTomeWeap)
-				reply.content += bold(`\nWarning! This user does not own the tome weapon, proceed?`)
-			if (member.hasTomeWeapUp)
-				reply.content += bold(`\nWarning! This user alreay has the tome weapon upgrade, proceed?`)
-			if (member.hasWeapon)
-				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
-			break;
-		case 'gearUp':
-			baseline = Member.getCurrentBaseline(type);
-			if (member.totalGearUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
-			if (member.gearUpDone)
-				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
-
-			break;
-		case 'accUp':
-			baseline = Member.getCurrentBaseline(type);
-			if (member.totalAccUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
-			if (member.accUpDone)
-				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
-			break;
-	}
-
-	reply.components = [row];
-
-	return reply;
-}
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loot')
@@ -174,3 +93,83 @@ module.exports = {
 		await interaction.editReply(reply);
 	},
 };
+
+
+/**
+ * gives the user a question with a choice to add the item type to the user
+ * @param {GuildMember} user mentioned user
+ * @param {String} type item type
+ * @param {Boolean} setDone if the type should be ignored for future
+ * @returns an reply object to be sent to the user
+ */
+function addGiveBtn(user, type, setDone) {
+	const reply = { content: null, components: null, ephemeral: true };
+	reply.components = new ActionRowBuilder()
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('yesitem')
+				.setLabel('Yes')
+				.setStyle(ButtonStyle.Primary)
+		)
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('no')
+				.setLabel('No')
+				.setStyle(ButtonStyle.Danger)
+		);
+
+	if (setDone)
+		reply.content = `Set ${bold(ItemManager.fromItemValue(type).name)} for ${user} as done`;
+	else
+		reply.content = `Give ${bold(ItemManager.fromItemValue(type).name)} to ${user}`;
+
+	const member = new Member(user.id, user.displayName);
+	let baseline = 0;
+
+	// Warning for certain types
+	switch (type) {
+		case 'gear':
+			if (member.gearDone)
+				reply.content += bold(`\nWarning! This user is already done with raid gear, proceed?`)
+			break;
+		case 'weap':
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user already has a raid weapon, proceed?`)
+			break;
+		case 'body':
+			if (member.hasBody)
+				reply.content += bold(`\nWarning! This user already has a raid body, proceed?`)
+			break;
+		case 'tomeWeap':
+			if (member.hasTomeWeap)
+				reply.content += bold(`\nWarning! This user already has a tome weapon, proceed?`)
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+			break;
+		case 'tomeUp':
+			if (!member.hasTomeWeap)
+				reply.content += bold(`\nWarning! This user does not own the tome weapon, proceed?`)
+			if (member.hasTomeWeapUp)
+				reply.content += bold(`\nWarning! This user alreay has the tome weapon upgrade, proceed?`)
+			if (member.hasWeapon)
+				reply.content += bold(`\nWarning! This user alreay has a raid weapon upgrade, proceed?`)
+			break;
+		case 'gearUp':
+			baseline = Member.getCurrentBaseline(type);
+			if (member.totalGearUp > baseline && !setDone)
+				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+			if (member.gearUpDone)
+				reply.content += bold(`\nWarning! This user is already done with gear upgrades, proceed?`)
+
+			break;
+		case 'accUp':
+			baseline = Member.getCurrentBaseline(type);
+			if (member.totalAccUp > baseline && !setDone)
+				reply.content += bold(`\nWarning! Max ${ItemManager.fromItemValue(type).name}(s): ${baseline + 1}, ${user} has ${member.totalGearUp}, proceed?`)
+			if (member.accUpDone)
+				reply.content += bold(`\nWarning! This user is already done with accessory upgrades, proceed?`)
+			break;
+	}
+
+	return reply;
+}
