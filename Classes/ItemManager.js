@@ -1,4 +1,4 @@
-const { bold, escapeUnderline, userMention, inlineCode, italic } = require('discord.js');
+const { bold, inlineCode, italic } = require('discord.js');
 const Member = require('./Member');
 
 class ItemManager {
