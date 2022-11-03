@@ -82,18 +82,9 @@ class ItemManager {
 				else
 					member.totalAccUp++;
 				break;
-			case 'prio': // TODO: change / rethink / something I dont like this
-				const members = Member.getAllMembers();
-				members.sort((a, b) => a.priority - b.priority);
-
-				if (member.isInFile()) {
-					for (let i = 0; i < members.length; i++)
-						if (members[i].id === member.id)
-							member.priority = i + 1;
-				}
-				else {
-					member.priority = members.length + 1;
-				}
+			case 'prio':
+				if (member.priority === 10) // put at the bottom of the priority
+					member.priority = Member.getAllMembers().length + 1;
 
 				break;
 		}
