@@ -4,7 +4,8 @@ const { ensureFileExists, onFileError } = require('../utility');
 
 class Member {
 	static fileName = './MemberLoot.json';
-	static csvName = './MemberLoot.csv';
+	static bkpLocation = './data/backup/'
+	static csvName = 'MemberLoot.csv';
 
 	constructor(id, displayName = '') {
 		this.displayName = displayName ? displayName : '';
@@ -256,12 +257,26 @@ class Member {
 		return embed;
 	}
 
+	static backupLast10() {
+
+		const csvFiles = fs.readdirSync(Member.bkpLocation).filter(file => file.endsWith('.csv'));
+		if (csvFiles.length >= 10)
+			fs.unlinkSync(csvFiles.pop());
+
+		const content = Member.toCSVFile();
+		const fileLocation = Member.bkpLocation + new Date().getTime() + Member.csvName
+		fs.writeFileSync(fileLocation, content);
+	}
+
 	static toCSVFile() {
-		let content = 'Id, Total gear, Weapon, Body, Tome weapon, Tome weapon upgrade, Gear upgrade, Gear upgrade done, Accessory upgrade, Accessory upgrade done\n';
 		const members = Member.getAllMembers();
+
+		let content = 'Name, Id, Priority, Total gear, Gear done, Weapon, Body, Tome weapon, Tome weapon upgrade, Gear upgrade, Gear upgrade done, Accessory upgrade, Accessory upgrade done\n';
 		members.forEach(member => {
-			content += `${member.id}, ${member.totalGear}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasBody ? '1' : '0'}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasTomeWeapUp ? '1' : '0'}, ${member.totalGearUp}, ${member.gearUpDone ? '1' : '0'}, ${member.totalAccUp}, ${member.accUpDone ? '1' : '0'}\n`;
+			content += `${member.displayName}, ${member.id}, ${member.priority}, ${member.totalGear}, ${member.gearDone ? '1' : '0'}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasBody ? '1' : '0'}, ${member.hasTomeWeap ? '1' : '0'}, ${member.hasTomeWeapUp ? '1' : '0'}, ${member.totalGearUp}, ${member.gearUpDone ? '1' : '0'}, ${member.totalAccUp}, ${member.accUpDone ? '1' : '0'}\n`;
 		});
+
+		return content;
 	}
 }
 
