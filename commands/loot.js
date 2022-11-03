@@ -53,13 +53,7 @@ module.exports = {
 				.setDescription('user you want to see')
 			)
 		)
-		.addSubcommand(subcmd => subcmd.setName('create') // opt: user
-			.setDescription('Create a new item user profile')
-			.addUserOption(opt => opt.setName('user')
-				.setDescription('Who you want to create a profile for')
-				.setRequired(true)
-			)
-		),
+	,
 	/**
 	 * @param {import('discord.js').Interaction} interaction
 	 */
@@ -83,10 +77,6 @@ module.exports = {
 					reply = { embeds: [new Member(user.id).toEmbed(user, type)] }
 				else
 					reply = itemMgr.generateData();
-				break;
-			case 'create':
-				new Member(user.id).saveMember();
-				reply = { content: user.displayName + ' Has been created' };
 				break;
 		}
 
