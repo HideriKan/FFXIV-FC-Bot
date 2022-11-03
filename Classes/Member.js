@@ -168,6 +168,20 @@ class Member {
 	}
 
 	/**
+	 * 
+	 * @param {import('discord.js').ButtonInteraction} interaction 
+	 */
+	static async removeMemberFromFile(interaction) {
+		const user = interaction.message.mentions.parsedUsers.first();
+		const members = Member.getAllMembers();
+		const newMembers = members.filter(member => member.id !== user.id);
+
+		Member.saveMembers(newMembers);
+
+		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed'), components: [] });
+	}
+
+	/**
 	 * reads the json file and returns the found members
 	 * @returns {Array} array of members
 	 */

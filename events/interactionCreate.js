@@ -1,6 +1,7 @@
 const ItemManager = require('../Classes/ItemManager');
+const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents, assingToMember } = require('../utility');
+const { createScheduledEvents } = require('../utility');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -14,10 +15,10 @@ module.exports = {
 			if (interaction.isButton()) {
 				if (interaction.customId === 'savage' || interaction.customId === 'ult')
 					await createScheduledEvents(interaction, new RaidWeek());
-				if (interaction.customId === 'yesitem')
-					// this is a mess that I am not proud of
-					await new ItemManager(ItemManager.itemNameFromMessage(interaction.message.content))
-						.assingToMember(interaction);
+				else if (interaction.customId === 'yesitem')
+					await new ItemManager(ItemManager.itemNameFromMessage(interaction.message.content)).assingToMember(interaction);
+				else if (interaction.customId === 'yesrem')
+					await Member.removeUserFromFile(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
 			}
@@ -31,7 +32,7 @@ module.exports = {
 
 		} catch (error) {
 			console.error(error);
-			
+
 			if (interaction.deferred && !interaction.replied)
 				await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true });
 			else if (!interaction.replied)
