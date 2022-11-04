@@ -246,6 +246,9 @@ class ItemManager {
 	toRollOverview() {
 		const reply = { content: null, components: null, ephemeral: true };
 		const members = Member.getAllMembers();
+		if (members.length === 0)
+			return { content: 'Please give members any kind of loot first', ephemeral: true };
+
 		const output = new Array();
 
 		members.forEach(this.getMemberValueFunc(reply, output));
