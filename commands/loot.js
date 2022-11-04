@@ -6,7 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loot')
 		.setDescription('Loot tracker')
-		.setDMPermission(false)
+		.setDMPermission(false) // TODO: move this and the permission to each individual subcommand
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
 		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type, [isdone]
 			.setDescription('Distrubte loot for a raid member')
@@ -86,7 +86,7 @@ module.exports = {
 				else if (type === 'stats')
 					reply = ItemManager.toEmbedStats();
 				else
-					reply = itemMgr.toRollOverview();
+					reply = itemMgr.toRollOverview(); // TODO: change to embed
 				break;
 			case 'remove':
 				reply = addRemoveBtn(user);

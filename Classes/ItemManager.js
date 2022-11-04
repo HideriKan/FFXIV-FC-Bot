@@ -109,7 +109,7 @@ class ItemManager {
 			}
 		});
 
-
+		// TODO: fix when used on emtpy member file
 		let fields = [{
 			name: 'Gear', value: `/\\: ${highGear.num} (${highGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, highGear.name)}
 		\\/: ${lowestGear.num} (${lowestGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestGear.name)}`
