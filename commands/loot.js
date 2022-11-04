@@ -46,7 +46,7 @@ module.exports = {
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
 					{ name: 'Priority', value: 'prio' },
-					{ name: 'User', value: 'user' },
+					{ name: 'Profile', value: 'user' },
 					{ name: 'Statistics', value: 'stats' }
 				)
 			)
