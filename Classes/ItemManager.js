@@ -66,19 +66,6 @@ class ItemManager {
 	}
 
 	/**
-	 * Reads all of the members in the file sorts it by thier priortiy and then fill the priority so no gaps are present
-	 */
-	static sortPriorityOfAll() {
-		const members = Member.getAllMembers();
-		members.sort((a, b) => a.priority - b.priority);
-
-		for (let i = 0; i < members.length; i++)
-			members[i].priority = i + 1;
-
-		Member.saveMembers(members);
-	}
-
-	/**
 	 * WIP
 	 * collects data from the members and tries to calculate the max and min values with procentages certain gear
 	 * @returns discord embed
@@ -157,8 +144,7 @@ class ItemManager {
 					member.gearDone = true;
 				else {
 					member.totalGear++;
-					member.priority = 9
-					ItemManager.sortPriorityOfAll();
+					member.priority = 9;
 				}
 				break;
 			case 'weap':

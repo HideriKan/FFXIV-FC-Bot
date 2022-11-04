@@ -38,13 +38,14 @@ class Member {
 	saveMember() {
 		const members = Member.getAllMembers();
 		const index = members.findIndex(element => element.id === this.id)
+		const updatePrio = index === -1 ? false : members[index].priority === this.priority;
 
 		if (index >= 0)
 			members[index] = this;
 		else
 			members.push(this)
 
-		Member.saveMembers(members);
+		Member.saveMembers(members, updatePrio);
 	}
 
 	/**
@@ -166,11 +167,19 @@ class Member {
 
 	/**
 	 * will write the passed data into the json
-	 * @param {Array} data an Array of Member
+	 * @param {Array} members an Array of Member
+	 * @param {Boolean} sortPrio (Optional: defualt false) if true it will sort the members based on priority and move members to fill the gaps
 	 */
-	static saveMembers(data) {
+	static saveMembers(members, sortPrio = false) {
 		try {
-			fs.writeFileSync(Member.fileName, JSON.stringify(data, null, 2));
+			if (sortPrio) {
+				members.sort((a, b) => a.priority - b.priority);
+
+				for (let i = 0; i < members.length; i++)
+					members[i].priority = i + 1;
+			}
+
+			fs.writeFileSync(Member.fileName, JSON.stringify(members, null, 2));
 			Member.backupLastTen();
 		} catch (err) {
 			console.error(err);
