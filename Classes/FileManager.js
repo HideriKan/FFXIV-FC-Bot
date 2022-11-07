@@ -9,11 +9,11 @@ class FileManager {
 	}
 
 	static readFile(dataLocation, fileName) {
-		const path = path.join(dataLocation, fileName);
-		FileManager.ensureFileExists(path);
+		const filePath = path.join(dataLocation, fileName);
+		FileManager.ensureFileExists(filePath);
 
 		try {
-			return fs.readFileSync(path, 'utf8')
+			return fs.readFileSync(filePath, 'utf8')
 		} catch (err) {
 			console.error(err);
 			return '';
@@ -21,10 +21,10 @@ class FileManager {
 	}
 
 	static writeFile(dataLocation, fileName, data) {
-		const path = path.join(dataLocation, fileName);
+		const filePath = path.join(dataLocation, fileName);
 
 		try {
-			fs.writeFileSync(path, data);
+			fs.writeFileSync(filePath, data);
 		} catch (err) {
 			console.error(err);
 		}
