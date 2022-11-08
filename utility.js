@@ -49,30 +49,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 	interaction.update({ content: 'Guild Events have been added', components: [] });
 }
 
-/**
- * 
- * @param {String} fileName path to the file
- * @returns true if already exisits, otherwise false and creates the file
- */
-function ensureFileExists(fileName) {
-	try {
-		fs.accessSync(fileName, fs.constants.R_OK | fs.constants.W_OK)
-	} catch (error) {
-		fs.writeFileSync(fileName, '[]');
-	}
-}
-
-
-function onFileError(err) {
-	if (err.message === 'Unexpected end of JSON input')
-		return { text: 'Error: File Emtpy', type: 1 }
-	else
-		return { text: err, type: 0 };
-}
-
 module.exports = {
 	getStartingDay,
-	createScheduledEvents,
-	ensureFileExists,
-	onFileError
+	createScheduledEvents
 }; 

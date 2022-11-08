@@ -1,12 +1,10 @@
 const { EmbedBuilder, GuildMember } = require('discord.js');
-const fs = require('fs');
-const { ensureFileExists, onFileError } = require('../utility');
+const fm = require('./FileManager');
 
 class Member {
-	// directory and file constants
-	static fileName = './MemberLoot.json';
-	static bkpLocation = './data/backup/'
-	static csvName = 'MemberLoot.csv';
+	// file name constants
+	static lootFile = 'MemberLoot.json';
+	static csvFile = 'MemberLoot.csv'
 
 	/**
 	 * generates an emtpy member with default values
@@ -72,18 +70,15 @@ class Member {
 	 * tries to find the user in the file and fill the member with fond one
 	 */
 	fillMemberFromFile() {
-		ensureFileExists(Member.fileName);
+		const fileData = fm.readFile(fm.dir.DATA, Member.lootFile);
+		if (fileData === '')
+			return
 
-		try {
-			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
-			const member = data.find(member => member.id === this.id);
+		const jsonData = JSON.parse(fileData);
+		const member = jsonData.find(member => member.id === this.id);
 
-			if (member !== undefined)
-				this.fromMember(member);
-
-		} catch (err) {
-			console.error(onFileError(err).text);
-		}
+		if (member !== undefined)
+			this.fromMember(member);
 	}
 
 	/**
@@ -151,18 +146,14 @@ class Member {
 	 * @returns true if found, otherwise false
 	 */
 	isMemberInFile() {
-		ensureFileExists(Member.fileName);
+		const fileData = fm.readFile(fm.dir.DATA, Member.lootFile);
+		if (fileData === '')
+			return false;
 
-		try {
-			const data = JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
-			const member = data.find(member => member.id === this.id);
+		const jsonData = JSON.parse(fileData);
+		const member = jsonData.find(member => member.id === this.id);
 
-			return member !== undefined;
-		} catch (error) {
-			console.error(onFileError(error).text);
-		}
-
-		return false;
+		return member !== undefined;
 	}
 
 	/**
@@ -171,19 +162,15 @@ class Member {
 	 * @param {Boolean} sortPrio (Optional: defualt false) if true it will sort the members based on priority and move members to fill the gaps
 	 */
 	static saveMembers(members, sortPrio = false) {
-		try {
-			if (sortPrio) {
-				members.sort((a, b) => a.priority - b.priority);
+		if (sortPrio) {
+			members.sort((a, b) => a.priority - b.priority);
 
-				for (let i = 0; i < members.length; i++)
-					members[i].priority = i + 1;
-			}
-
-			fs.writeFileSync(Member.fileName, JSON.stringify(members, null, 2));
-			Member.backupLastTen();
-		} catch (err) {
-			console.error(err);
+			for (let i = 0; i < members.length; i++)
+				members[i].priority = i + 1;
 		}
+
+		fm.writeFile(fm.dir.DATA, Member.lootFile, JSON.stringify(members, null, 2));
+		Member.backupLastTen();
 	}
 
 	/**
@@ -206,14 +193,11 @@ class Member {
 	 * @returns {Array} array of members
 	 */
 	static getAllMembers() {
-		ensureFileExists(Member.fileName);
+		const fileData = fm.readFile(fm.dir.DATA, Member.lootFile);
+		if (fileData === '')
+			return new Array;
 
-		try {
-			return JSON.parse(fs.readFileSync(Member.fileName, 'utf8'));
-		} catch (error) {
-			console.error(onFileError(error).text);
-		}
-		return new Array;
+		return JSON.parse(fileData);
 	}
 
 	/**
@@ -258,14 +242,13 @@ class Member {
 	 * then save another csv file as backup
 	 */
 	static backupLastTen() {
-
-		const csvFiles = fs.readdirSync(Member.bkpLocation).filter(file => file.endsWith('.csv'));
+		const csvFiles = fm.readDir(fm.dir.BKUP).filter(file => file.endsWith('.csv'));
 		if (csvFiles.length >= 10)
-			fs.unlinkSync(csvFiles.pop());
+			fm.removeFile(csvFiles.pop());
 
 		const content = Member.toCSVFile();
-		const fileLocation = Member.bkpLocation + new Date().getTime() + Member.csvName
-		fs.writeFileSync(fileLocation, content);
+		const file = new Date().getTime() + Member.csvFile;
+		fm.writeFile(fm.dir.BKUP, file, content);
 	}
 
 	/**

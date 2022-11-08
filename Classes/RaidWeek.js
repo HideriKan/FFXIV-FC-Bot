@@ -1,8 +1,8 @@
 // Imports
 const RaidDay = require('./RaidDay');
-const fs = require('fs');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
 const { getStartingDay } = require('../utility');
+const fm = require('./FileManager');
 
 // File settings
 const jsonFile = './RaidTimes.json';
@@ -211,41 +211,31 @@ class RaidWeek {
 	 * Reads the defual json file and fills this raidweek
 	 */
 	readJson() {
-		try {
-			const data = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
-
-			this.startingWeekDay = data.startingWeekDay;
-			this.week = [];
-
-			data.week.forEach(dataDay => {
-				let newDay = new RaidDay(dataDay.day);
-				newDay.isRaid = dataDay.isRaid;
-				newDay.startTime = dataDay.startTime;
-				newDay.endTime = dataDay.endTime;
-
-				this.week.push(newDay);
-			});
+		const fileData = fm.readFile(fm.dir.DATA, jsonFile);
+		if (fileData === '')
 			return;
 
-		} catch (err) {
-			console.error(err);
-		} // End of try-catch
+		const data = JSON.parse(fileData);
+
+		this.startingWeekDay = data.startingWeekDay;
+		this.week = [];
+
+		data.week.forEach(dataDay => {
+			let newDay = new RaidDay(dataDay.day);
+			newDay.isRaid = dataDay.isRaid;
+			newDay.startTime = dataDay.startTime;
+			newDay.endTime = dataDay.endTime;
+
+			this.week.push(newDay);
+		});
+		return;
 	} // End of readJson
 
 	/**
 	 * Simple function that writes the whole contents of the RaidWeek into a JSON file
 	 */
 	writeJson() {
-		// fs.writeFile(jsonFile, JSON.stringify(this, null, 2), err => {
-		// 	if (err) return console.error(err);
-		// 	console.log('saved RaidWeek');
-		// });
-		try {
-			fs.writeFileSync(jsonFile, JSON.stringify(this, null, 2));
-		} catch (err) {
-			if (err) return console.error(err);
-		} // End of try-catch
-
+		fm.writeFile(fm.dir.DATA, jsonFile, JSON.stringify(this, null, 2))
 	} // End of writeJson
 
 } // End RaidWeek
