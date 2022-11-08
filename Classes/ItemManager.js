@@ -111,14 +111,14 @@ class ItemManager {
 
 		// TODO: fix when used on emtpy member file
 		let fields = [{
-			name: 'Gear', value: `/\\: ${highGear.num} (${highGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, highGear.name)}
-		\\/: ${lowestGear.num} (${lowestGear.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestGear.name)}`
+			name: 'Gear', value: `/\\: ${highGear.num} (${highGear.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, highGear.name)}
+		\\/: ${lowestGear.num} (${lowestGear.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, lowestGear.name)}`
 		}, {
-			name: 'Gear Upgrades', value: `/\\: ${highGearUp.num} (${highGearUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, highGearUp.name)}
-		\\/: ${lowestGearUp.num} (${lowestGearUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestGearUp.name)}`
+			name: 'Gear Upgrades', value: `/\\: ${highGearUp.num} (${highGearUp.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, highGearUp.name)}
+		\\/: ${lowestGearUp.num} (${lowestGearUp.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, lowestGearUp.name)}`
 		}, {
-			name: 'Acc Upgrades', value: `/\\: ${highAccUp.num} (${highAccUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, highAccUp.name)}
-		\\/: ${lowestAccUp.num} (${lowestAccUp.num / totalGear * 100}%) ${Member.getNamesFromList(members, lowestAccUp.name)}`
+			name: 'Acc Upgrades', value: `/\\: ${highAccUp.num} (${highAccUp.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, highAccUp.name)}
+		\\/: ${lowestAccUp.num} (${lowestAccUp.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, lowestAccUp.name)}`
 		}];
 
 		const embed = new EmbedBuilder()
