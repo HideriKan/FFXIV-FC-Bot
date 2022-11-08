@@ -1,4 +1,4 @@
-const { bold, inlineCode, italic } = require('discord.js');
+const { inlineCode, EmbedBuilder } = require('discord.js');
 const Member = require('./Member');
 
 /**
@@ -126,7 +126,7 @@ class ItemManager {
 			.addFields(fields)
 			.setFooter({ text: 'work in progress' });
 
-		return embed;
+		return { embeds: [embed] };
 	}
 
 	/**
@@ -185,11 +185,11 @@ class ItemManager {
 
 	/**
 	 * creates a custom foreach function to customize the output 
-	 * @param {Object} reply message reply object
+	 * @param {EmbedBuilder} embed message embed
 	 * @param {Array} output container to keep all the custom objects
 	 * @returns for each function
 	 */
-	getMemberValueFunc(reply, output) {
+	getMemberValueFunc(embed, output) {
 		let func;
 
 		// Need  = false
@@ -197,41 +197,45 @@ class ItemManager {
 		// Pass  = null
 		switch (this.type.value) {
 			case 'gear': // Isolated
-				reply.content = bold('Total Gear:\n');
+				embed.setTitle('Total Gear'); // TODO: GEARBASED: add baseline warning
 				func = member => { if (!member.gearDone) output.push({ name: member.displayName, value: member.totalGear }); };
 				break;
 			case 'weap': // Dependant on body
-				reply.content = bold('Weapon Rolls:\n');
+				embed.setTitle('Weapon Rolls');
 				if (Member.isWeapBodyBalanced())
 					func = member => { output.push({ name: member.displayName, value: member.hasWeapon }); };
 				else
 					func = member => { output.push({ name: member.displayName, value: member.hasWeapon || member.hasBody }); };
 				break;
 			case 'body': // Dependant on weap
-				reply.content = bold('Body Rolls:\n');
+				embed.setTitle('Body Rolls');
 				if (Member.isWeapBodyBalanced())
 					func = member => { output.push({ name: member.displayName, value: member.hasBody }); };
 				else
 					func = member => { output.push({ name: member.displayName, value: member.hasBody || member.hasWeapon }); };
 				break;
 			case 'tomeWeap': // Isolated
-				reply.content = bold('Tome Weapon Rolls:\n') + italic('requires 500 Tomes\n');
+				embed.setTitle('Tome Weapon Rolls');
+				embed.setFooter({ text: 'requires 500 Tomes' });
 				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeap ? null : false }); };
 				break;
 			case 'tomeUp': // Dependant on tomeWeap
-				reply.content = bold(`Tome Weapon Upgrade Rolls:\n`) + italic('requires Tome Weapon\n');
+				embed.setTitle(`Tome Weapon Upgrade Rolls`);
+				embed.setFooter({ text: 'requires Tome Weapon' });
 				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
 				break;
 			case 'gearUp': // Isolated
-				reply.content = bold('Total Gear Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
+				embed.setTitle('Total Gear Upgrade:\n');
+				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
 				func = member => { if (!member.gearUpDone) output.push({ name: member.displayName, value: member.totalGearUp }); };
 				break;
 			case 'accUp': // Isolated
-				reply.content = bold('Total Accessory Upgrade:\n') + italic(`Current baseline: ${bold(Member.getCurrentBaseline(this.type.value))}\n`);
+				embed.setTitle('Total Accessory Upgrade:\n');
+				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
 				func = member => { if (!member.accUpDone) output.push({ name: member.displayName, value: member.totalAccUp }); };
 				break;
 			case 'prio':
-				reply.content = bold('Current Priority:\n');
+				embed.setTitle('Current Priority:');
 				func = member => { output.push({ name: member.displayName, value: member.priority }); };
 				break;
 		}
@@ -244,14 +248,14 @@ class ItemManager {
 	 * @returns {Object} message reply object
 	 */
 	toRollOverview() {
-		const reply = { content: null, components: null, ephemeral: true };
+		const embed = new EmbedBuilder();
 		const members = Member.getAllMembers();
 		if (members.length === 0)
-			return { content: 'Please give members any kind of loot first', ephemeral: true };
+			return { content: 'Please add members first', ephemeral: true };
 
 		const output = new Array();
 
-		members.forEach(this.getMemberValueFunc(reply, output));
+		members.forEach(this.getMemberValueFunc(embed, output));
 		output.sort((a, b) => {
 			if (a.value === null)
 				return 1
@@ -260,9 +264,9 @@ class ItemManager {
 
 			return a.value - b.value
 		});
-		output.forEach(this.type.isBool ? this.dataFromBool(reply) : this.dataFromNumber(reply));
+		embed.setDescription(this.type.isBool ? this.dataFromBool(output) : this.dataFromNumber(output))
 
-		return reply;
+		return { embeds: [embed] };
 	}
 
 	// Simple functions to keep the code not as messy
@@ -283,17 +287,29 @@ class ItemManager {
 
 	/**
 	 * generates strings to display the roll table but uses the rollFromBool method to display roll types instead of numbers
-	 * @param {Object} reply discord reply object
+	 * @param {Array} output array with each member's data
 	 * @returns foreach function to display certain data
 	 */
-	dataFromBool = reply => item => { reply.content += `${inlineCode(this.rollFromBool(item.value))}: ${item.name}\n` };
+	dataFromBool = output => {
+		let data = '';
+		output.forEach(item => {
+			data += `${inlineCode(this.rollFromBool(item.value))}: ${item.name}\n`
+		});
+		return data;
+	}
 
 	/**
 	 * generates strings to display the roll table
-	 * @param {Object} reply discord reply object
+	 * @param {Array} output array with each member's data
 	 * @returns foreach function to display certain data
 	 */
-	dataFromNumber = reply => item => { reply.content += `${inlineCode(item.value)}: ${item.name}\n` };
+	dataFromNumber = output => {
+		let data = '';
+		output.forEach(item => {
+			data += `${inlineCode(item.value)}: ${item.name}\n`
+		});
+		return data;
+	}
 }
 
 module.exports = ItemManager;

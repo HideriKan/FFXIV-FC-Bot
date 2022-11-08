@@ -138,7 +138,7 @@ class Member {
 				break;
 		}
 
-		return embed;
+		return { embeds: [embed] };
 	}
 
 	/**
