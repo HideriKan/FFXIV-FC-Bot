@@ -110,6 +110,7 @@ class ItemManager {
 		});
 
 		// TODO: fix when used on emtpy member file
+		// TODO: add count of weap, body, ...
 		let fields = [{
 			name: 'Gear', value: `/\\: ${highGear.num} (${highGear.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, highGear.name)}
 		\\/: ${lowestGear.num} (${lowestGear.num / totalGear * 100}%) ${ItemManager.getNamesFromList(members, lowestGear.name)}`
