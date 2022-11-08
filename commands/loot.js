@@ -122,6 +122,7 @@ function addGiveBtn(user, type, setDone) {
 		)
 	];
 
+	// TODO: maybe add priority number when adding priority
 	if (setDone)
 		reply.content = `Set ${bold(ItemManager.nameFromItemValue(type).name)} for ${user} as done`;
 	else
