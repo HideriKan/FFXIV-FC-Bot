@@ -38,6 +38,7 @@ module.exports = {
 				.setDescription('Item Type')
 				.setRequired(true)
 				.addChoices(
+					{ name: 'Priority', value: 'prio' },
 					{ name: 'Gear', value: 'gear' },
 					{ name: 'Weapon', value: 'weap' },
 					{ name: 'Body', value: 'body' },
@@ -45,7 +46,6 @@ module.exports = {
 					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
-					{ name: 'Priority', value: 'prio' },
 					{ name: 'Profile', value: 'user' },
 					{ name: 'Statistics', value: 'stats' }
 				)
