@@ -226,17 +226,17 @@ class ItemManager {
 				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
 				break;
 			case 'gearUp': // Isolated
-				embed.setTitle('Total Gear Upgrade:\n');
+				embed.setTitle('Total Gear Upgrade');
 				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
 				func = member => { if (!member.gearUpDone) output.push({ name: member.displayName, value: member.totalGearUp }); };
 				break;
 			case 'accUp': // Isolated
-				embed.setTitle('Total Accessory Upgrade:\n');
+				embed.setTitle('Total Accessory Upgrade');
 				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
 				func = member => { if (!member.accUpDone) output.push({ name: member.displayName, value: member.totalAccUp }); };
 				break;
 			case 'prio':
-				embed.setTitle('Current Priority:');
+				embed.setTitle('Current Priority');
 				func = member => { output.push({ name: member.displayName, value: member.priority }); };
 				break;
 		}
