@@ -2,7 +2,7 @@
 const RaidDay = require('./RaidDay');
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
 const { getStartingDay } = require('../utility');
-const FileManager = require('./FileManager');
+const fm = require('./FileManager');
 
 // File settings
 const jsonFile = './RaidTimes.json';
@@ -211,7 +211,7 @@ class RaidWeek {
 	 * Reads the defual json file and fills this raidweek
 	 */
 	readJson() {
-		const fileData = FileManager.readFile(jsonFile);
+		const fileData = fm.readFile(fm.dir.DATA, jsonFile);
 		if (fileData === '')
 			return;
 
@@ -235,7 +235,7 @@ class RaidWeek {
 	 * Simple function that writes the whole contents of the RaidWeek into a JSON file
 	 */
 	writeJson() {
-		FileManager.writeFile(jsonFile, JSON.stringify(this, null, 2))
+		fm.writeFile(fm.dir.DATA, jsonFile, JSON.stringify(this, null, 2))
 	} // End of writeJson
 
 } // End RaidWeek
