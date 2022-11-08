@@ -36,7 +36,7 @@ class Member {
 	saveMember() {
 		const members = Member.getAllMembers();
 		const index = members.findIndex(element => element.id === this.id)
-		const updatePrio = index === -1 ? false : members[index].priority === this.priority;
+		const updatePrio = index === -1 ? false : members[index].priority !== this.priority;
 
 		if (index >= 0)
 			members[index] = this;
