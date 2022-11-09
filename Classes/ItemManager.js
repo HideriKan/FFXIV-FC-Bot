@@ -136,7 +136,7 @@ class ItemManager {
 	 */
 	async assingItemToMember(interaction) {
 		const user = interaction.message.mentions.members.first();
-		const setDone = interaction.message.content.includes('as done?');
+		const setDone = interaction.message.content.includes('as done');
 		const member = new Member(user.id, user.displayName);
 
 		switch (this.type.value) {
