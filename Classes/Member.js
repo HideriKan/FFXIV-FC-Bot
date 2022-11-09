@@ -61,7 +61,7 @@ class Member {
 		this.hasTomeWeap = member.hasTomeWeap;
 		this.hasTomeWeapUp = member.hasTomeWeapUp;
 		this.totalGearUp = member.totalGearUp;
-		this.gearUpDone = member.accUpDone;
+		this.gearUpDone = member.gearUpDone;
 		this.totalAccUp = member.totalAccUp;
 		this.accUpDone = member.accUpDone;
 	}
