@@ -51,7 +51,7 @@ module.exports = {
 				)
 			)
 			.addUserOption(opt => opt.setName('user')
-				.setDescription('user you want to see')
+				.setDescription('(Optional) Only show for this user')
 			)
 		)
 		.addSubcommand(subcmd => subcmd.setName('remove') // opt: user
