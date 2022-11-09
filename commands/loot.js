@@ -19,12 +19,12 @@ module.exports = {
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Gear', value: 'gear' },
-					{ name: 'Weapon', value: 'weap' },
-					{ name: 'Body', value: 'body' },
-					{ name: 'Tome Weapon', value: 'tomeWeap' },
-					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
+					{ name: 'Tome Weapon', value: 'tomeWeap' },
+					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					{ name: 'Weapon', value: 'weap' },
+					{ name: 'Body', value: 'body' },
 					{ name: 'Priority', value: 'prio' }
 				)
 			)
@@ -40,12 +40,12 @@ module.exports = {
 				.addChoices(
 					{ name: 'Priority', value: 'prio' },
 					{ name: 'Gear', value: 'gear' },
-					{ name: 'Weapon', value: 'weap' },
-					{ name: 'Body', value: 'body' },
-					{ name: 'Tome Weapon', value: 'tomeWeap' },
-					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
 					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
+					{ name: 'Tome Weapon', value: 'tomeWeap' },
+					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					{ name: 'Weapon', value: 'weap' },
+					{ name: 'Body', value: 'body' },
 					{ name: 'Profile', value: 'user' },
 					{ name: 'Statistics', value: 'stats' }
 				)
