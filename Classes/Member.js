@@ -82,12 +82,13 @@ class Member {
 	}
 
 	/**
-	 * Generates an discord embed
+	 * Generates an discord embed with the data from the users
 	 * @param {GuildMember} user the user profile to display
 	 * @param {String} type item value
 	 * @returns generated embed
 	 */
-	toEmbed(user, type) {
+	static toEmbed(user, type) {
+		const member = new Member(user.id);
 		const embed = new EmbedBuilder()
 			.setTitle(user.displayName)
 			.setThumbnail(user.displayAvatarURL())
@@ -95,46 +96,40 @@ class Member {
 			.setFooter({ text: 'work in progress' });
 
 		switch (type) {
+			case 'prio':
+				embed.setDescription(`Priority: ${member.priority}`);
+				break;
 			case 'gear':
-				embed.setDescription(`Number of savage gear: ${this.totalGear}
-				Is done with savage gear: ${this.gearDone ? 'Yes' : 'No'}`);
+				embed.setDescription(`Raid gear: ${member.totalGear}, Finished: ${member.gearDone ? 'Yes' : 'No'}`);
 				break;
 			case 'weap':
-				embed.setDescription(`Has weapon: ${this.hasWeapon ? 'Yes' : 'No'}`);
+				embed.setDescription(`Raid weapon: ${member.hasWeapon ? 'Yes' : 'No'}`);
 				break;
 			case 'body':
-				embed.setDescription(`Has body: ${this.gearDone ? 'Yes' : 'No'}`);
+				embed.setDescription(`Raid body: ${member.gearDone ? 'Yes' : 'No'}`);
 				break;
 			case 'tomeWeap':
-				embed.setDescription(`Has tome weapon: ${this.hasTomeWeap ? 'Yes' : 'No'}`);
+				embed.setDescription(`Tome weapon: ${member.hasTomeWeap ? 'Yes' : 'No'}`);
 				break;
 			case 'tomeUp':
-				embed.setDescription(`Has tome weapon upgrade: ${this.hasTomeWeapUp ? 'Yes' : 'No'}`);
+				embed.setDescription(`Tome weapon upgrade: ${member.hasTomeWeapUp ? 'Yes' : 'No'}`);
 				break;
 			case 'gearUp':
-				embed.setDescription(`Number of gear upgrades: ${this.totalGearUp}
-				Is done with gear upgrades: ${this.gearUpDone ? 'Yes' : 'No'}`);
+				embed.setDescription(`Gear upgrades: ${member.totalGearUp}, Finished: ${member.gearUpDone ? 'Yes' : 'No'}`);
 				break;
 			case 'accUp':
-				embed.setDescription(`Number of accessories upgreades: ${this.totalAccUp}
-				Is done with accessories upgreades: ${this.accUpDone ? 'Yes' : 'No'}`);
-				break;
-			case 'prio':
-				embed.setDescription(`Current priority: ${this.priority}`);
+				embed.setDescription(`Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`);
 				break;
 			case 'user':
 			default:
-				embed.setDescription(`Current priority: ${this.priority}
-				Number of savage gear: ${this.totalGear}
-				Is done with savage gear: ${this.gearDone ? 'Yes' : 'No'}
-				Has weapon: ${this.hasWeapon ? 'Yes' : 'No'}
-				Has body: ${this.gearDone ? 'Yes' : 'No'}
-				Has tome weapon: ${this.hasTomeWeap ? 'Yes' : 'No'}
-				Has tome weapon upgrade: ${this.hasTomeWeapUp ? 'Yes' : 'No'}
-				Number of gear upgrades: ${this.totalGearUp}
-				Is done with gear upgrades: ${this.gearUpDone ? 'Yes' : 'No'}
-				Number of accessories upgreades: ${this.totalAccUp}
-				Is done with accessories upgreades: ${this.accUpDone ? 'Yes' : 'No'}`)
+				embed.setDescription(`Priority: ${member.priority}
+				Raid gear: ${member.totalGear}, Finished: ${member.gearDone ? 'Yes' : 'No'}
+				Raid weapon: ${member.hasWeapon ? 'Yes' : 'No'}
+				Raid body: ${member.gearDone ? 'Yes' : 'No'}
+				Tome weapon: ${member.hasTomeWeap ? 'Yes' : 'No'}
+				Tome weapon upgrade: ${member.hasTomeWeapUp ? 'Yes' : 'No'}
+				Gear upgrades: ${member.totalGearUp}, Finished: ${member.gearUpDone ? 'Yes' : 'No'}
+				Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`)
 				break;
 		}
 
