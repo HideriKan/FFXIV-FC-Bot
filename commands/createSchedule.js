@@ -7,7 +7,7 @@ module.exports = {
 	// TODO: change to subcommand create
 	// TODO: merge edit time into this as a subcommand edit
 	data: new SlashCommandBuilder()
-		.setName('createschedule') 
+		.setName('createschedule')
 		.setDescription('Creates a new Schedule for the raid command to be displayed')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
@@ -29,15 +29,15 @@ module.exports = {
 		const batch = interaction.options.getString('batch');
 		// process user batch
 		let batchArr = batch.split('/');
-		
+
 		// reduce the array when its too big
 		if (batchArr.lenght > 7)
-		batchArr = batchArr.slice(0, 7);
-		
+			batchArr = batchArr.slice(0, 7);
+
 		// fill the array when its to small
 		while (batchArr.lenght < 7)
-		batchArr.push('');
-		
+			batchArr.push('');
+
 		const raidWeek = new RaidWeek();
 		const row = new ActionRowBuilder()
 			.addComponents(

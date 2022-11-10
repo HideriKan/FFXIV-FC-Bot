@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js'
 const fs = require('node:fs');
 
 // configs
-const { token, isBeta, tokenBeta } = require('./config.json');
+const { token, tokenBeta, isBeta, isBeta, tokenBeta } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
 
