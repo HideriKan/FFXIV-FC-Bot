@@ -162,7 +162,7 @@ async function edit(interaction) {
 			event.setScheduledStartTime(raidWeek[newIndex].startTime);
 
 
-		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(newDate(raidWeek.week[newIndex].startTime).getDay())}`;
+		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].startTime).getDay())}`;
 		if (time !== null) {
 			const newDayTime = new Date(newDay.startTime);
 			content += ` with the time ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`;
