@@ -115,8 +115,9 @@ async function create(interaction) {
 
 async function edit(interaction) {
 	// get user options
+	const userDay = interaction.options.getString('day'); // it kinda makes sence that null gets translated to 0 but I thought it would convert it to NaN
 	const index = Number(interaction.options.getString('raidday')); // selected day
-	const newIndex = Number(interaction.options.getString('day')); // move day to this
+	const newIndex = userDay === null ? NaN : Number(userDay); // move day to this
 	const time = interaction.options.getString('time'); // move time to this
 	let content;
 
