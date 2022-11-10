@@ -10,11 +10,6 @@ module.exports = {
 	 * @param {import("discord.js").Interaction} interaction 
 	 */
 	async execute(interaction) {
-		if (!interaction.isCommand()) return;
-
-		const command = interaction.client.commands.get(interaction.commandName);
-		if (!command) return;
-
 		try {
 
 			if (interaction.isButton()) {
