@@ -41,7 +41,7 @@ module.exports = {
         raidWeek.readJson();
         const rDay = raidWeek.week[index];
         const rDayTime = new Date(rDay.startTime)
-        content = `${rDayTime.getDate()} has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to `;
+        content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime.getDay())} has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to `;
 
         // get the event for that raid day
         const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
