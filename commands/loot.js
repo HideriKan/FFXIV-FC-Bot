@@ -85,7 +85,7 @@ module.exports = {
 				else if (type === 'stats')
 					reply = ItemManager.toEmbedStats();
 				else
-					reply = itemMgr.toRollOverview(); // TODO: change to embed
+					reply = itemMgr.toRollOverview();
 				break;
 			case 'remove':
 				reply = addRemoveBtn(user);
@@ -121,7 +121,6 @@ function addGiveBtn(user, type, setDone) {
 		)
 	];
 
-	// TODO: maybe add priority number when adding priority
 	if (setDone)
 		reply.content = `Set ${bold(ItemManager.nameFromItemValue(type).name)} for ${user} as done`;
 	else
