@@ -10,8 +10,7 @@ module.exports = {
 		.setDescription('Shows the Raid Schedule')
 		.addStringOption(opt => opt.setName('options')
 			.setDescription('Optional Modifiers')
-			.addChoices({ name: 'Lite', value: argLite }
-			)
+			.addChoices({ name: 'Lite', value: argLite })
 		)
 	,
 	/**
@@ -60,7 +59,6 @@ module.exports = {
 		if (!onlyRaidDays)
 			embed.setDescription('Please do tell us when there is a day that you dont have time so we can adjust the schedule');
 
-		await interaction.reply({ embeds: [embed] })
-			.catch(err => console.error(err));
+		interaction.reply({ embeds: [embed] })
 	},
 };
