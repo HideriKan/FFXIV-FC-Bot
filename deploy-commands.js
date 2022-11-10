@@ -1,11 +1,11 @@
 // Discord Js require
 const { REST, Routes } = require('discord.js');
-const fs = require('node:fs');
+const fm = require('./Classes/FileManager');
 // Config
 const { clientId, guildId, token, isBeta, tokenBeta, clientIdBeta } = require('./config.json'); // eslint-disable-line no-unused-vars
 
 const commands = [];
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fm.readDir('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);

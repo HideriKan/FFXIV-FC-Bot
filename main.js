@@ -1,6 +1,6 @@
 // Imports
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
-const fs = require('node:fs');
+const fm = require('./Classes/FileManager');
 
 // configs
 const { token, tokenBeta, isBeta, isBeta, tokenBeta } = require('./config.json');
@@ -9,14 +9,14 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Part
 
 // add commands dynamicly 
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fm.readDir('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.data.name, command);
 }
 
 // add client events dynamicly 
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const eventFiles = fm.readDir('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
 	if (event.once)

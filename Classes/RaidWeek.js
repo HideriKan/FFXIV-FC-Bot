@@ -1,7 +1,6 @@
 const RaidDay = require('./RaidDay');
-const fs = require('fs');
 const { getStartingDay, getRaidDayFromString } = require('../utility');
-
+const fm = require('./FileManager');
 
 /**
  * Manages the whole raid week with an array of RaidDays. 
@@ -42,37 +41,28 @@ class RaidWeek {
 	 * Reads the defual json file and fills this raidweek with its content
 	 */
 	readJson() {
-		try {
-			const data = JSON.parse(fs.readFileSync(RaidWeek.fileName, 'utf8'));
+		const data = JSON.parse(fm.readFile(fm.dir.DATA, RaidWeek.fileName));
 
-			this.startingWeekDay = data.startingWeekDay;
-			this.week = [];
+		this.startingWeekDay = data.startingWeekDay;
+		this.week = [];
 
-			data.week.forEach(dataDay => {
-				let newDay = new RaidDay(dataDay.day);
-				newDay.isRaid = dataDay.isRaid;
-				newDay.startTime = dataDay.startTime;
-				newDay.endTime = dataDay.endTime;
+		data.week.forEach(dataDay => {
+			let newDay = new RaidDay(dataDay.day);
+			newDay.isRaid = dataDay.isRaid;
+			newDay.startTime = dataDay.startTime;
+			newDay.endTime = dataDay.endTime;
 
-				this.week.push(newDay);
-			});
-			return;
+			this.week.push(newDay);
+		});
 
-		} catch (err) {
-			console.error(err);
-		} // End of try-catch
+		return;
 	} // End of readJson
 
 	/**
 	 * writes the raid week into a formatted json file
 	 */
 	writeJson() {
-		try {
-			fs.writeFileSync(RaidWeek.fileName, JSON.stringify(this, null, 2));
-		} catch (err) {
-			if (err) return console.error(err);
-		} // End of try-catch
-
+		fm.writeFile(fm.dir.DATA, RaidWeek.fileName, JSON.stringify(this, null, 2));
 	} // End of writeJson
 
 } // End RaidWeek
