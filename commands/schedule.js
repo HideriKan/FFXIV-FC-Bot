@@ -6,6 +6,7 @@ const { getStartingDay } = require('../utility');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('schedule')
+		.setDescription('Create or edit a schedule for your raid')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
 		.addSubcommand(subcmd => subcmd.setName('create') // next, batch
@@ -65,7 +66,7 @@ module.exports = {
 				edit(interaction);
 				break;
 		}
-	}
+	},
 };
 
 async function create(interaction) {
@@ -180,5 +181,4 @@ async function edit(interaction) {
 	raidWeek.writeJson();
 
 	interaction.reply({ content: content });
-
 }

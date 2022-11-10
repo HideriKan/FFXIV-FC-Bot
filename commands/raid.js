@@ -12,7 +12,8 @@ module.exports = {
 			.setDescription('Optional Modifiers')
 			.addChoices({ name: 'Lite', value: argLite }
 			)
-		),
+		)
+	,
 	/**
 	 * Displays the current raid schedule
 	 * Sends an Embed with the raid times into the corresponding channel
