@@ -56,8 +56,13 @@ module.exports = {
 			raidWeek.startingWeekDay = getStartingDay(true);
 
 		raidWeek.newDaysFromBatch(batchArr);
-
 		raidWeek.writeJson();
+
+		// check if the guild has scheduled events for the raid
+		const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', description: 'Raid Time' });
+		if (events.size > 0)
+			events.forEach(event => event.delete());
+
 		await interaction.reply({ content: 'New Times have been saved', components: [row] });
-	},
+	}
 };
