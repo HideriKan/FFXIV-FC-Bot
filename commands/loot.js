@@ -6,8 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('loot')
 		.setDescription('Loot tracker')
-		.setDMPermission(false) // TODO: move this and the permission to each individual subcommand
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+		.setDMPermission(false)
 		.addSubcommand(subcmd => subcmd.setName('give') // opt: user, type, [isdone]
 			.setDescription('Distrubte loot for a raid member')
 			.addUserOption(opt => opt.setName('user')
