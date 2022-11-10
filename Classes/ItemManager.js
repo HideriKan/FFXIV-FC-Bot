@@ -1,4 +1,4 @@
-const { inlineCode, EmbedBuilder } = require('discord.js');
+const { inlineCode, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const Member = require('./Member');
 
 /**
@@ -135,6 +135,11 @@ class ItemManager {
 	 * @param {import('discord.js').ButtonInteraction} interaction from the interactionCreate event
 	 */
 	async assingItemToMember(interaction) {
+		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+		}
+
+
 		const user = interaction.message.mentions.members.first();
 		const setDone = interaction.message.content.includes('as done');
 		const member = new Member(user.id, user.displayName);
