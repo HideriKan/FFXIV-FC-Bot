@@ -77,11 +77,11 @@ async function create(interaction) {
 	let batchArr = batch.split('/');
 
 	// reduce the array when its too big
-	if (batchArr.lenght > 7)
+	if (batchArr.length > 7)
 		batchArr = batchArr.slice(0, 7);
 
 	// fill the array when its to small
-	while (batchArr.lenght < 7)
+	while (batchArr.length < 7)
 		batchArr.push('');
 
 	const raidWeek = new RaidWeek();
