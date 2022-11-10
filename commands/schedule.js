@@ -4,11 +4,8 @@ const RaidDay = require("../Classes/RaidDay");
 const { getStartingDay } = require('../utility');
 
 module.exports = {
-	// TODO: change name to time
-	// TODO: change to subcommand create
-	// TODO: merge edit time into this as a subcommand edit
 	data: new SlashCommandBuilder()
-		.setName('time')
+		.setName('schedule')
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageEvents)
 		.addSubcommand(subcmd => subcmd.setName('create') // next, batch
