@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Host class for file operations
+ */
 class FileManager {
 	constructor() { }
 	static dir = {
@@ -8,6 +11,12 @@ class FileManager {
 		BKUP: './data/backup',
 	}
 
+	/**
+	 * Reads the data from a file and returns the data
+	 * @param {String} dataLocation directory to search the file in
+	 * @param {String} fileName name of the file to be read
+	 * @returns data from the read file
+	 */
 	static readFile(dataLocation, fileName) {
 		const filePath = path.join(dataLocation, fileName);
 		FileManager.ensureFileExists(filePath);
@@ -20,6 +29,12 @@ class FileManager {
 		}
 	}
 
+	/**
+	 * Writes the given data into the file
+	 * @param {String} dataLocation directory to search the file in
+	 * @param {String} fileName name of the file to be read
+	 * @param {*} data to write into the file
+	 */
 	static writeFile(dataLocation, fileName, data) {
 		const filePath = path.join(dataLocation, fileName);
 
@@ -30,7 +45,11 @@ class FileManager {
 		}
 	}
 
-	static removeFile(fileName) {
+	/**
+	 * deletes a file from the filesystem
+	 * @param {String} fileName name of the file to be read
+	 */
+	static removeFile(fileName) { // TODO: test if dataLoc is needed or not
 		FileManager.ensureFileExists(fileName);
 
 		try {
@@ -40,6 +59,11 @@ class FileManager {
 		}
 	}
 
+	/**
+	 * reads all the file name in the given directory
+	 * @param {String} directory which directory to read the files
+	 * @returns 
+	 */
 	static readDir(directory) {
 		FileManager.ensureDirExists(directory);
 
