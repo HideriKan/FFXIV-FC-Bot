@@ -139,13 +139,13 @@ function addGiveBtn(user, type, setDone) {
 			if (member.hasWeapon)
 				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`)
 			if (!Member.isWeapBodyBalanced() && member.hasBody)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon while raid weap/body imbalance, proceed?`) // TODO: restrucure
+				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`)
 			break;
 		case 'body':
 			if (member.hasBody)
 				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid body, proceed?`)
 			if (!Member.isWeapBodyBalanced() && member.hasWeapon)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon while raid weap/body imbalance, proceed?`) // TODO: restrucure
+				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`)
 			break;
 		case 'tomeWeap':
 			if (member.hasTomeWeap)

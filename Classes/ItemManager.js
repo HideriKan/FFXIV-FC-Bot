@@ -222,7 +222,7 @@ class ItemManager {
 				break;
 			case 'tomeWeap': // Isolated
 				embed.setTitle('Tome Weapon Rolls');
-				embed.setFooter({ text: 'need requires 500 Tomes' });
+				embed.setFooter({ text: 'requires 500 Tomes to need instead of greed' });
 				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeap ? null : true }); };
 				break;
 			case 'tomeUp': // Dependant on tomeWeap
