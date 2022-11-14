@@ -131,7 +131,7 @@ function addGiveBtn(user, type, setDone) {
 
 	// Warning for certain types
 	switch (type) {
-		case 'gear': // TODO: GEARBASED: add baseline warning
+		case 'gear':
 			if (member.gearDone)
 				reply.content += '\n' + bold(`Warning! ${user.displayName} is already done with thier raid gear, proceed?`)
 			break;

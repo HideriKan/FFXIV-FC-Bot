@@ -203,7 +203,7 @@ class ItemManager {
 		// Pass  = null
 		switch (this.type.value) {
 			case 'gear': // Isolated
-				embed.setTitle('Total Gear'); // TODO: GEARBASED: add baseline warning
+				embed.setTitle('Total Gear');
 				func = member => { if (!member.gearDone) output.push({ name: member.displayName, value: member.totalGear }); };
 				break;
 			case 'weap': // Dependant on body
