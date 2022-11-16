@@ -135,10 +135,9 @@ class ItemManager {
 	 * @param {import('discord.js').ButtonInteraction} interaction from the interactionCreate event
 	 */
 	async assingItemToMember(interaction) {
-		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
 			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
 		}
-
 
 		const user = interaction.message.mentions.members.first();
 		const setDone = interaction.message.content.includes('as done');

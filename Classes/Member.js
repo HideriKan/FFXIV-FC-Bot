@@ -1,4 +1,4 @@
-const { EmbedBuilder, GuildMember } = require('discord.js');
+const { EmbedBuilder, GuildMember, PermissionFlagsBits } = require('discord.js');
 const fm = require('./FileManager');
 
 class Member {
@@ -174,6 +174,10 @@ class Member {
 	 * @param {import('discord.js').ButtonInteraction} interaction interactoin from the intercationCreate discord event
 	 */
 	static async removeMemberFromFile(interaction) {
+		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
+			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+		}
+
 		const user = interaction.message.mentions.parsedUsers.first();
 		const members = Member.getAllMembers();
 		const newMembers = members.filter(member => member.id !== user.id);
