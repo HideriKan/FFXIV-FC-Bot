@@ -4,12 +4,11 @@
 /DiscFFXIVBot.todo
 /FCBot.code-workspace
 /node_modules
-/RaidTimes.json
 .vs/FFXIV FC Bot/config/applicationhost.config
 .vs/FFXIV FC Bot/v16/.suo
 .vs/FFXIV FC Bot/v17/.suo
 .vs/VSWorkspaceState.json
 .vs/slnx.sqlite
 .vs/ProjectSettings.json
-MemberLoot.json
 /changelog
+/data

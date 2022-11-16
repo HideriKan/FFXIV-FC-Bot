@@ -67,7 +67,6 @@ async function createScheduledEvents(interaction, raidWeek) {
 	if (!interaction.guild.available)
 		return;
 
-	// TODO: Make custom with some command
 	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
 	const now = new Date();
