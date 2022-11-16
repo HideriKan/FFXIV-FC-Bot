@@ -75,6 +75,10 @@ class FileManager {
 		}
 	}
 
+	/**
+	 * checks the path of the file and if the file is currently avaliable
+	 * @param {String} fileName Path to the file to check
+	 */
 	static ensureFileExists(fileName) {
 		FileManager.ensureDirExists(path.dirname(fileName));
 
@@ -86,6 +90,10 @@ class FileManager {
 		}
 	}
 
+	/**
+	 * Creates the directory(s) if needed 
+	 * @param {String} directory directory to check
+	 */
 	static ensureDirExists(directory) {
 		try {
 			fs.mkdirSync(directory, { recursive: true });

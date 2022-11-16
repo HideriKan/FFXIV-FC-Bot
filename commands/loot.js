@@ -17,19 +17,19 @@ module.exports = {
 				.setDescription('Item Type')
 				.setRequired(true)
 				.addChoices(
-					{ name: 'Gear', value: 'gear' },
-					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
-					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
-					{ name: 'Tome Weapon', value: 'tomeWeap' },
-					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					// { name: 'Gear', value: 'gear' },
+					// { name: 'Tome Gear Upgrade', value: 'gearUp' },
+					// { name: 'Tome Accessory Upgrade', value: 'accUp' },
+					// { name: 'Tome Weapon', value: 'tomeWeap' },
+					// { name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Weapon', value: 'weap' },
 					{ name: 'Body', value: 'body' },
-					{ name: 'Priority', value: 'prio' }
+					// { name: 'Priority', value: 'prio' }
 				)
 			)
-			.addBooleanOption(opt => opt.setName('isdone')
-				.setDescription('(Optional) Indicates a finished state. Only works on Gear, GearUp or AccUp')
-			)
+			// .addBooleanOption(opt => opt.setName('isdone')
+			// 	.setDescription('(Optional) Indicates a finished state. Only works on Gear, GearUp or AccUp')
+			// )
 		)
 		.addSubcommand(subcmd => subcmd.setName('show') // opt: type, [user]
 			.setDescription('Show who can roll / priority')
