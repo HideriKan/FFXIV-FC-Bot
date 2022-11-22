@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
-const RaidDay = require("../Classes/RaidDay");
-const { getRaidDayFromString } = require('../utility');
+const RaidDay = require('../Classes/RaidDay');
+const { getStartingDay, getRaidDayFromString } = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
