@@ -144,7 +144,7 @@ async function edit(interaction) {
 
 		content += `has been updated to no raid`;
 	} else if (!Number.isNaN(newIndex)) { // a new day has bee passed
-		if (new Date().getDay() < newIndex) {
+		if (new Date() > raidWeek.week[newIndex].day) { // When the current date is higher (older) then the target date (it's in the past); cancel
 			interaction.reply({ content: 'Cannot move the event into the past' })
 			return;
 		}
