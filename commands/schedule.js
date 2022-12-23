@@ -125,7 +125,7 @@ async function edit(interaction) {
 	const raidWeek = new RaidWeek();
 	raidWeek.readJson();
 	const rDay = raidWeek.week[index];
-	const rDayTime = new Date(rDay.startTime)
+	const rDayTime = new Date(rDay.startTime);
 	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime.getDay())} `;
 
 	// get the event for that raid day
@@ -145,7 +145,7 @@ async function edit(interaction) {
 		content += 'has been updated to no raid';
 	} else if (!Number.isNaN(newIndex)) { // a new day has bee passed
 		if (new Date() > raidWeek.week[newIndex].day) { // When the current date is higher (older) then the target date (it's in the past); cancel
-			interaction.reply({ content: 'Cannot move the event into the past' })
+			interaction.reply({ content: 'Cannot move the event into the past' });
 			return;
 		}
 
@@ -172,10 +172,10 @@ async function edit(interaction) {
 		raidWeek.week[index] = newDay;
 
 		if (event !== null) // adjust the scheduled event
-			event.setScheduledStartTime(newDay.startTime)
+			event.setScheduledStartTime(newDay.startTime);
 
 		const newDayTime = new Date(newDay.startTime);
-		content += `has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`
+		content += `has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`;
 	}
 
 	// save the new raid day to the file
