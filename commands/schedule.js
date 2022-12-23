@@ -160,7 +160,7 @@ async function edit(interaction) {
 		}
 
 		if (event !== null) // adjust the scheduled event
-			event.setScheduledStartTime(raidWeek[newIndex].startTime);
+			event.setScheduledStartTime(raidWeek.week[newIndex].startTime);
 
 
 		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].startTime).getDay())}`;
