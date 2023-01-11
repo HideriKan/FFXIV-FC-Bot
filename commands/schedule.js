@@ -69,6 +69,7 @@ module.exports = {
 	},
 };
 
+//TODO: remove only confirmed raid events
 async function create(interaction) {
 	// get user option
 	const editNext = interaction.options.getBoolean('next');
