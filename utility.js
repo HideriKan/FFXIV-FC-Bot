@@ -3,6 +3,15 @@ const RaidDay = require('./Classes/RaidDay');
 const { isBeta } = require('./config.json')
 
 /**
+ * return the first letter of a string but capitalized
+ * @param {String} string sting 
+ * @returns String
+ */
+function cpitilizeFirstLetter(string) {
+	return string.charAt(0).toLocaleUpperCase() + string.slice(1);
+}
+
+/**
  * Returns the day of the reset in FFXIV (Tuesday)
  * @param {Boolean} isNextWeek determins if the start of the week is the current one or the next week
  * @returns starting week date of FFXIV (Tuesday)
@@ -105,7 +114,9 @@ async function createScheduledEvents(interaction, raidWeek) {
 }
 
 module.exports = {
+	cpitilizeFirstLetter,
 	getStartingDay,
 	getRaidDayFromString,
+	getEventChannels,
 	createScheduledEvents
 }; 

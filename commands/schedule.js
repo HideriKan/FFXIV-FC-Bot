@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
 const RaidDay = require('../Classes/RaidDay');
-const { getStartingDay, getRaidDayFromString } = require('../utility');
+const { getStartingDay, getRaidDayFromString, getEventChannels, cpitilizeFirstLetter } = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -85,18 +85,16 @@ async function create(interaction) {
 		batchArr.push('');
 
 	const raidWeek = new RaidWeek();
-	const row = new ActionRowBuilder()
-		.addComponents(
+	const row = new ActionRowBuilder();
+	const staticChannels = getEventChannels();
+	staticChannels.forEach(channel => {
+		row.addComponents(
 			new ButtonBuilder()
-				.setCustomId('savage')
-				.setLabel('Savage')
-				.setStyle(ButtonStyle.Secondary)
-		).addComponents(
-			new ButtonBuilder()
-				.setCustomId('ult')
-				.setLabel('Ult')
+				.setCustomId(channel.type)
+				.setLabel(cpitilizeFirstLetter(channel.type))
 				.setStyle(ButtonStyle.Secondary)
 		);
+	});
 
 	if (editNext) // when the user is chosing a next week
 		raidWeek.startingWeekDay = getStartingDay(true);
