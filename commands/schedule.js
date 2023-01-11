@@ -151,8 +151,12 @@ async function edit(interaction) {
 			raidWeek.week[index] = newDay;
 
 		if (raidWeek.week[index].isRaid) { // move selected day to the new one
+			const newIDay = new Date(raidWeek.week[newIndex].day);
+			newIDay.setHours(rDayTime.getHours());
+			newIDay.setMinutes(rDayTime.getMinutes());
+
 			raidWeek.week[newIndex].isRaid = true;
-			raidWeek.week[newIndex].startTime = raidWeek.week[index].startTime;
+			raidWeek.week[newIndex].startTime = newIDay;
 			raidWeek.week[newIndex].endTime = raidWeek.week[index].endTime;
 			raidWeek.week[index] = new RaidDay(raidWeek.week[index].day);
 		}
