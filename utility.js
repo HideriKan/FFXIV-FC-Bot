@@ -1,5 +1,6 @@
 const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
 const RaidDay = require('./Classes/RaidDay');
+const { isBeta } = require('./config.json')
 
 /**
  * Returns the day of the reset in FFXIV (Tuesday)
