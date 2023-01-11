@@ -124,7 +124,7 @@ async function edit(interaction) {
 	raidWeek.readJson();
 	const rDay = raidWeek.week[index];
 	const rDayTime = new Date(rDay.startTime);
-	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime.getDay())} `;
+	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime)} `;
 
 	// get the event for that raid day
 	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
@@ -165,7 +165,7 @@ async function edit(interaction) {
 			event.setScheduledStartTime(raidWeek.week[newIndex].startTime);
 
 
-		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].startTime).getDay())}`;
+		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].day))}`;
 		if (time !== null) {
 			const newDayTime = new Date(newDay.startTime);
 			content += ` with the time ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`;
