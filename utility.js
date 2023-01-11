@@ -58,6 +58,17 @@ function getRaidDayFromString(timeStr, raidDate) {
 	return rDay;
 }
 
+
+/**
+ * simple function to get the hardcoded channels
+ * TODO: config command?
+ * @returns Array with the id and the name of the bound channels
+ */
+function getEventChannels() {
+	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
+	return staticChannels;
+}
+
 /**
  * Creates scheduled guild events for a specific channel from a raidweek 
  * @param {import('discord.js').MessageComponentInteraction} interaction 
@@ -67,7 +78,7 @@ async function createScheduledEvents(interaction, raidWeek) {
 	if (!interaction.guild.available)
 		return;
 
-	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
+	const staticChannels = getEventChannels();
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
 	const now = new Date();
 
