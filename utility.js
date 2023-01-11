@@ -66,6 +66,8 @@ function getRaidDayFromString(timeStr, raidDate) {
  */
 function getEventChannels() {
 	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
+	if (isBeta) staticChannels.push({ id: '296984061287596033', type: 'beta' });
+
 	return staticChannels;
 }
 
