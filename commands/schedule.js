@@ -24,28 +24,28 @@ module.exports = {
 				.setDescription('The RaidDay that you want to change the status of')
 				.setRequired(true)
 				.addChoices(
-					{ name: 'Tu', value: '0' },
-					{ name: 'We', value: '1' },
-					{ name: 'Th', value: '2' },
-					{ name: 'Fr', value: '3' },
-					{ name: 'Sa', value: '4' },
-					{ name: 'So', value: '5' },
-					{ name: 'Mo', value: '6' }
+					{ name: 'Tue', value: '0' },
+					{ name: 'Wed', value: '1' },
+					{ name: 'Thu', value: '2' },
+					{ name: 'Fri', value: '3' },
+					{ name: 'Sat', value: '4' },
+					{ name: 'Sun', value: '5' },
+					{ name: 'Mon', value: '6' }
 				)
 			)
 			.addStringOption(opt => opt.setName('time')
-				.setDescription('(Optional) The new time. Leave empty for no raid')
+				.setDescription('(Optional) The new ST. Leave empty for no raid')
 			)
 			.addStringOption(opt => opt.setName('day')
 				.setDescription('(Optional) The new RaidDay you want to move it to')
 				.addChoices(
-					{ name: 'Tu', value: '0' },
-					{ name: 'We', value: '1' },
-					{ name: 'Th', value: '2' },
-					{ name: 'Fr', value: '3' },
-					{ name: 'Sa', value: '4' },
-					{ name: 'So', value: '5' },
-					{ name: 'Mo', value: '6' }
+					{ name: 'Tue', value: '0' },
+					{ name: 'Wed', value: '1' },
+					{ name: 'Thu', value: '2' },
+					{ name: 'Fri', value: '3' },
+					{ name: 'Sat', value: '4' },
+					{ name: 'Sun', value: '5' },
+					{ name: 'Mon', value: '6' }
 				)
 			)
 		)
