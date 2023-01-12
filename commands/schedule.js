@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
 const RaidDay = require('../Classes/RaidDay');
-const { getStartingDay, getRaidDayFromString } = require('../utility');
+const { getStartingDay, getRaidDayFromString, getEventChannels, cpitilizeFirstLetter } = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -24,28 +24,28 @@ module.exports = {
 				.setDescription('The RaidDay that you want to change the status of')
 				.setRequired(true)
 				.addChoices(
-					{ name: 'Tu', value: '0' },
-					{ name: 'We', value: '1' },
-					{ name: 'Th', value: '2' },
-					{ name: 'Fr', value: '3' },
-					{ name: 'Sa', value: '4' },
-					{ name: 'So', value: '5' },
-					{ name: 'Mo', value: '6' }
+					{ name: 'Tue', value: '0' },
+					{ name: 'Wed', value: '1' },
+					{ name: 'Thu', value: '2' },
+					{ name: 'Fri', value: '3' },
+					{ name: 'Sat', value: '4' },
+					{ name: 'Sun', value: '5' },
+					{ name: 'Mon', value: '6' }
 				)
 			)
 			.addStringOption(opt => opt.setName('time')
-				.setDescription('(Optional) The new time. Leave empty for no raid')
+				.setDescription('(Optional) The new ST. Leave empty for no raid')
 			)
 			.addStringOption(opt => opt.setName('day')
 				.setDescription('(Optional) The new RaidDay you want to move it to')
 				.addChoices(
-					{ name: 'Tu', value: '0' },
-					{ name: 'We', value: '1' },
-					{ name: 'Th', value: '2' },
-					{ name: 'Fr', value: '3' },
-					{ name: 'Sa', value: '4' },
-					{ name: 'So', value: '5' },
-					{ name: 'Mo', value: '6' }
+					{ name: 'Tue', value: '0' },
+					{ name: 'Wed', value: '1' },
+					{ name: 'Thu', value: '2' },
+					{ name: 'Fri', value: '3' },
+					{ name: 'Sat', value: '4' },
+					{ name: 'Sun', value: '5' },
+					{ name: 'Mon', value: '6' }
 				)
 			)
 		)
@@ -85,18 +85,16 @@ async function create(interaction) {
 		batchArr.push('');
 
 	const raidWeek = new RaidWeek();
-	const row = new ActionRowBuilder()
-		.addComponents(
+	const row = new ActionRowBuilder();
+	const staticChannels = getEventChannels();
+	staticChannels.forEach(channel => {
+		row.addComponents(
 			new ButtonBuilder()
-				.setCustomId('savage')
-				.setLabel('Savage')
-				.setStyle(ButtonStyle.Secondary)
-		).addComponents(
-			new ButtonBuilder()
-				.setCustomId('ult')
-				.setLabel('Ult')
+				.setCustomId(channel.type)
+				.setLabel(cpitilizeFirstLetter(channel.type))
 				.setStyle(ButtonStyle.Secondary)
 		);
+	});
 
 	if (editNext) // when the user is chosing a next week
 		raidWeek.startingWeekDay = getStartingDay(true);
@@ -105,9 +103,10 @@ async function create(interaction) {
 	raidWeek.writeJson();
 
 	// check if the guild has scheduled events for the raid
-	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', description: 'Raid Time' });
-	if (events.size > 0)
-		events.forEach(event => event.delete());
+	const events = await interaction.guild.scheduledEvents.fetch();
+	const filterdEvents = events.filter(eve => eve.name === 'Raid' && eve.description === 'Raid Time');
+	if (filterdEvents.size > 0)
+		filterdEvents.forEach(event => event.delete());
 
 	interaction.reply({ content: 'New Times have been saved', components: [row] });
 
@@ -115,18 +114,18 @@ async function create(interaction) {
 
 async function edit(interaction) {
 	// get user options
-	const userDay = interaction.options.getString('day'); // it kinda makes sence that null gets translated to 0 but I thought it would convert it to NaN
 	const index = Number(interaction.options.getString('raidday')); // selected day
-	const newIndex = userDay === null ? NaN : Number(userDay); // move day to this
 	const time = interaction.options.getString('time'); // move time to this
+	const userDay = interaction.options.getString('day'); // it kinda makes sence that null gets translated to 0 but I thought it would convert it to NaN
+	const newIndex = userDay === null ? NaN : Number(userDay); // move day to this
 	let content;
 
 	// read the raid day to be changed
 	const raidWeek = new RaidWeek();
 	raidWeek.readJson();
 	const rDay = raidWeek.week[index];
-	const rDayTime = new Date(rDay.startTime)
-	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime.getDay())} `;
+	const rDayTime = new Date(rDay.startTime);
+	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime)} `;
 
 	// get the event for that raid day
 	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
@@ -142,10 +141,10 @@ async function edit(interaction) {
 		if (event !== null) // if an event was found - delete it
 			event.delete();
 
-		content += `has been updated to no raid`;
+		content += 'has been updated to no raid';
 	} else if (!Number.isNaN(newIndex)) { // a new day has bee passed
 		if (new Date() > raidWeek.week[newIndex].day) { // When the current date is higher (older) then the target date (it's in the past); cancel
-			interaction.reply({ content: 'Cannot move the event into the past' })
+			interaction.reply({ content: 'Cannot move the event into the past' });
 			return;
 		}
 
@@ -153,8 +152,12 @@ async function edit(interaction) {
 			raidWeek.week[index] = newDay;
 
 		if (raidWeek.week[index].isRaid) { // move selected day to the new one
+			const newIDay = new Date(raidWeek.week[newIndex].day);
+			newIDay.setHours(rDayTime.getHours());
+			newIDay.setMinutes(rDayTime.getMinutes());
+
 			raidWeek.week[newIndex].isRaid = true;
-			raidWeek.week[newIndex].startTime = raidWeek.week[index].startTime;
+			raidWeek.week[newIndex].startTime = newIDay;
 			raidWeek.week[newIndex].endTime = raidWeek.week[index].endTime;
 			raidWeek.week[index] = new RaidDay(raidWeek.week[index].day);
 		}
@@ -163,7 +166,7 @@ async function edit(interaction) {
 			event.setScheduledStartTime(raidWeek.week[newIndex].startTime);
 
 
-		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].startTime).getDay())}`;
+		content += `has been moved to ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(raidWeek.week[newIndex].day))}`;
 		if (time !== null) {
 			const newDayTime = new Date(newDay.startTime);
 			content += ` with the time ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`;
@@ -172,10 +175,10 @@ async function edit(interaction) {
 		raidWeek.week[index] = newDay;
 
 		if (event !== null) // adjust the scheduled event
-			event.setScheduledStartTime(newDay.startTime)
+			event.setScheduledStartTime(newDay.startTime);
 
 		const newDayTime = new Date(newDay.startTime);
-		content += `has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`
+		content += `has been updated from ${rDayTime.getUTCHours()}:${rDayTime.getUTCMinutes() === 0 ? '00' : rDayTime.getUTCMinutes()} to ${newDayTime.getUTCHours()}:${newDayTime.getUTCMinutes() === 0 ? '00' : newDayTime.getUTCMinutes()}`;
 	}
 
 	// save the new raid day to the file

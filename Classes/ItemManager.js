@@ -137,6 +137,7 @@ class ItemManager {
 	async assingItemToMember(interaction) {
 		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
 			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+			return;
 		}
 
 		const user = interaction.message.mentions.members.first();
@@ -177,9 +178,7 @@ class ItemManager {
 					member.totalAccUp++;
 				break;
 			case 'prio':
-				if (member.priority === 10) // put at the bottom of the priority
-					member.priority = Member.getAllMembers().length + 1;
-
+				member.priority = 9;
 				break;
 		}
 

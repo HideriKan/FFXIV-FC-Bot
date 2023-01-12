@@ -1,5 +1,15 @@
 const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
 const RaidDay = require('./Classes/RaidDay');
+const { isBeta } = require('./config.json')
+
+/**
+ * return the first letter of a string but capitalized
+ * @param {String} string sting 
+ * @returns String
+ */
+function cpitilizeFirstLetter(string) {
+	return string.charAt(0).toLocaleUpperCase() + string.slice(1);
+}
 
 /**
  * Returns the day of the reset in FFXIV (Tuesday)
@@ -58,6 +68,19 @@ function getRaidDayFromString(timeStr, raidDate) {
 	return rDay;
 }
 
+
+/**
+ * simple function to get the hardcoded channels
+ * TODO: config command?
+ * @returns Array with the id and the name of the bound channels
+ */
+function getEventChannels() {
+	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
+	if (isBeta) staticChannels.push({ id: '296984061287596033', type: 'beta' });
+
+	return staticChannels;
+}
+
 /**
  * Creates scheduled guild events for a specific channel from a raidweek 
  * @param {import('discord.js').MessageComponentInteraction} interaction 
@@ -67,12 +90,14 @@ async function createScheduledEvents(interaction, raidWeek) {
 	if (!interaction.guild.available)
 		return;
 
-	const staticChannels = [{ id: '968545420198416397', type: 'ult' }, { id: '1012614749378326609', type: 'savage' }];
+	const staticChannels = getEventChannels();
 	const channel = staticChannels.find(keyValue => keyValue.type === interaction.customId);
 	const now = new Date();
 
 	raidWeek.readJson();
 	raidWeek.keepOnlyRaidDays();
+
+	const avatar = interaction.client.user.avatarURL();
 
 	raidWeek.week.forEach(day => {
 		const start = new Date(day.startTime)
@@ -83,7 +108,8 @@ async function createScheduledEvents(interaction, raidWeek) {
 				scheduledStartTime: start.getTime(),
 				privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
 				entityType: GuildScheduledEventEntityType.Voice,
-				channel: channel.id
+				channel: channel.id,
+				image: './data/MoreYakuza.png'
 			});
 	});
 
@@ -91,7 +117,9 @@ async function createScheduledEvents(interaction, raidWeek) {
 }
 
 module.exports = {
+	cpitilizeFirstLetter,
 	getStartingDay,
 	getRaidDayFromString,
+	getEventChannels,
 	createScheduledEvents
 }; 

@@ -53,11 +53,10 @@ module.exports = {
 				.setDescription('(Optional) Only show for this user')
 			)
 		)
-		.addSubcommand(subcmd => subcmd.setName('remove') // opt: user
-			.setDescription('Remove the a user from the database')
+		.addSubcommand(subcmd => subcmd.setName('delete') // opt: [user]
+			.setDescription('Resets the database (New Tier)')
 			.addUserOption(opt => opt.setName('user')
-				.setDescription('Who you want to remove')
-				.setRequired(true)
+				.setDescription('Choose to only remove one member')
 			)
 		)
 	,
@@ -87,7 +86,7 @@ module.exports = {
 				else
 					reply = itemMgr.toRollOverview();
 				break;
-			case 'remove':
+			case 'delete':
 				reply = addRemoveBtn(user);
 				break;
 		}
@@ -95,7 +94,6 @@ module.exports = {
 		await interaction.editReply(reply);
 	},
 };
-
 
 /**
  * gives the user a question with a choice to add the item type to the user
@@ -187,7 +185,7 @@ function addGiveBtn(user, type, setDone) {
  */
 function addRemoveBtn(user) {
 	const reply = { content: null, components: null, ephemeral: true };
-	reply.content = `Remove ${user} from the database`
+	reply.content = user === null ? 'Remove all members?' : `Remove ${user} from the database?`
 	reply.components = [new ActionRowBuilder()
 		.addComponents(
 			new ButtonBuilder()

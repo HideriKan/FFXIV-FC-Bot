@@ -15,7 +15,7 @@ class Member {
 	constructor(id, displayName = '') {
 		this.displayName = displayName ? displayName : '';
 		this.id = id;
-		this.priority = 10;
+		this.priority = 9;
 		this.totalGear = 0;
 		this.gearDone = false;
 		this.hasWeapon = false;
@@ -36,7 +36,7 @@ class Member {
 	saveMember() {
 		const members = Member.getAllMembers();
 		const index = members.findIndex(element => element.id === this.id)
-		const updatePrio = index === -1 ? false : members[index].priority !== this.priority;
+		const updatePrio = index === -1 ? true : members[index].priority === 9 ? true : members[index].priority !== this.priority;
 
 		if (index >= 0)
 			members[index] = this;
@@ -176,15 +176,20 @@ class Member {
 	static async removeMemberFromFile(interaction) {
 		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
 			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+			return;
 		}
 
-		const user = interaction.message.mentions.parsedUsers.first();
-		const members = Member.getAllMembers();
-		const newMembers = members.filter(member => member.id !== user.id);
+		if (interaction.message.mentions.parsedUsers.size === 0) {
+			Member.saveMembers(new Array());
+		} else {
+			const user = interaction.message.mentions.parsedUsers.first();
+			const members = Member.getAllMembers();
+			const newMembers = members.filter(member => member.id !== user.id);
 
-		Member.saveMembers(newMembers);
+			Member.saveMembers(newMembers);
+		}
 
-		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed'), components: [] });
+		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed').replace('?', ''), components: [] });
 	}
 
 	/**
@@ -241,9 +246,11 @@ class Member {
 	 * then save another csv file as backup
 	 */
 	static backupLastTen() {
-		const csvFiles = fm.readDir(fm.dir.BKUP).filter(file => file.endsWith('.csv'));
-		if (csvFiles.length >= 10)
-			fm.removeFile(csvFiles.pop());
+		const csvFiles = fm.readDir(fm.dir.BKUP).filter(file => file.endsWith(Member.csvFile));
+		csvFiles.reverse();
+
+		while (csvFiles.length >= 10)
+			fm.removeFile(fm.dir.BKUP, csvFiles.pop());
 
 		const content = Member.toCSVFile();
 		const file = new Date().getTime() + Member.csvFile;

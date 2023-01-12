@@ -1,7 +1,7 @@
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents } = require('../utility');
+const { createScheduledEvents, getEventChannels } = require('../utility');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -11,9 +11,8 @@ module.exports = {
 	 */
 	async execute(interaction) {
 		try {
-
 			if (interaction.isButton()) {
-				if (interaction.customId === 'savage' || interaction.customId === 'ult')
+				if (getEventChannels().map(item => item.type).includes(interaction.customId))
 					await createScheduledEvents(interaction, new RaidWeek());
 				else if (interaction.customId === 'yesitem')
 					await new ItemManager(ItemManager.itemTypeFromMessage(interaction.message.content)).assingItemToMember(interaction);
