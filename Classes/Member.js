@@ -241,9 +241,11 @@ class Member {
 	 * then save another csv file as backup
 	 */
 	static backupLastTen() {
-		const csvFiles = fm.readDir(fm.dir.BKUP).filter(file => file.endsWith('.csv'));
-		if (csvFiles.length >= 10)
-			fm.removeFile(csvFiles.pop());
+		const csvFiles = fm.readDir(fm.dir.BKUP).filter(file => file.endsWith(Member.csvFile));
+		csvFiles.reverse();
+
+		while (csvFiles.length >= 10)
+			fm.removeFile(fm.dir.BKUP, csvFiles.pop());
 
 		const content = Member.toCSVFile();
 		const file = new Date().getTime() + Member.csvFile;

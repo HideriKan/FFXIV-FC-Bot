@@ -47,13 +47,15 @@ class FileManager {
 
 	/**
 	 * deletes a file from the filesystem
+	 * @param {String} dataLocation directory to search the file in
 	 * @param {String} fileName name of the file to be read
 	 */
-	static removeFile(fileName) { // TODO: test if dataLoc is needed or not
-		FileManager.ensureFileExists(fileName);
+	static removeFile(dataLocation, fileName) {
+		const filePath = path.join(dataLocation, fileName);
+		FileManager.ensureFileExists(filePath);
 
 		try {
-			fs.unlinkSync(fileName);
+			fs.unlinkSync(filePath);
 		} catch (err) {
 			console.error(err);
 		}
