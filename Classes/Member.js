@@ -179,13 +179,17 @@ class Member {
 			return;
 		}
 
-		const user = interaction.message.mentions.parsedUsers.first();
-		const members = Member.getAllMembers();
-		const newMembers = members.filter(member => member.id !== user.id);
+		if (interaction.message.mentions.parsedUsers.size === 0) {
+			Member.saveMembers(new Array());
+		} else {
+			const user = interaction.message.mentions.parsedUsers.first();
+			const members = Member.getAllMembers();
+			const newMembers = members.filter(member => member.id !== user.id);
 
-		Member.saveMembers(newMembers);
+			Member.saveMembers(newMembers);
+		}
 
-		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed'), components: [] });
+		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed').replace('?', ''), components: [] });
 	}
 
 	/**
