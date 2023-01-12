@@ -97,6 +97,8 @@ async function createScheduledEvents(interaction, raidWeek) {
 	raidWeek.readJson();
 	raidWeek.keepOnlyRaidDays();
 
+	const avatar = interaction.client.user.avatarURL();
+
 	raidWeek.week.forEach(day => {
 		const start = new Date(day.startTime)
 		if (start > now)
@@ -106,7 +108,8 @@ async function createScheduledEvents(interaction, raidWeek) {
 				scheduledStartTime: start.getTime(),
 				privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
 				entityType: GuildScheduledEventEntityType.Voice,
-				channel: channel.id
+				channel: channel.id,
+				image: './data/MoreYakuza.png'
 			});
 	});
 
