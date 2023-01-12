@@ -69,7 +69,6 @@ module.exports = {
 	},
 };
 
-//TODO: remove only confirmed raid events
 async function create(interaction) {
 	// get user option
 	const editNext = interaction.options.getBoolean('next');
@@ -104,9 +103,10 @@ async function create(interaction) {
 	raidWeek.writeJson();
 
 	// check if the guild has scheduled events for the raid
-	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', description: 'Raid Time' });
-	if (events.size > 0)
-		events.forEach(event => event.delete());
+	const events = await interaction.guild.scheduledEvents.fetch();
+	const filterdEvents = events.filter(eve => eve.name === 'Raid' && eve.description === 'Raid Time');
+	if (filterdEvents.size > 0)
+		filterdEvents.forEach(event => event.delete());
 
 	interaction.reply({ content: 'New Times have been saved', components: [row] });
 
