@@ -178,9 +178,7 @@ class ItemManager {
 					member.totalAccUp++;
 				break;
 			case 'prio':
-				if (member.priority === 10) // put at the bottom of the priority
-					member.priority = Member.getAllMembers().length + 1;
-
+				member.priority = 9;
 				break;
 		}
 
