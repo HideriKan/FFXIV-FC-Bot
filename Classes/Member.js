@@ -176,6 +176,7 @@ class Member {
 	static async removeMemberFromFile(interaction) {
 		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
 			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+			return;
 		}
 
 		const user = interaction.message.mentions.parsedUsers.first();
