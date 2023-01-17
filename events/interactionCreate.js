@@ -18,6 +18,8 @@ module.exports = {
 					await new ItemManager(ItemManager.itemTypeFromMessage(interaction.message.content)).assingItemToMember(interaction);
 				else if (interaction.customId === 'yesrem')
 					await Member.removeMemberFromFile(interaction);
+				else if (interaction.customId === 'yesreset')
+					await Member.resetMemberFromFile(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
 			}

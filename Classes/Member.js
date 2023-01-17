@@ -192,6 +192,29 @@ class Member {
 		interaction.update({ content: interaction.message.content.replace('Remove', 'Removed').replace('?', ''), components: [] });
 	}
 
+	static async resetMemberFromFile(interaction) {
+		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageEvents)) {
+			interaction.deferReply({ content: 'You do not have the required permissons', ephemeral: true });
+			return;
+		}
+
+		if (interaction.message.mentions.parsedUsers.size === 0) {
+			const members = Member.getAllMembers();
+			members.forEach(member => { member = Member(member.id, member.displayName) });
+			Member.saveMembers(members);
+		} else {
+			const user = interaction.message.mentions.parsedUsers.first();
+			const members = Member.getAllMembers();
+			const memberIndex = members.findIndex(member => member.id === user.id);
+
+			members[memberIndex] = new Member(members[memberIndex].id, members[memberIndex].displayName);
+
+			Member.saveMembers(newMembers);
+		}
+
+		interaction.update({ content: interaction.message.content.replace('Reset', 'Reseted').replace('?', ''), components: [] });
+	}
+
 	/**
 	 * reads the json file and returns the found members
 	 * @returns {Array} array of members
