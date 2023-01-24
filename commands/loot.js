@@ -56,6 +56,7 @@ module.exports = {
 		.addSubcommand(subcmd => subcmd.setName('data') // opt: [user]
 			.setDescription('Manipulates the database')
 			.addStringOption(opt => opt.setName('operation')
+				.setDescription('Choose the operation you wish to perform')
 				.addChoices(
 					{ name: 'delete', value: 'delete' },
 					{ name: 'reset', value: 'reset' }
