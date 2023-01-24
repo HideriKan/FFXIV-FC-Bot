@@ -3,7 +3,7 @@ const { SlashCommandBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder,
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('griefbox')
+		.setName('suggestionbox')
 		.setDescription('An anonymized place to send your thoughts about the static')
 	,
 	/**
