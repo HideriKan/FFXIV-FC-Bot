@@ -1,7 +1,7 @@
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents, getEventChannels } = require('../utility');
+const { createScheduledEvents, getEventChannels, sendGriefToChannel } = require('../utility');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -12,6 +12,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (interaction.isButton()) {
+
 				if (getEventChannels().map(item => item.type).includes(interaction.customId))
 					await createScheduledEvents(interaction, new RaidWeek());
 				else if (interaction.customId === 'yesitem')
@@ -22,15 +23,20 @@ module.exports = {
 					await Member.resetMemberFromFile(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
-			}
 
-			else if (interaction.isCommand()) {
+			} else if (interaction.isCommand()) {
+
 				const command = interaction.client.commands.get(interaction.commandName);
 				if (!command) return;
 
 				await command.execute(interaction);
-			}
 
+			} else if (interaction.isModalSubmit()) {
+
+				if (interaction.customId === 'griefpaper')
+					await sendGriefToChannel(interaction);
+
+			}
 		} catch (error) {
 			console.error(error);
 
