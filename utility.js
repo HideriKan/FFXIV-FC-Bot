@@ -3,11 +3,11 @@ const RaidDay = require('./Classes/RaidDay');
 const { isBeta } = require('./config.json')
 
 /**
- * return the first letter of a string but capitalized
+ * return the same string but the first letter is capitalized
  * @param {String} string sting 
  * @returns String
  */
-function cpitilizeFirstLetter(string) {
+function capitalizeFirstLetter(string) {
 	return string.charAt(0).toLocaleUpperCase() + string.slice(1);
 }
 
@@ -129,7 +129,7 @@ async function sendGriefToChannel(interaction) {
 }
 
 module.exports = {
-	cpitilizeFirstLetter,
+	capitalizeFirstLetter,
 	getStartingDay,
 	getRaidDayFromString,
 	getEventChannels,

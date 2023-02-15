@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, codeBlock } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
 const RaidDay = require('../Classes/RaidDay');
-const { getStartingDay, getRaidDayFromString, getEventChannels, cpitilizeFirstLetter } = require('../utility');
+const { getStartingDay, getRaidDayFromString, getEventChannels, capitalizeFirstLetter } = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -91,7 +91,7 @@ async function create(interaction) {
 		row.addComponents(
 			new ButtonBuilder()
 				.setCustomId(channel.type)
-				.setLabel(cpitilizeFirstLetter(channel.type))
+				.setLabel(capitalizeFirstLetter(channel.type))
 				.setStyle(ButtonStyle.Secondary)
 		);
 	});
