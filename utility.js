@@ -1,6 +1,6 @@
 const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
 const RaidDay = require('./Classes/RaidDay');
-const { isBeta } = require('./config.json')
+const { isBeta } = require('./config.json');
 
 /**
  * return the first letter of a string but capitalized
@@ -97,10 +97,10 @@ async function createScheduledEvents(interaction, raidWeek) {
 	raidWeek.readJson();
 	raidWeek.keepOnlyRaidDays();
 
-	const avatar = interaction.client.user.avatarURL();
+	// const avatar = interaction.client.user.avatarURL();
 
 	raidWeek.week.forEach(day => {
-		const start = new Date(day.startTime)
+		const start = new Date(day.startTime);
 		if (start > now)
 			interaction.guild.scheduledEvents.create({
 				name: 'Raid',
