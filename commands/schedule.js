@@ -124,6 +124,13 @@ async function edit(interaction) {
 	const raidWeek = new RaidWeek();
 	raidWeek.readJson();
 	const rDay = raidWeek.week[index];
+
+	// check if the choosen day has a raid
+	if (!rDay.isRaid) {
+		interaction.reply({ content: 'There is no raid on your choosen date you can only edit a raid day. \nIf you want to create a raid day use `\\schedule create`' });
+		return;
+	}
+
 	const rDayTime = new Date(rDay.startTime);
 	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime)} `;
 
