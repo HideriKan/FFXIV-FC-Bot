@@ -1,13 +1,13 @@
-const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
+const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType, ModalSubmitInteraction } = require('discord.js');
 const RaidDay = require('./Classes/RaidDay');
 const { isBeta } = require('./config.json')
 
 /**
- * return the first letter of a string but capitalized
+ * return the same string but the first letter is capitalized
  * @param {String} string sting 
  * @returns String
  */
-function cpitilizeFirstLetter(string) {
+function capitalizeFirstLetter(string) {
 	return string.charAt(0).toLocaleUpperCase() + string.slice(1);
 }
 
@@ -116,10 +116,23 @@ async function createScheduledEvents(interaction, raidWeek) {
 	interaction.update({ content: 'Guild Events have been added', components: [] });
 }
 
+/**
+ * 
+ * @param {ModalSubmitInteraction} interaction 
+ */
+async function sendGriefToChannel(interaction) {
+	let content = 'A new post over the griefbox:\n' + interaction.fields.getTextInputValue('griefcontent');
+	const channelId = isBeta ? '517365608665448448' : '1023511290523689011'
+
+	interaction.client.channels.fetch(channelId).then(channel => channel.send(content));
+	await interaction.reply({ content: 'Your Message was sent successfuly', ephemeral: true });
+}
+
 module.exports = {
-	cpitilizeFirstLetter,
+	capitalizeFirstLetter,
 	getStartingDay,
 	getRaidDayFromString,
 	getEventChannels,
-	createScheduledEvents
+	createScheduledEvents,
+	sendGriefToChannel
 }; 

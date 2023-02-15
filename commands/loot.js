@@ -17,19 +17,19 @@ module.exports = {
 				.setDescription('Item Type')
 				.setRequired(true)
 				.addChoices(
-					// { name: 'Gear', value: 'gear' },
-					// { name: 'Tome Gear Upgrade', value: 'gearUp' },
-					// { name: 'Tome Accessory Upgrade', value: 'accUp' },
-					// { name: 'Tome Weapon', value: 'tomeWeap' },
-					// { name: 'Tome Weapon Upgrade', value: 'tomeUp' },
+					{ name: 'Gear', value: 'gear' },
+					{ name: 'Tome Gear Upgrade', value: 'gearUp' },
+					{ name: 'Tome Accessory Upgrade', value: 'accUp' },
+					{ name: 'Tome Weapon', value: 'tomeWeap' },
+					{ name: 'Tome Weapon Upgrade', value: 'tomeUp' },
 					{ name: 'Weapon', value: 'weap' },
 					{ name: 'Body', value: 'body' },
-					// { name: 'Priority', value: 'prio' }
+					{ name: 'Priority', value: 'prio' }
 				)
 			)
-			// .addBooleanOption(opt => opt.setName('isdone')
-			// 	.setDescription('(Optional) Indicates a finished state. Only works on Gear, GearUp or AccUp')
-			// )
+			.addBooleanOption(opt => opt.setName('isdone')
+				.setDescription('(Optional) Indicates a finished state. Only works on Gear, GearUp or AccUp')
+			)
 		)
 		.addSubcommand(subcmd => subcmd.setName('show') // opt: type, [user]
 			.setDescription('Show who can roll / priority')
@@ -53,10 +53,17 @@ module.exports = {
 				.setDescription('(Optional) Only show for this user')
 			)
 		)
-		.addSubcommand(subcmd => subcmd.setName('delete') // opt: [user]
-			.setDescription('Resets the database (New Tier)')
+		.addSubcommand(subcmd => subcmd.setName('data') // opt: [operation, user]
+			.setDescription('Manipulates the database')
+			.addStringOption(opt => opt.setName('operation')
+				.setDescription('Choose the operation you wish to perform')
+				.addChoices(
+					{ name: 'Delete', value: 'delete' },
+					{ name: 'Reset', value: 'reset' }
+				)
+			)
 			.addUserOption(opt => opt.setName('user')
-				.setDescription('Choose to only remove one member')
+				.setDescription('Choose to only affect one member')
 			)
 		)
 	,
@@ -68,6 +75,7 @@ module.exports = {
 		const cmd = interaction.options.getSubcommand();
 		const user = interaction.options.getMember('user');
 		const type = interaction.options.getString('type');
+		const operation = interaction.options.getString('operation');
 		const setDone = interaction.options.getBoolean('isdone');
 		const itemMgr = new ItemManager(type);
 
@@ -86,8 +94,11 @@ module.exports = {
 				else
 					reply = itemMgr.toRollOverview();
 				break;
-			case 'delete':
-				reply = addRemoveBtn(user);
+			case 'data':
+				if (operation === 'delete')
+					reply = addRemoveBtn(user);
+				if (operation === 'reset')
+					reply = addResetBtn(user);
 				break;
 		}
 
@@ -202,4 +213,26 @@ function addRemoveBtn(user) {
 	];
 
 	return reply;
+}
+
+function addResetBtn(user) {
+	const reply = { content: null, components: null, ephemeral: true };
+	reply.content = user === null ? 'Reset all members?' : `Reset ${user} from the database?`
+	reply.components = [new ActionRowBuilder()
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('yesreset')
+				.setLabel('Yes')
+				.setStyle(ButtonStyle.Danger)
+		)
+		.addComponents(
+			new ButtonBuilder()
+				.setCustomId('no')
+				.setLabel('No')
+				.setStyle(ButtonStyle.Secondary)
+		)
+	];
+
+	return reply;
+
 }
