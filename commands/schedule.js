@@ -59,12 +59,12 @@ module.exports = {
 		const cmd = interaction.options.getSubcommand();
 
 		switch (cmd) {
-			case 'create':
-				create(interaction);
-				break;
-			case 'edit':
-				edit(interaction);
-				break;
+		case 'create':
+			create(interaction);
+			break;
+		case 'edit':
+			edit(interaction);
+			break;
 		}
 	},
 };

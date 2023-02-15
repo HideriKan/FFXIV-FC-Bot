@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildMember, PermissionFlagsBits, bold, } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, bold, } = require('discord.js');
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 
@@ -81,25 +81,25 @@ module.exports = {
 
 		let reply;
 		switch (cmd) {
-			case 'give':
-				reply = addGiveBtn(user, type, setDone);
-				break;
-			case 'show':
-				if (type === 'user' && user === null)
-					reply = { content: 'Please pass a user as the second argument' }
-				else if (type !== 'stats' && user !== null)
-					reply = Member.toEmbed(user, type);
-				else if (type === 'stats')
-					reply = ItemManager.toEmbedStats();
-				else
-					reply = itemMgr.toRollOverview();
-				break;
-			case 'data':
-				if (operation === 'delete')
-					reply = addRemoveBtn(user);
-				if (operation === 'reset')
-					reply = addResetBtn(user);
-				break;
+		case 'give':
+			reply = addGiveBtn(user, type, setDone);
+			break;
+		case 'show':
+			if (type === 'user' && user === null)
+				reply = { content: 'Please pass a user as the second argument' };
+			else if (type !== 'stats' && user !== null)
+				reply = Member.toEmbed(user, type);
+			else if (type === 'stats')
+				reply = ItemManager.toEmbedStats();
+			else
+				reply = itemMgr.toRollOverview();
+			break;
+		case 'data':
+			if (operation === 'delete')
+				reply = addRemoveBtn(user);
+			if (operation === 'reset')
+				reply = addResetBtn(user);
+			break;
 		}
 
 		await interaction.editReply(reply);
@@ -108,7 +108,7 @@ module.exports = {
 
 /**
  * gives the user a question with a choice to add the item type to the user
- * @param {GuildMember} user mentioned user
+ * @param {import("discord.js").GuildMember} user mentioned user
  * @param {String} type item type
  * @param {Boolean} setDone if the type should be ignored for future
  * @returns an reply object to be sent to the user
@@ -140,51 +140,51 @@ function addGiveBtn(user, type, setDone) {
 
 	// Warning for certain types
 	switch (type) {
-		case 'gear':
-			if (member.gearDone)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} is already done with thier raid gear, proceed?`)
-			break;
-		case 'weap':
-			if (member.hasWeapon)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`)
-			if (!Member.isWeapBodyBalanced() && member.hasBody)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`)
-			break;
-		case 'body':
-			if (member.hasBody)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid body, proceed?`)
-			if (!Member.isWeapBodyBalanced() && member.hasWeapon)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`)
-			break;
-		case 'tomeWeap':
-			if (member.hasTomeWeap)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a tome weapon, proceed?`)
-			if (member.hasWeapon)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`)
-			break;
-		case 'tomeUp':
-			if (!member.hasTomeWeap)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} does not own the tome weapon, proceed?`)
-			if (member.hasTomeWeapUp)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has the tome weapon upgrade, proceed?`)
-			if (member.hasWeapon)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`)
-			break;
-		case 'gearUp':
-			baseline = Member.getCurrentBaseline(type);
-			if (member.totalGearUp > baseline && !setDone)
-				reply.content += '\n' + bold(`Warning! Max. allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`)
-			if (member.gearUpDone)
-				reply.content += '\n' + bold(`Warning! ${user.displayName} is already done with gear upgrades, proceed?`)
+	case 'gear':
+		if (member.gearDone)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} is already done with thier raid gear, proceed?`);
+		break;
+	case 'weap':
+		if (member.hasWeapon)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`);
+		if (!Member.isWeapBodyBalanced() && member.hasBody)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`);
+		break;
+	case 'body':
+		if (member.hasBody)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid body, proceed?`);
+		if (!Member.isWeapBodyBalanced() && member.hasWeapon)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} has a raid weapon & raid has weap/body imbalance, proceed?`);
+		break;
+	case 'tomeWeap':
+		if (member.hasTomeWeap)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has a tome weapon, proceed?`);
+		if (member.hasWeapon)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`);
+		break;
+	case 'tomeUp':
+		if (!member.hasTomeWeap)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} does not own the tome weapon, proceed?`);
+		if (member.hasTomeWeapUp)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has the tome weapon upgrade, proceed?`);
+		if (member.hasWeapon)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} already has a raid weapon, proceed?`);
+		break;
+	case 'gearUp':
+		baseline = Member.getCurrentBaseline(type);
+		if (member.totalGearUp > baseline && !setDone)
+			reply.content += '\n' + bold(`Warning! Max. allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`);
+		if (member.gearUpDone)
+			reply.content += '\n' + bold(`Warning! ${user.displayName} is already done with gear upgrades, proceed?`);
 
-			break;
-		case 'accUp':
-			baseline = Member.getCurrentBaseline(type);
-			if (member.totalAccUp > baseline && !setDone)
-				reply.content += bold(`\nWarning! Max. allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`)
-			if (member.accUpDone)
-				reply.content += bold(`\nWarning! ${user.displayName} is already done with accessory upgrades, proceed?`)
-			break;
+		break;
+	case 'accUp':
+		baseline = Member.getCurrentBaseline(type);
+		if (member.totalAccUp > baseline && !setDone)
+			reply.content += bold(`\nWarning! Max. allowed: ${baseline + 1}, ${user.displayName} has ${member.totalGearUp}, proceed?`);
+		if (member.accUpDone)
+			reply.content += bold(`\nWarning! ${user.displayName} is already done with accessory upgrades, proceed?`);
+		break;
 	}
 
 	return reply;
@@ -192,11 +192,11 @@ function addGiveBtn(user, type, setDone) {
 
 /**
  * gives the user a question with a choice to remove the user from the file
- * @param {GuildMember} user mentioned user
+ * @param {import("discord.js").GuildMember} user mentioned user
  */
 function addRemoveBtn(user) {
 	const reply = { content: null, components: null, ephemeral: true };
-	reply.content = user === null ? 'Remove all members?' : `Remove ${user} from the database?`
+	reply.content = user === null ? 'Remove all members?' : `Remove ${user} from the database?`;
 	reply.components = [new ActionRowBuilder()
 		.addComponents(
 			new ButtonBuilder()
@@ -217,7 +217,7 @@ function addRemoveBtn(user) {
 
 function addResetBtn(user) {
 	const reply = { content: null, components: null, ephemeral: true };
-	reply.content = user === null ? 'Reset all members?' : `Reset ${user} from the database?`
+	reply.content = user === null ? 'Reset all members?' : `Reset ${user} from the database?`;
 	reply.components = [new ActionRowBuilder()
 		.addComponents(
 			new ButtonBuilder()

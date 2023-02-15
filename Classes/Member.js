@@ -1,10 +1,10 @@
-const { EmbedBuilder, GuildMember, PermissionFlagsBits } = require('discord.js');
+const { EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const fm = require('./FileManager');
 
 class Member {
 	// file name constants
 	static lootFile = 'MemberLoot.json';
-	static csvFile = 'MemberLoot.csv'
+	static csvFile = 'MemberLoot.csv';
 
 	/**
 	 * generates an emtpy member with default values
@@ -27,7 +27,7 @@ class Member {
 		this.totalAccUp = 0;
 		this.accUpDone = false;
 
-		this.fillMemberFromFile()
+		this.fillMemberFromFile();
 	}
 
 	/**
@@ -35,13 +35,13 @@ class Member {
 	 */
 	saveMember() {
 		const members = Member.getAllMembers();
-		const index = members.findIndex(element => element.id === this.id)
+		const index = members.findIndex(element => element.id === this.id);
 		const updatePrio = index === -1 ? true : members[index].priority === 9 ? true : members[index].priority !== this.priority;
 
 		if (index >= 0)
 			members[index] = this;
 		else
-			members.push(this)
+			members.push(this);
 
 		Member.saveMembers(members, updatePrio);
 	}
@@ -72,7 +72,7 @@ class Member {
 	fillMemberFromFile() {
 		const fileData = fm.readFile(fm.dir.DATA, Member.lootFile);
 		if (fileData === '')
-			return
+			return;
 
 		const jsonData = JSON.parse(fileData);
 		const member = jsonData.find(member => member.id === this.id);
@@ -83,7 +83,7 @@ class Member {
 
 	/**
 	 * Generates an discord embed with the data from the users
-	 * @param {GuildMember} user the user profile to display
+	 * @param {import("discord.js").GuildMember} user the user profile to display
 	 * @param {String} type item value
 	 * @returns generated embed
 	 */
@@ -96,41 +96,41 @@ class Member {
 			.setFooter({ text: 'work in progress' });
 
 		switch (type) {
-			case 'prio':
-				embed.setDescription(`Priority: ${member.priority}`);
-				break;
-			case 'gear':
-				embed.setDescription(`Raid gear: ${member.totalGear}, Finished: ${member.gearDone ? 'Yes' : 'No'}`);
-				break;
-			case 'weap':
-				embed.setDescription(`Raid weapon: ${member.hasWeapon ? 'Yes' : 'No'}`);
-				break;
-			case 'body':
-				embed.setDescription(`Raid body: ${member.gearDone ? 'Yes' : 'No'}`);
-				break;
-			case 'tomeWeap':
-				embed.setDescription(`Tome weapon: ${member.hasTomeWeap ? 'Yes' : 'No'}`);
-				break;
-			case 'tomeUp':
-				embed.setDescription(`Tome weapon upgrade: ${member.hasTomeWeapUp ? 'Yes' : 'No'}`);
-				break;
-			case 'gearUp':
-				embed.setDescription(`Gear upgrades: ${member.totalGearUp}, Finished: ${member.gearUpDone ? 'Yes' : 'No'}`);
-				break;
-			case 'accUp':
-				embed.setDescription(`Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`);
-				break;
-			case 'user':
-			default:
-				embed.setDescription(`Priority: ${member.priority}
+		case 'prio':
+			embed.setDescription(`Priority: ${member.priority}`);
+			break;
+		case 'gear':
+			embed.setDescription(`Raid gear: ${member.totalGear}, Finished: ${member.gearDone ? 'Yes' : 'No'}`);
+			break;
+		case 'weap':
+			embed.setDescription(`Raid weapon: ${member.hasWeapon ? 'Yes' : 'No'}`);
+			break;
+		case 'body':
+			embed.setDescription(`Raid body: ${member.gearDone ? 'Yes' : 'No'}`);
+			break;
+		case 'tomeWeap':
+			embed.setDescription(`Tome weapon: ${member.hasTomeWeap ? 'Yes' : 'No'}`);
+			break;
+		case 'tomeUp':
+			embed.setDescription(`Tome weapon upgrade: ${member.hasTomeWeapUp ? 'Yes' : 'No'}`);
+			break;
+		case 'gearUp':
+			embed.setDescription(`Gear upgrades: ${member.totalGearUp}, Finished: ${member.gearUpDone ? 'Yes' : 'No'}`);
+			break;
+		case 'accUp':
+			embed.setDescription(`Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`);
+			break;
+		case 'user':
+		default:
+			embed.setDescription(`Priority: ${member.priority}
 				Raid gear: ${member.totalGear}, Finished: ${member.gearDone ? 'Yes' : 'No'}
 				Raid weapon: ${member.hasWeapon ? 'Yes' : 'No'}
 				Raid body: ${member.gearDone ? 'Yes' : 'No'}
 				Tome weapon: ${member.hasTomeWeap ? 'Yes' : 'No'}
 				Tome weapon upgrade: ${member.hasTomeWeapUp ? 'Yes' : 'No'}
 				Gear upgrades: ${member.totalGearUp}, Finished: ${member.gearUpDone ? 'Yes' : 'No'}
-				Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`)
-				break;
+				Accessories upgreades: ${member.totalAccUp}, Finished: ${member.accUpDone ? 'Yes' : 'No'}`);
+			break;
 		}
 
 		return { embeds: [embed] };
@@ -198,18 +198,25 @@ class Member {
 			return;
 		}
 
+		// reset each member
 		if (interaction.message.mentions.parsedUsers.size === 0) {
 			const members = Member.getAllMembers();
-			members.forEach(member => { member = Member(member.id, member.displayName) });
+			// eslint-disable-next-line no-unused-vars
+			members.forEach(member => { member = Member(member.id, member.displayName); });
 			Member.saveMembers(members);
 		} else {
 			const user = interaction.message.mentions.parsedUsers.first();
 			const members = Member.getAllMembers();
 			const memberIndex = members.findIndex(member => member.id === user.id);
 
-			members[memberIndex] = new Member(members[memberIndex].id, members[memberIndex].displayName);
+			if (memberIndex != -1)
+				members[memberIndex] = new Member(members[memberIndex].id, members[memberIndex].displayName);
+			else {
+				interaction.update({content: `${user} was not found in as a member.`});
+				return;
+			}
 
-			Member.saveMembers(newMembers);
+			Member.saveMembers(members);
 		}
 
 		interaction.update({ content: interaction.message.content.replace('Reset', 'Reseted').replace('?', ''), components: [] });
@@ -253,12 +260,12 @@ class Member {
 		let baseline = 0;
 
 		switch (type) {
-			case 'gearUp':
-				members.forEach(member => { if (!member.gearUpDone) baseline = member.totalGearUp < baseline ? member.totalGearUp : baseline; });
-				break;
-			case 'accUp':
-				members.forEach(member => { if (!member.accUpDone) baseline = member.totalAccUp < baseline ? member.totalAccUp : baseline; });
-				break;
+		case 'gearUp':
+			members.forEach(member => { if (!member.gearUpDone) baseline = member.totalGearUp < baseline ? member.totalGearUp : baseline; });
+			break;
+		case 'accUp':
+			members.forEach(member => { if (!member.accUpDone) baseline = member.totalAccUp < baseline ? member.totalAccUp : baseline; });
+			break;
 		}
 
 		return baseline;
