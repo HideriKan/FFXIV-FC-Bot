@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, codeBlock } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
 const RaidDay = require('../Classes/RaidDay');
-const { getStartingDay, getRaidDayFromString, getEventChannels, cpitilizeFirstLetter } = require('../utility');
+const { getStartingDay, getRaidDayFromString, getEventChannels, capitalizeFirstLetter } = require('../utility');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,9 +19,9 @@ module.exports = {
 				.setRequired(true))
 		)
 		.addSubcommand(subcmd => subcmd.setName('edit') // raidday, [time, day]
-			.setDescription('Edits a singular day from the schedule')
+			.setDescription('Edits a singular raid day from the schedule')
 			.addStringOption(opt => opt.setName('raidday')
-				.setDescription('The RaidDay that you want to change the status of')
+				.setDescription('The raid day that you want to change the status of')
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Tue', value: '0' },
@@ -34,10 +34,10 @@ module.exports = {
 				)
 			)
 			.addStringOption(opt => opt.setName('time')
-				.setDescription('(Optional) The new ST. Leave empty for no raid')
+				.setDescription('(Optional) The new ST. Leave empty for no raid. Does not create a raid day!')
 			)
 			.addStringOption(opt => opt.setName('day')
-				.setDescription('(Optional) The new RaidDay you want to move it to')
+				.setDescription('(Optional) The new raid day you want to move it to')
 				.addChoices(
 					{ name: 'Tue', value: '0' },
 					{ name: 'Wed', value: '1' },
@@ -91,7 +91,7 @@ async function create(interaction) {
 		row.addComponents(
 			new ButtonBuilder()
 				.setCustomId(channel.type)
-				.setLabel(cpitilizeFirstLetter(channel.type))
+				.setLabel(capitalizeFirstLetter(channel.type))
 				.setStyle(ButtonStyle.Secondary)
 		);
 	});
@@ -124,12 +124,21 @@ async function edit(interaction) {
 	const raidWeek = new RaidWeek();
 	raidWeek.readJson();
 	const rDay = raidWeek.week[index];
+
+	// check if the choosen day has a raid
+	if (!rDay.isRaid) {
+		interaction.reply({ content: 'There is no raid on your choosen date you can only edit a raid day. \nIf you want to create a raid day use `\\schedule create`' });
+		return;
+	}
+
 	const rDayTime = new Date(rDay.startTime);
 	content = `${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(rDayTime)} `;
 
 	// get the event for that raid day
 	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
 	const event = events.size >= 1 ? events.first() : null;
+	let debugMessage = `\nDebug: Found more then 1 event with ${rDayTime.getTime()}`;
+	events.forEach(eve => { debugMessage += '\n' + codeBlock(`Name: ${eve.name}\nDescription: ${eve.description}\nDate: ${eve.scheduledStartAt}`); });
 
 	// Get a new day with the new time
 	const newDay = getRaidDayFromString(time === null ? '' : time, rDay.day);
@@ -184,5 +193,7 @@ async function edit(interaction) {
 	// save the new raid day to the file
 	raidWeek.writeJson();
 
+	if (events.size > 1)
+		content += debugMessage;
 	interaction.reply({ content: content });
 }

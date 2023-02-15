@@ -1,7 +1,7 @@
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents, getEventChannels } = require('../utility');
+const { createScheduledEvents, getEventChannels, sendGriefToChannel } = require('../utility');
 const { authorId, isBeta } = require('../config.json');
 const { bold, codeBlock, Events } = require('discord.js');
 
@@ -33,23 +33,31 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (interaction.isButton()) {
+
 				if (getEventChannels().map(item => item.type).includes(interaction.customId))
 					await createScheduledEvents(interaction, new RaidWeek());
 				else if (interaction.customId === 'yesitem')
 					await new ItemManager(ItemManager.itemTypeFromMessage(interaction.message.content)).assingItemToMember(interaction);
 				else if (interaction.customId === 'yesrem')
 					await Member.removeMemberFromFile(interaction);
+				else if (interaction.customId === 'yesreset')
+					await Member.resetMemberFromFile(interaction);
 				else if (interaction.customId === 'no')
 					interaction.update({ content: 'Command has been canceled', components: [] });
-			}
 
-			else if (interaction.isCommand()) {
+			} else if (interaction.isCommand()) {
+
 				const command = interaction.client.commands.get(interaction.commandName);
 				if (!command) return;
 
 				await command.execute(interaction);
-			}
 
+			} else if (interaction.isModalSubmit()) {
+
+				if (interaction.customId === 'griefpaper')
+					await sendGriefToChannel(interaction);
+
+			}
 		} catch (error) {
 			errorInform(interaction, error);
 		}
