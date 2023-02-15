@@ -2,9 +2,10 @@ const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
 const { createScheduledEvents, getEventChannels } = require('../utility');
+const { bold, codeBlock, Events } = require('discord.js');
 
 module.exports = {
-	name: 'interactionCreate',
+	name: Events.InteractionCreate,
 	/**
 	 * Module for the interactionCreate discord event
 	 * @param {import("discord.js").Interaction} interaction 

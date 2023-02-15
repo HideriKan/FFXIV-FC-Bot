@@ -1,8 +1,5 @@
-// Imports
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const fm = require('./Classes/FileManager');
-
-// configs
 const { token, tokenBeta, isBeta } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
