@@ -19,9 +19,9 @@ module.exports = {
 				.setRequired(true))
 		)
 		.addSubcommand(subcmd => subcmd.setName('edit') // raidday, [time, day]
-			.setDescription('Edits a singular day from the schedule')
+			.setDescription('Edits a singular raid day from the schedule')
 			.addStringOption(opt => opt.setName('raidday')
-				.setDescription('The RaidDay that you want to change the status of')
+				.setDescription('The raid day that you want to change the status of')
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Tue', value: '0' },
@@ -34,10 +34,10 @@ module.exports = {
 				)
 			)
 			.addStringOption(opt => opt.setName('time')
-				.setDescription('(Optional) The new ST. Leave empty for no raid')
+				.setDescription('(Optional) The new ST. Leave empty for no raid. Does not create a raid day!')
 			)
 			.addStringOption(opt => opt.setName('day')
-				.setDescription('(Optional) The new RaidDay you want to move it to')
+				.setDescription('(Optional) The new raid day you want to move it to')
 				.addChoices(
 					{ name: 'Tue', value: '0' },
 					{ name: 'Wed', value: '1' },
