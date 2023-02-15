@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, codeBlock } = require('discord.js');
 const RaidWeek = require('../Classes/RaidWeek');
 const RaidDay = require('../Classes/RaidDay');
 const { getStartingDay, getRaidDayFromString, getEventChannels, cpitilizeFirstLetter } = require('../utility');
@@ -137,6 +137,8 @@ async function edit(interaction) {
 	// get the event for that raid day
 	const events = await interaction.guild.scheduledEvents.fetch({ name: 'Raid', scheduledStartTimestamp: rDayTime.getTime() }); // Test: if this works
 	const event = events.size >= 1 ? events.first() : null;
+	let debugMessage = `\nDebug: Found more then 1 event with ${rDayTime.getTime()}`;
+	events.forEach(eve => { debugMessage += '\n' + codeBlock(`Name: ${eve.name}\nDescription: ${eve.description}\nDate: ${eve.scheduledStartAt}`); });
 
 	// Get a new day with the new time
 	const newDay = getRaidDayFromString(time === null ? '' : time, rDay.day);
@@ -191,5 +193,7 @@ async function edit(interaction) {
 	// save the new raid day to the file
 	raidWeek.writeJson();
 
+	if (events.size > 1)
+		content += debugMessage;
 	interaction.reply({ content: content });
 }
