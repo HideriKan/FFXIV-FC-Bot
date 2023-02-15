@@ -54,7 +54,7 @@ module.exports = {
 			.setTitle('Raid Schedule (' + dateRange + ')')
 			.setColor('#dc4fad')
 			.addFields(fields)
-			.setFooter({ text: 'The Time displayed is in Server Time (ST) / UTC' });
+			.setFooter({ text: 'The Time displayed is in your local time' });
 
 		if (!onlyRaidDays)
 			embed.setDescription('Please do tell us when there is a day that you dont have time so we can adjust the schedule');
