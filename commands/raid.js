@@ -59,6 +59,6 @@ module.exports = {
 		if (!onlyRaidDays)
 			embed.setDescription('Please do tell us when there is a day that you dont have time so we can adjust the schedule');
 
-		interaction.reply({ embeds: [embed] })
+		interaction.reply({ embeds: [embed] });
 	},
 };

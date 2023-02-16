@@ -1,5 +1,5 @@
-const { ModalBuilder } = require("@discordjs/builders");
-const { SlashCommandBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, BaseInteraction } = require("discord.js");
+const { ModalBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
 	,
 	/**
 	 * 
-	 * @param {BaseInteraction} interaction 
+	 * @param {import("discord.js").BaseInteraction} interaction 
 	 */
 	async execute(interaction) {
 		const modal = new ModalBuilder()
@@ -26,4 +26,4 @@ module.exports = {
 
 		await interaction.showModal(modal);
 	}
-}
+};

@@ -1,6 +1,6 @@
-const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType, ModalSubmitInteraction } = require('discord.js');
+const { GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require('discord.js');
 const RaidDay = require('./Classes/RaidDay');
-const { isBeta } = require('./config.json')
+const { isBeta } = require('./config.json');
 
 /**
  * return the same string but the first letter is capitalized
@@ -97,10 +97,10 @@ async function createScheduledEvents(interaction, raidWeek) {
 	raidWeek.readJson();
 	raidWeek.keepOnlyRaidDays();
 
-	const avatar = interaction.client.user.avatarURL();
+	// const avatar = interaction.client.user.avatarURL();
 
 	raidWeek.week.forEach(day => {
-		const start = new Date(day.startTime)
+		const start = new Date(day.startTime);
 		if (start > now)
 			interaction.guild.scheduledEvents.create({
 				name: 'Raid',
@@ -118,11 +118,11 @@ async function createScheduledEvents(interaction, raidWeek) {
 
 /**
  * 
- * @param {ModalSubmitInteraction} interaction 
+ * @param {import("discord.js").ModalSubmitInteraction} interaction 
  */
 async function sendGriefToChannel(interaction) {
 	let content = 'A new post over the griefbox:\n' + interaction.fields.getTextInputValue('griefcontent');
-	const channelId = isBeta ? '517365608665448448' : '1023511290523689011'
+	const channelId = isBeta ? '517365608665448448' : '1023511290523689011';
 
 	interaction.client.channels.fetch(channelId).then(channel => channel.send(content));
 	await interaction.reply({ content: 'Your Message was sent successfuly', ephemeral: true });

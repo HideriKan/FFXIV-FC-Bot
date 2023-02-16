@@ -25,7 +25,7 @@ class ItemManager {
 		{ name: 'Tome Gear Upgrade', value: 'gearUp', isBool: false },
 		{ name: 'Tome Accessory Upgrade', value: 'accUp', isBool: false },
 		{ name: 'Priority', value: 'prio', isBool: false }
-	]
+	];
 
 	/**
 	 * extracts the item type from the give message send from the bot before confirming the command
@@ -33,7 +33,7 @@ class ItemManager {
 	 * @returns type obejct with name value and isBool boolean
 	 */
 	static itemTypeFromMessage(content) {
-		const search = '**'
+		const search = '**';
 		const first = content.indexOf(search) + search.length; // plus search length to ignore it on the next search and in the substring
 		const second = content.indexOf(search, first);
 		const type = content.substring(first, second);
@@ -62,7 +62,7 @@ class ItemManager {
 		return ItemManager.items.find(item => {
 			if (item.value === value)
 				return item.name;
-		})
+		});
 	}
 
 	/**
@@ -145,41 +145,41 @@ class ItemManager {
 		const member = new Member(user.id, user.displayName);
 
 		switch (this.type.value) {
-			case 'gear':
-				if (setDone)
-					member.gearDone = true;
-				else {
-					member.totalGear++;
-					member.priority = 9;
-				}
-				break;
-			case 'weap':
-				member.hasWeapon = true;
-				break;
-			case 'body':
-				member.hasBody = true;
-				break;
-			case 'tomeWeap':
-				member.hasTomeWeap = true;
-				break;
-			case 'tomeUp':
-				member.hasTomeWeapUp = true;
-				break;
-			case 'gearUp':
-				if (setDone)
-					member.gearUpDone = true;
-				else
-					member.totalGearUp++;
-				break;
-			case 'accUp':
-				if (setDone)
-					member.accUpDone = true;
-				else
-					member.totalAccUp++;
-				break;
-			case 'prio':
+		case 'gear':
+			if (setDone)
+				member.gearDone = true;
+			else {
+				member.totalGear++;
 				member.priority = 9;
-				break;
+			}
+			break;
+		case 'weap':
+			member.hasWeapon = true;
+			break;
+		case 'body':
+			member.hasBody = true;
+			break;
+		case 'tomeWeap':
+			member.hasTomeWeap = true;
+			break;
+		case 'tomeUp':
+			member.hasTomeWeapUp = true;
+			break;
+		case 'gearUp':
+			if (setDone)
+				member.gearUpDone = true;
+			else
+				member.totalGearUp++;
+			break;
+		case 'accUp':
+			if (setDone)
+				member.accUpDone = true;
+			else
+				member.totalAccUp++;
+			break;
+		case 'prio':
+			member.priority = 9;
+			break;
 		}
 
 		member.saveMember();
@@ -200,48 +200,48 @@ class ItemManager {
 		// Greed = true
 		// Pass  = null
 		switch (this.type.value) {
-			case 'gear': // Isolated
-				embed.setTitle('Total Gear');
-				func = member => { if (!member.gearDone) output.push({ name: member.displayName, value: member.totalGear }); };
-				break;
-			case 'weap': // Dependant on body
-				embed.setTitle('Weapon Rolls');
-				if (Member.isWeapBodyBalanced())
-					func = member => { output.push({ name: member.displayName, value: member.hasWeapon }); };
-				else
-					func = member => { output.push({ name: member.displayName, value: member.hasWeapon || member.hasBody }); };
-				break;
-			case 'body': // Dependant on weap
-				embed.setTitle('Body Rolls');
-				if (Member.isWeapBodyBalanced())
-					func = member => { output.push({ name: member.displayName, value: member.hasBody }); };
-				else
-					func = member => { output.push({ name: member.displayName, value: member.hasBody || member.hasWeapon }); };
-				break;
-			case 'tomeWeap': // Isolated
-				embed.setTitle('Tome Weapon Rolls');
-				embed.setFooter({ text: 'requires 500 Tomes to need instead of greed' });
-				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeap ? null : true }); };
-				break;
-			case 'tomeUp': // Dependant on tomeWeap
-				embed.setTitle(`Tome Weapon Upgrade Rolls`);
-				embed.setFooter({ text: 'requires Tome Weapon' });
-				func = member => { output.push({ name: member.displayName, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
-				break;
-			case 'gearUp': // Isolated
-				embed.setTitle('Total Gear Upgrade');
-				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
-				func = member => { if (!member.gearUpDone) output.push({ name: member.displayName, value: member.totalGearUp }); };
-				break;
-			case 'accUp': // Isolated
-				embed.setTitle('Total Accessory Upgrade');
-				embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
-				func = member => { if (!member.accUpDone) output.push({ name: member.displayName, value: member.totalAccUp }); };
-				break;
-			case 'prio':
-				embed.setTitle('Current Priority');
-				func = member => { output.push({ name: member.displayName, value: member.priority }); };
-				break;
+		case 'gear': // Isolated
+			embed.setTitle('Total Gear');
+			func = member => { if (!member.gearDone) output.push({ name: member.displayName, value: member.totalGear }); };
+			break;
+		case 'weap': // Dependant on body
+			embed.setTitle('Weapon Rolls');
+			if (Member.isWeapBodyBalanced())
+				func = member => { output.push({ name: member.displayName, value: member.hasWeapon }); };
+			else
+				func = member => { output.push({ name: member.displayName, value: member.hasWeapon || member.hasBody }); };
+			break;
+		case 'body': // Dependant on weap
+			embed.setTitle('Body Rolls');
+			if (Member.isWeapBodyBalanced())
+				func = member => { output.push({ name: member.displayName, value: member.hasBody }); };
+			else
+				func = member => { output.push({ name: member.displayName, value: member.hasBody || member.hasWeapon }); };
+			break;
+		case 'tomeWeap': // Isolated
+			embed.setTitle('Tome Weapon Rolls');
+			embed.setFooter({ text: 'requires 500 Tomes to need instead of greed' });
+			func = member => { output.push({ name: member.displayName, value: member.hasTomeWeap ? null : true }); };
+			break;
+		case 'tomeUp': // Dependant on tomeWeap
+			embed.setTitle('Tome Weapon Upgrade Rolls');
+			embed.setFooter({ text: 'requires Tome Weapon' });
+			func = member => { output.push({ name: member.displayName, value: member.hasTomeWeapUp ? null : member.hasTomeWeap ? false : true }); };
+			break;
+		case 'gearUp': // Isolated
+			embed.setTitle('Total Gear Upgrade');
+			embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
+			func = member => { if (!member.gearUpDone) output.push({ name: member.displayName, value: member.totalGearUp }); };
+			break;
+		case 'accUp': // Isolated
+			embed.setTitle('Total Accessory Upgrade');
+			embed.setFooter({ text: `Current baseline: ${Member.getCurrentBaseline(this.type.value)}` });
+			func = member => { if (!member.accUpDone) output.push({ name: member.displayName, value: member.totalAccUp }); };
+			break;
+		case 'prio':
+			embed.setTitle('Current Priority');
+			func = member => { output.push({ name: member.displayName, value: member.priority }); };
+			break;
 		}
 
 		return func;
@@ -262,13 +262,13 @@ class ItemManager {
 		members.forEach(this.getMemberValueFunc(embed, output));
 		output.sort((a, b) => {
 			if (a.value === null)
-				return 1
+				return 1;
 			if (b.value === null)
-				return -1
+				return -1;
 
-			return a.value - b.value
+			return a.value - b.value;
 		});
-		embed.setDescription(this.type.isBool ? this.dataFromBool(output) : this.dataFromNumber(output))
+		embed.setDescription(this.type.isBool ? this.dataFromBool(output) : this.dataFromNumber(output));
 
 		return { embeds: [embed] };
 	}
@@ -297,10 +297,10 @@ class ItemManager {
 	dataFromBool = output => {
 		let data = '';
 		output.forEach(item => {
-			data += `${inlineCode(this.rollFromBool(item.value))}: ${item.name}\n`
+			data += `${inlineCode(this.rollFromBool(item.value))}: ${item.name}\n`;
 		});
 		return data;
-	}
+	};
 
 	/**
 	 * generates strings to display the roll table
@@ -310,10 +310,10 @@ class ItemManager {
 	dataFromNumber = output => {
 		let data = '';
 		output.forEach(item => {
-			data += `${inlineCode(item.value)}: ${item.name}\n`
+			data += `${inlineCode(item.value)}: ${item.name}\n`;
 		});
 		return data;
-	}
+	};
 }
 
 module.exports = ItemManager;

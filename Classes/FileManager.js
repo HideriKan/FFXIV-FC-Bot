@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 /**
  * Host class for file operations
@@ -9,7 +9,7 @@ class FileManager {
 	static dir = {
 		DATA: './data',
 		BKUP: './data/backup',
-	}
+	};
 
 	/**
 	 * Reads the data from a file and returns the data
@@ -22,7 +22,7 @@ class FileManager {
 		FileManager.ensureFileExists(filePath);
 
 		try {
-			return fs.readFileSync(filePath, 'utf8')
+			return fs.readFileSync(filePath, 'utf8');
 		} catch (err) {
 			console.error(err);
 			return '';

@@ -2,9 +2,30 @@ const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
 const { createScheduledEvents, getEventChannels, sendGriefToChannel } = require('../utility');
+const { authorId, isBeta } = require('../config.json');
+const { bold, codeBlock, Events } = require('discord.js');
+
+async function errorInform(interaction, error) {
+	console.error(error);
+
+	if (!isBeta) {
+		let cmd;
+		if (interaction.isButton())
+			cmd = `Button ${interaction.customId}`;
+		else if (interaction.isCommand())
+			cmd = interaction.commandName;
+		await interaction.client.users.send(authorId, { content: `Error: ${bold(error.message)}\nCommand: ${cmd}\nFrom: ${interaction.user}\nStack: ${codeBlock(error.stack)}` });
+	}
+
+	if (interaction.deferred && !interaction.replied)
+		await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true });
+	else if (!interaction.replied)
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+}
+
 
 module.exports = {
-	name: 'interactionCreate',
+	name: Events.InteractionCreate,
 	/**
 	 * Module for the interactionCreate discord event
 	 * @param {import("discord.js").Interaction} interaction 
@@ -38,12 +59,7 @@ module.exports = {
 
 			}
 		} catch (error) {
-			console.error(error);
-
-			if (interaction.deferred && !interaction.replied)
-				await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true });
-			else if (!interaction.replied)
-				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			errorInform(interaction, error);
 		}
 	},
 };
