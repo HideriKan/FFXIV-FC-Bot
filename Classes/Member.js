@@ -201,9 +201,10 @@ class Member {
 		// reset each member
 		if (interaction.message.mentions.parsedUsers.size === 0) {
 			const members = Member.getAllMembers();
-			// eslint-disable-next-line no-unused-vars
-			members.forEach(member => { member = Member(member.id, member.displayName); });
-			Member.saveMembers(members);
+			const resetMembers = new Array();
+			members.forEach(member => { resetMembers.push(Member(member.id, member.displayName)); });
+
+			Member.saveMembers(resetMembers);
 		} else {
 			const user = interaction.message.mentions.parsedUsers.first();
 			const members = Member.getAllMembers();
@@ -212,7 +213,7 @@ class Member {
 			if (memberIndex != -1)
 				members[memberIndex] = new Member(members[memberIndex].id, members[memberIndex].displayName);
 			else {
-				interaction.update({content: `${user} was not found in as a member.`});
+				interaction.update({ content: `${user} was not found in as a member.` });
 				return;
 			}
 
