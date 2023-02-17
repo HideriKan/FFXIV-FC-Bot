@@ -12,12 +12,12 @@ module.exports = {
 	 */
 	async execute(interaction) {
 		const modal = new ModalBuilder()
-			.setCustomId('griefpaper')
+			.setCustomId('paper')
 			.setTitle('Anonymized Paper');
 
 		const content = new TextInputBuilder()
-			.setCustomId('griefcontent')
-			.setLabel('Please write your thought down.')
+			.setCustomId('content')
+			.setLabel('Write your thought down.')
 			.setStyle(TextInputStyle.Paragraph)
 			.setRequired(true);
 

@@ -1,7 +1,7 @@
 const ItemManager = require('../Classes/ItemManager');
 const Member = require('../Classes/Member');
 const RaidWeek = require('../Classes/RaidWeek');
-const { createScheduledEvents, getEventChannels, sendGriefToChannel } = require('../utility');
+const { createScheduledEvents, getEventChannels, sendPostToChannel } = require('../utility');
 const { authorId, isBeta } = require('../config.json');
 const { bold, codeBlock, Events } = require('discord.js');
 
@@ -54,8 +54,8 @@ module.exports = {
 
 			} else if (interaction.isModalSubmit()) {
 
-				if (interaction.customId === 'griefpaper')
-					await sendGriefToChannel(interaction);
+				if (interaction.customId === 'paper')
+					await sendPostToChannel(interaction);
 
 			}
 		} catch (error) {

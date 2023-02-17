@@ -120,9 +120,9 @@ async function createScheduledEvents(interaction, raidWeek) {
  * 
  * @param {import("discord.js").ModalSubmitInteraction} interaction 
  */
-async function sendGriefToChannel(interaction) {
-	let content = 'A new post over the griefbox:\n' + interaction.fields.getTextInputValue('griefcontent');
-	const channelId = isBeta ? '517365608665448448' : '1023511290523689011';
+async function sendPostToChannel(interaction) {
+	let content = 'Anonymized Post:\n' + interaction.fields.getTextInputValue('content');
+	const channelId = isBeta ? '517365608665448448' : '1012614927170687007';
 
 	interaction.client.channels.fetch(channelId).then(channel => channel.send(content));
 	await interaction.reply({ content: 'Your Message was sent successfuly', ephemeral: true });
@@ -134,5 +134,5 @@ module.exports = {
 	getRaidDayFromString,
 	getEventChannels,
 	createScheduledEvents,
-	sendGriefToChannel
+	sendPostToChannel
 }; 
